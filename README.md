@@ -1,11 +1,9 @@
-# 🚀 AstroWind
+# AstroWind Agrar Template
 
 <img src="https://raw.githubusercontent.com/arthelokyo/.github/main/resources/astrowind/lighthouse-score.png" align="right"
      alt="AstroWind Lighthouse Score" width="100" height="358">
 
-🌟 _Most *starred* & *forked* Astro theme in 2022, 2023 & 2024_. 🌟
-
-**AstroWind** is a free and open-source template to make your website using **[Astro 5.0](https://astro.build/) + [Tailwind CSS](https://tailwindcss.com/)**. Ready to start a new project and designed taking into account web best practices.
+Neutrales Basis-Template auf Grundlage von **AstroWind** für Agrar- und Immobilien-Websites mit **[Astro 5.0](https://astro.build/)** + **[Tailwind CSS](https://tailwindcss.com/)**. Standardkonfiguration und Texte sind bewusst generisch gehalten, sodass du schnell kundenspezifische Projekte starten kannst.
 
 - ✅ **Production-ready** scores in **PageSpeed Insights** reports.
 - ✅ Integration with **Tailwind CSS** supporting **Dark mode** and **_RTL_**.
@@ -33,6 +31,7 @@
 <summary>Table of Contents</summary>
 
 - [Demo](#demo)
+- [Verwendung als Template](#verwendung-als-template)
 - [Upcoming: AstroWind 2.0 – We Need Your Vision!](#-upcoming-astrowind-20--we-need-your-vision)
 - [TL;DR](#tldr)
 - [Getting started](#getting-started)
@@ -52,7 +51,15 @@
 
 ## Demo
 
-📌 [https://astrowind.vercel.app/](https://astrowind.vercel.app/)
+📌 Lokale Vorschau: `npm run dev` (Standard: http://localhost:4321)
+
+<br>
+
+## Verwendung als Template
+
+- Klicke in GitHub auf `Use this template`, um ein neues Repository (z. B. `kunde-agrar-web`) auf Basis dieser Vorlage anzulegen.
+- Klone dein neues Repository lokal oder starte in Conductor einen frischen Workspace auf der Ziel-Branch `main`.
+- Passe anschließend Inhalte, Farben und Konfiguration projektbezogen an – die gelieferten Seiten-Skeletons sind bewusst neutral gehalten.
 
 <br>
 

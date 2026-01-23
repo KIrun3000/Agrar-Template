@@ -1,0 +1,74 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Hero from '~/components/widgets/Hero.astro';
+import Steps from '~/components/widgets/Steps.astro';
+import Features from '~/components/widgets/Features.astro';
+import FAQs from '~/components/widgets/FAQs.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+
+const metadata = {
+  title: 'Für Investoren – AstroWind Agrar Template',
+  description: '[INVESTOREN_INTRO]'
+};
+---
+
+<Layout metadata={metadata}>
+  <Hero id="investoren" actions={[{ text: 'Suchprofil hinterlegen', href: '/kontakt' }]}>
+    <Fragment slot="title">Für Investoren</Fragment>
+    <Fragment slot="subtitle">[INVESTOREN_INTRO]</Fragment>
+  </Hero>
+
+  <Steps
+    id="prozess"
+    tagline="Investmentprozess"
+    title="Investmentprozess"
+    items={[
+      { title: '[INV_STEP_1_TITLE]', description: '[INV_STEP_1_TEXT]', icon: 'tabler:number-1' },
+      { title: '[INV_STEP_2_TITLE]', description: '[INV_STEP_2_TEXT]', icon: 'tabler:number-2' },
+      { title: '[INV_STEP_3_TITLE]', description: '[INV_STEP_3_TEXT]', icon: 'tabler:number-3' },
+      { title: '[INV_STEP_4_TITLE]', description: '[INV_STEP_4_TEXT]', icon: 'tabler:number-4' },
+    ]}
+  />
+
+  <Features
+    id="assetklassen"
+    tagline="Assetklassen"
+    title="Assetklassen"
+    subtitle="[ASSETKLASSEN_TEXT]"
+    columns={3}
+    items={[
+      { title: '[ASSET_1]', description: '[ASSET_1_TEXT]', icon: 'tabler:building-community' },
+      { title: '[ASSET_2]', description: '[ASSET_2_TEXT]', icon: 'tabler:tractor' },
+      { title: '[ASSET_3]', description: '[ASSET_3_TEXT]', icon: 'tabler:leaf' },
+      { title: '[ASSET_4]', description: '[ASSET_4_TEXT]', icon: 'tabler:plant-2' },
+      { title: '[ASSET_5]', description: '[ASSET_5_TEXT]', icon: 'tabler:chart-bar' },
+      { title: '[ASSET_6]', description: '[ASSET_6_TEXT]', icon: 'tabler:map' },
+    ]}
+  />
+
+  <FAQs
+    id="faq"
+    tagline="FAQ"
+    title="Fragen von Investoren"
+    subtitle="[INV_FAQ_TEXT]"
+    items={[
+      { title: '[INV_FAQ_1_Q]', description: '[INV_FAQ_1_A]' },
+      { title: '[INV_FAQ_2_Q]', description: '[INV_FAQ_2_A]' },
+      { title: '[INV_FAQ_3_Q]', description: '[INV_FAQ_3_A]' },
+      { title: '[INV_FAQ_4_Q]', description: '[INV_FAQ_4_A]' },
+      { title: '[INV_FAQ_5_Q]', description: '[INV_FAQ_5_A]' },
+    ]}
+    classes={{ container: 'max-w-5xl' }}
+  />
+
+  <CallToAction
+    id="cta"
+    actions={[
+      { variant: 'primary', text: 'Suchprofil hinterlegen', href: '/kontakt' },
+      { text: 'Angebote ansehen', href: '/angebote' },
+    ]}
+  >
+    <Fragment slot="title">[CTA_INVESTOREN_TITLE]</Fragment>
+    <Fragment slot="subtitle">[CTA_INVESTOREN_SUBTITLE]</Fragment>
+  </CallToAction>
+</Layout>

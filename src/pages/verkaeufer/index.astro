@@ -1,0 +1,74 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Hero from '~/components/widgets/Hero.astro';
+import Steps from '~/components/widgets/Steps.astro';
+import Features from '~/components/widgets/Features.astro';
+import FAQs from '~/components/widgets/FAQs.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+
+const metadata = {
+  title: 'Für Verkäufer – AstroWind Agrar Template',
+  description: '[VERKAEUFER_INTRO]'
+};
+---
+
+<Layout metadata={metadata}>
+  <Hero id="verkaeufer" actions={[{ text: 'Kontakt', href: '/kontakt' }]}>
+    <Fragment slot="title">Für Verkäufer</Fragment>
+    <Fragment slot="subtitle">[VERKAEUFER_INTRO]</Fragment>
+  </Hero>
+
+  <Steps
+    id="prozess"
+    tagline="Prozess"
+    title="Unser Prozess"
+    items={[
+      { title: '[STEP_1_TITLE]', description: '[STEP_1_TEXT]', icon: 'tabler:number-1' },
+      { title: '[STEP_2_TITLE]', description: '[STEP_2_TEXT]', icon: 'tabler:number-2' },
+      { title: '[STEP_3_TITLE]', description: '[STEP_3_TEXT]', icon: 'tabler:number-3' },
+      { title: '[STEP_4_TITLE]', description: '[STEP_4_TEXT]', icon: 'tabler:number-4' },
+    ]}
+  />
+
+  <Features
+    id="leistungen"
+    tagline="Leistungen"
+    title="Leistungen für Verkäufer"
+    subtitle="[LEISTUNGEN_TEXT]"
+    columns={3}
+    items={[
+      { title: '[LEISTUNG_1]', description: '[LEISTUNG_1_TEXT]', icon: 'tabler:certificate' },
+      { title: '[LEISTUNG_2]', description: '[LEISTUNG_2_TEXT]', icon: 'tabler:scale' },
+      { title: '[LEISTUNG_3]', description: '[LEISTUNG_3_TEXT]', icon: 'tabler:shield-check' },
+      { title: '[LEISTUNG_4]', description: '[LEISTUNG_4_TEXT]', icon: 'tabler:map' },
+      { title: '[LEISTUNG_5]', description: '[LEISTUNG_5_TEXT]', icon: 'tabler:report-analytics' },
+      { title: '[LEISTUNG_6]', description: '[LEISTUNG_6_TEXT]', icon: 'tabler:hand-heart' },
+    ]}
+  />
+
+  <FAQs
+    id="faq"
+    tagline="FAQ"
+    title="Häufige Fragen"
+    subtitle="[FAQ_TEXT]"
+    items={[
+      { title: '[FAQ_1_Q]', description: '[FAQ_1_A]' },
+      { title: '[FAQ_2_Q]', description: '[FAQ_2_A]' },
+      { title: '[FAQ_3_Q]', description: '[FAQ_3_A]' },
+      { title: '[FAQ_4_Q]', description: '[FAQ_4_A]' },
+      { title: '[FAQ_5_Q]', description: '[FAQ_5_A]' },
+    ]}
+    classes={{ container: 'max-w-5xl' }}
+  />
+
+  <CallToAction
+    id="cta"
+    actions={[
+      { variant: 'primary', text: 'Ersteinschätzung anfragen', href: '/kontakt' },
+      { text: 'Mehr erfahren', href: '/ueber-uns' },
+    ]}
+  >
+    <Fragment slot="title">[CTA_VERKAEUFER_TITLE]</Fragment>
+    <Fragment slot="subtitle">[CTA_VERKAEUFER_SUBTITLE]</Fragment>
+  </CallToAction>
+</Layout>

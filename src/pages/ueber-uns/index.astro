@@ -1,0 +1,76 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Hero from '~/components/widgets/Hero.astro';
+import Content from '~/components/widgets/Content.astro';
+import Features from '~/components/widgets/Features.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+
+const metadata = {
+  title: 'Über uns – AstroWind Agrar Template',
+  description: '[UEBER_UNS_INTRO]'
+};
+---
+
+<Layout metadata={metadata}>
+  <Hero id="ueber-uns" actions={[]} image={{ src: '~/assets/images/placeholders/placeholder-hero.jpg', alt: '[BILD_TEAM]' }}>
+    <Fragment slot="title">Über [MAKLER_NAME]</Fragment>
+    <Fragment slot="subtitle">[UEBER_UNS_INTRO]</Fragment>
+  </Hero>
+
+  <Content
+    id="profil"
+    title="Firmenprofil"
+    items={[{ title: '[FIRMA_TITLE]', description: '[FIRMA_TEXT]' }]}
+    image={{ src: '~/assets/images/placeholders/placeholder-hero.jpg', alt: '[FIRMA_BILD]' }}
+  >
+    <Fragment slot="content">[FIRMA_TEXT_LANG]</Fragment>
+  </Content>
+
+  <Features
+    id="team"
+    tagline="Team"
+    title="Team"
+    subtitle="[TEAM_SUBTITLE]"
+    columns={3}
+    items={[
+      { title: '[NAME_1]', description: '[FUNKTION_1] · [KURZTEXT_1]', icon: 'tabler:user' },
+      { title: '[NAME_2]', description: '[FUNKTION_2] · [KURZTEXT_2]', icon: 'tabler:user' },
+      { title: '[NAME_3]', description: '[FUNKTION_3] · [KURZTEXT_3]', icon: 'tabler:user' },
+      { title: '[NAME_4]', description: '[FUNKTION_4] · [KURZTEXT_4]', icon: 'tabler:user' },
+      { title: '[NAME_5]', description: '[FUNKTION_5] · [KURZTEXT_5]', icon: 'tabler:user' },
+      { title: '[NAME_6]', description: '[FUNKTION_6] · [KURZTEXT_6]', icon: 'tabler:user' },
+    ]}
+  />
+
+  <Content
+    id="arbeitsweise"
+    title="Arbeitsweise"
+    items={[{ title: '[ARBEITSWEISE_TITLE]', description: '[ARBEITSWEISE_TEXT]' }]}
+  >
+    <Fragment slot="content">[ARBEITSWEISE_TEXT_LANG]</Fragment>
+  </Content>
+
+  <Features
+    id="referenzen"
+    tagline="Referenzen & Presse"
+    title="Referenzen & Presse"
+    subtitle="[REFERENZEN_SUBTITLE]"
+    columns={3}
+    items={[
+      { title: '[REF_1]', description: '[REF_1_TEXT]', icon: 'tabler:newspaper' },
+      { title: '[REF_2]', description: '[REF_2_TEXT]', icon: 'tabler:newspaper' },
+      { title: '[REF_3]', description: '[REF_3_TEXT]', icon: 'tabler:newspaper' },
+    ]}
+  />
+
+  <CallToAction
+    id="cta"
+    actions={[
+      { variant: 'primary', text: 'Kontakt aufnehmen', href: '/kontakt' },
+      { text: 'Angebote ansehen', href: '/angebote' },
+    ]}
+  >
+    <Fragment slot="title">[CTA_UEBER_UNS_TITLE]</Fragment>
+    <Fragment slot="subtitle">[CTA_UEBER_UNS_SUBTITLE]</Fragment>
+  </CallToAction>
+</Layout>
