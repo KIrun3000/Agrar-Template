@@ -5,9 +5,7 @@ import Content from '~/components/widgets/Content.astro';
 import Features from '~/components/widgets/Features.astro';
 
 export function getStaticPaths() {
-  return [
-    { params: { slug: 'musterregion' }, props: { region: '[BUNDESLAND]', intro: '[REGION_INTRO]' } },
-  ];
+  return [{ params: { slug: 'musterregion' }, props: { region: '[BUNDESLAND]', intro: '[REGION_INTRO]' } }];
 }
 
 const { region = '[BUNDESLAND]', intro = '[REGION_INTRO]' } = Astro.props;
@@ -28,11 +26,7 @@ const metadata = {
     <Fragment slot="subtitle">{intro}</Fragment>
   </Hero>
 
-  <Content
-    id="markt"
-    title="Markt & Besonderheiten"
-    items={[{ title: '[MARKT_TITEL]', description: '[MARKT_TEXT]' }]}
-  >
+  <Content id="markt" title="Markt & Besonderheiten" items={[{ title: '[MARKT_TITEL]', description: '[MARKT_TEXT]' }]}>
     <Fragment slot="content">[MARKT_TEXT_LANG]</Fragment>
   </Content>
 
@@ -43,9 +37,24 @@ const metadata = {
     subtitle="[REGION_OBJEKTE_TEXT]"
     columns={3}
     items={[
-      { title: '[OBJEKT_A]', description: '[KURZTEXT_A]', icon: 'tabler:map-pin', callToAction: { text: 'Details', href: '/angebote/[slug]' } },
-      { title: '[OBJEKT_B]', description: '[KURZTEXT_B]', icon: 'tabler:tractor', callToAction: { text: 'Details', href: '/angebote/[slug]' } },
-      { title: '[OBJEKT_C]', description: '[KURZTEXT_C]', icon: 'tabler:plant-2', callToAction: { text: 'Details', href: '/angebote/[slug]' } },
+      {
+        title: '[OBJEKT_A]',
+        description: '[KURZTEXT_A]',
+        icon: 'tabler:map-pin',
+        callToAction: { text: 'Details', href: '/angebote/[slug]' },
+      },
+      {
+        title: '[OBJEKT_B]',
+        description: '[KURZTEXT_B]',
+        icon: 'tabler:tractor',
+        callToAction: { text: 'Details', href: '/angebote/[slug]' },
+      },
+      {
+        title: '[OBJEKT_C]',
+        description: '[KURZTEXT_C]',
+        icon: 'tabler:plant-2',
+        callToAction: { text: 'Details', href: '/angebote/[slug]' },
+      },
     ]}
   />
 

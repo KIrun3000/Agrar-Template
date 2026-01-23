@@ -5,13 +5,16 @@ import Features from '~/components/widgets/Features.astro';
 
 const metadata = {
   title: 'Länder – AstroWind Agrar Template',
-  description: '[LAENDER_SUBTITLE]'
+  description: '[LAENDER_SUBTITLE]',
 };
 ---
 
 <Layout metadata={metadata}>
-  <Hero id="laender" actions={[]}
-    image={{ src: '~/assets/images/placeholders/placeholder-region.jpg', alt: '[LAENDER_BILD]' }}>
+  <Hero
+    id="laender"
+    actions={[]}
+    image={{ src: '~/assets/images/placeholders/placeholder-region.jpg', alt: '[LAENDER_BILD]' }}
+  >
     <Fragment slot="title">Agrarimmobilien in der EU</Fragment>
     <Fragment slot="subtitle">[LAENDER_SUBTITLE]</Fragment>
   </Hero>
@@ -23,11 +26,36 @@ const metadata = {
     subtitle="[LAENDER_GRID_SUBTITLE]"
     columns={3}
     items={[
-      { title: 'Rumänien', description: '[LAND_RUM_T]', icon: 'tabler:map', callToAction: { text: 'Details', href: '/laender/[slug]' } },
-      { title: 'Tschechien', description: '[LAND_CZ_T]', icon: 'tabler:map', callToAction: { text: 'Details', href: '/laender/[slug]' } },
-      { title: 'Lettland', description: '[LAND_LV_T]', icon: 'tabler:map', callToAction: { text: 'Details', href: '/laender/[slug]' } },
-      { title: 'Portugal', description: '[LAND_PT_T]', icon: 'tabler:map', callToAction: { text: 'Details', href: '/laender/[slug]' } },
-      { title: 'Spanien', description: '[LAND_ES_T]', icon: 'tabler:map', callToAction: { text: 'Details', href: '/laender/[slug]' } },
+      {
+        title: 'Rumänien',
+        description: '[LAND_RUM_T]',
+        icon: 'tabler:map',
+        callToAction: { text: 'Details', href: '/laender/[slug]' },
+      },
+      {
+        title: 'Tschechien',
+        description: '[LAND_CZ_T]',
+        icon: 'tabler:map',
+        callToAction: { text: 'Details', href: '/laender/[slug]' },
+      },
+      {
+        title: 'Lettland',
+        description: '[LAND_LV_T]',
+        icon: 'tabler:map',
+        callToAction: { text: 'Details', href: '/laender/[slug]' },
+      },
+      {
+        title: 'Portugal',
+        description: '[LAND_PT_T]',
+        icon: 'tabler:map',
+        callToAction: { text: 'Details', href: '/laender/[slug]' },
+      },
+      {
+        title: 'Spanien',
+        description: '[LAND_ES_T]',
+        icon: 'tabler:map',
+        callToAction: { text: 'Details', href: '/laender/[slug]' },
+      },
     ]}
   />
 </Layout>

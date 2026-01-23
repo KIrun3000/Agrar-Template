@@ -7,12 +7,16 @@ import CallToAction from '~/components/widgets/CallToAction.astro';
 
 const metadata = {
   title: 'Über uns – AstroWind Agrar Template',
-  description: '[UEBER_UNS_INTRO]'
+  description: '[UEBER_UNS_INTRO]',
 };
 ---
 
 <Layout metadata={metadata}>
-  <Hero id="ueber-uns" actions={[]} image={{ src: '~/assets/images/placeholders/placeholder-hero.jpg', alt: '[BILD_TEAM]' }}>
+  <Hero
+    id="ueber-uns"
+    actions={[]}
+    image={{ src: '~/assets/images/placeholders/placeholder-hero.jpg', alt: '[BILD_TEAM]' }}
+  >
     <Fragment slot="title">Über [MAKLER_NAME]</Fragment>
     <Fragment slot="subtitle">[UEBER_UNS_INTRO]</Fragment>
   </Hero>
@@ -57,9 +61,9 @@ const metadata = {
     subtitle="[REFERENZEN_SUBTITLE]"
     columns={3}
     items={[
-      { title: '[REF_1]', description: '[REF_1_TEXT]', icon: 'tabler:newspaper' },
-      { title: '[REF_2]', description: '[REF_2_TEXT]', icon: 'tabler:newspaper' },
-      { title: '[REF_3]', description: '[REF_3_TEXT]', icon: 'tabler:newspaper' },
+      { title: '[REF_1]', description: '[REF_1_TEXT]', icon: 'tabler:news' },
+      { title: '[REF_2]', description: '[REF_2_TEXT]', icon: 'tabler:news' },
+      { title: '[REF_3]', description: '[REF_3_TEXT]', icon: 'tabler:news' },
     ]}
   />
 

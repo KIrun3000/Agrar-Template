@@ -37,32 +37,89 @@ const metadata = {
           {angebot.regionKurz && ` · ${angebot.regionKurz}`} · {angebot.typ} · {angebot.flaecheGesamtHa} ha
         </p>
       </div>
-      <div class="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-slate-900 p-4 text-sm space-y-2">
-        <div class="flex justify-between"><span>Bundesland</span><span class="font-medium">{angebot.bundesland}</span></div>
-        {angebot.regionKurz && (
-          <div class="flex justify-between"><span>Region</span><span class="font-medium">{angebot.regionKurz}</span></div>
-        )}
-        <div class="flex justify-between"><span>Gesamtfläche</span><span class="font-medium">{angebot.flaecheGesamtHa} ha</span></div>
-        {angebot.flaecheAckerHa && (
-          <div class="flex justify-between"><span>Ackerland</span><span class="font-medium">{angebot.flaecheAckerHa} ha</span></div>
-        )}
-        {angebot.flaecheWaldHa && (
-          <div class="flex justify-between"><span>Wald</span><span class="font-medium">{angebot.flaecheWaldHa} ha</span></div>
-        )}
-        {angebot.flaecheGruenHa && (
-          <div class="flex justify-between"><span>Grünland</span><span class="font-medium">{angebot.flaecheGruenHa} ha</span></div>
-        )}
-        {angebot.bodenpunkteKern && (
-          <div class="flex justify-between"><span>Bodenpunkte (Kern)</span><span class="font-medium">ca. {angebot.bodenpunkteKern} BP</span></div>
-        )}
-        {angebot.niederschlagMm && (
-          <div class="flex justify-between"><span>Niederschlag</span><span class="font-medium">ca. {angebot.niederschlagMm} mm</span></div>
-        )}
-        {angebot.pachtBis && (
-          <div class="flex justify-between"><span>Pacht</span><span class="font-medium">{angebot.pachtBis}</span></div>
-        )}
+      <div
+        class="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-slate-900 p-4 text-sm space-y-2"
+      >
+        <div class="flex justify-between">
+          <span>Bundesland</span><span class="font-medium">{angebot.bundesland}</span>
+        </div>
+        {
+          angebot.regionKurz && (
+            <div class="flex justify-between">
+              <>
+                <span>Region</span>
+                <span class="font-medium">{angebot.regionKurz}</span>
+              </>
+            </div>
+          )
+        }
+        <div class="flex justify-between">
+          <span>Gesamtfläche</span><span class="font-medium">{angebot.flaecheGesamtHa} ha</span>
+        </div>
+        {
+          angebot.flaecheAckerHa && (
+            <div class="flex justify-between">
+              <>
+                <span>Ackerland</span>
+                <span class="font-medium">{angebot.flaecheAckerHa} ha</span>
+              </>
+            </div>
+          )
+        }
+        {
+          angebot.flaecheWaldHa && (
+            <div class="flex justify-between">
+              <>
+                <span>Wald</span>
+                <span class="font-medium">{angebot.flaecheWaldHa} ha</span>
+              </>
+            </div>
+          )
+        }
+        {
+          angebot.flaecheGruenHa && (
+            <div class="flex justify-between">
+              <>
+                <span>Grünland</span>
+                <span class="font-medium">{angebot.flaecheGruenHa} ha</span>
+              </>
+            </div>
+          )
+        }
+        {
+          angebot.bodenpunkteKern && (
+            <div class="flex justify-between">
+              <>
+                <span>Bodenpunkte (Kern)</span>
+                <span class="font-medium">ca. {angebot.bodenpunkteKern} BP</span>
+              </>
+            </div>
+          )
+        }
+        {
+          angebot.niederschlagMm && (
+            <div class="flex justify-between">
+              <>
+                <span>Niederschlag</span>
+                <span class="font-medium">ca. {angebot.niederschlagMm} mm</span>
+              </>
+            </div>
+          )
+        }
+        {
+          angebot.pachtBis && (
+            <div class="flex justify-between">
+              <>
+                <span>Pacht</span>
+                <span class="font-medium">{angebot.pachtBis}</span>
+              </>
+            </div>
+          )
+        }
         <div class="flex justify-between"><span>Status</span><span class="font-medium">{angebot.status}</span></div>
-        <div class="flex justify-between"><span>Kaufpreis</span><span class="font-medium">{angebot.kaufpreisText}</span></div>
+        <div class="flex justify-between">
+          <span>Kaufpreis</span><span class="font-medium">{angebot.kaufpreisText}</span>
+        </div>
       </div>
     </div>
 
@@ -83,19 +140,21 @@ const metadata = {
     <Content
       id="kennzahlen"
       title="Kennzahlen"
-      items={
-        ([
-        { title: 'Gesamtfläche', description: `${angebot.flaecheGesamtHa} ha` },
-        angebot.flaecheAckerHa ? { title: 'Ackerland', description: `${angebot.flaecheAckerHa} ha` } : null,
-        angebot.flaecheGruenHa ? { title: 'Grünland', description: `${angebot.flaecheGruenHa} ha` } : null,
-        angebot.flaecheWaldHa ? { title: 'Wald', description: `${angebot.flaecheWaldHa} ha` } : null,
-        angebot.bodenpunkteKern ? { title: 'Bodenpunkte (Kern)', description: `ca. ${angebot.bodenpunkteKern} BP` } : null,
-        angebot.niederschlagMm ? { title: 'Niederschlag', description: `ca. ${angebot.niederschlagMm} mm` } : null,
-        angebot.pachtBis ? { title: 'Pacht', description: angebot.pachtBis } : null,
-        { title: 'Status', description: angebot.status },
-        { title: 'Kaufpreis', description: angebot.kaufpreisText },
-      ] as (Item | null)[]).filter(Boolean) as Item[]
-      }
+      items={(
+        [
+          { title: 'Gesamtfläche', description: `${angebot.flaecheGesamtHa} ha` },
+          angebot.flaecheAckerHa ? { title: 'Ackerland', description: `${angebot.flaecheAckerHa} ha` } : null,
+          angebot.flaecheGruenHa ? { title: 'Grünland', description: `${angebot.flaecheGruenHa} ha` } : null,
+          angebot.flaecheWaldHa ? { title: 'Wald', description: `${angebot.flaecheWaldHa} ha` } : null,
+          angebot.bodenpunkteKern
+            ? { title: 'Bodenpunkte (Kern)', description: `ca. ${angebot.bodenpunkteKern} BP` }
+            : null,
+          angebot.niederschlagMm ? { title: 'Niederschlag', description: `ca. ${angebot.niederschlagMm} mm` } : null,
+          angebot.pachtBis ? { title: 'Pacht', description: angebot.pachtBis } : null,
+          { title: 'Status', description: angebot.status },
+          { title: 'Kaufpreis', description: angebot.kaufpreisText },
+        ] as (Item | null)[]
+      ).filter(Boolean) as Item[]}
     />
 
     <Features
@@ -104,8 +163,16 @@ const metadata = {
       title="Weitere Informationen"
       columns={2}
       items={[
-        { title: 'Datenraum', description: 'Auf Anfrage stellen wir Datenraumzugang mit Flurkarten, Pachtverträgen und Bonitäten bereit.', icon: 'tabler:folder' },
-        { title: 'Besichtigung', description: 'Besichtigungen nach Abstimmung und Vertraulichkeitserklärung möglich.', icon: 'tabler:map-search' },
+        {
+          title: 'Datenraum',
+          description: 'Auf Anfrage stellen wir Datenraumzugang mit Flurkarten, Pachtverträgen und Bonitäten bereit.',
+          icon: 'tabler:folder',
+        },
+        {
+          title: 'Besichtigung',
+          description: 'Besichtigungen nach Abstimmung und Vertraulichkeitserklärung möglich.',
+          icon: 'tabler:map-search',
+        },
       ]}
     />
 
@@ -117,7 +184,9 @@ const metadata = {
       ]}
     >
       <Fragment slot="title">Interesse an {angebot.id}?</Fragment>
-      <Fragment slot="subtitle">Schreiben Sie uns, um das vollständige Exposé und weitere Kennzahlen zu erhalten.</Fragment>
+      <Fragment slot="subtitle"
+        >Schreiben Sie uns, um das vollständige Exposé und weitere Kennzahlen zu erhalten.</Fragment
+      >
     </CallToAction>
 
     <Contact

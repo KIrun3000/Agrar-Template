@@ -5,9 +5,7 @@ import Content from '~/components/widgets/Content.astro';
 import Features from '~/components/widgets/Features.astro';
 
 export function getStaticPaths() {
-  return [
-    { params: { slug: 'musterland' }, props: { land: '[LAND_NAME]', intro: '[LAND_INTRO]' } },
-  ];
+  return [{ params: { slug: 'musterland' }, props: { land: '[LAND_NAME]', intro: '[LAND_INTRO]' } }];
 }
 
 const { land = '[LAND_NAME]', intro = '[LAND_INTRO]' } = Astro.props;
@@ -36,11 +34,7 @@ const metadata = {
     <Fragment slot="content">[RECHT_TEXT_LANG]</Fragment>
   </Content>
 
-  <Content
-    id="markt"
-    title="Marktübersicht"
-    items={[{ title: '[MARKT_TITEL]', description: '[MARKT_TEXT]' }]}
-  >
+  <Content id="markt" title="Marktübersicht" items={[{ title: '[MARKT_TITEL]', description: '[MARKT_TEXT]' }]}>
     <Fragment slot="content">[MARKT_TEXT_LANG]</Fragment>
   </Content>
 
@@ -51,9 +45,24 @@ const metadata = {
     subtitle="[LAND_OBJEKTE_TEXT]"
     columns={3}
     items={[
-      { title: '[OBJEKT_1]', description: '[KURZTEXT_1]', icon: 'tabler:building', callToAction: { text: 'Details', href: '/angebote/[slug]' } },
-      { title: '[OBJEKT_2]', description: '[KURZTEXT_2]', icon: 'tabler:map', callToAction: { text: 'Details', href: '/angebote/[slug]' } },
-      { title: '[OBJEKT_3]', description: '[KURZTEXT_3]', icon: 'tabler:plant-2', callToAction: { text: 'Details', href: '/angebote/[slug]' } },
+      {
+        title: '[OBJEKT_1]',
+        description: '[KURZTEXT_1]',
+        icon: 'tabler:building',
+        callToAction: { text: 'Details', href: '/angebote/[slug]' },
+      },
+      {
+        title: '[OBJEKT_2]',
+        description: '[KURZTEXT_2]',
+        icon: 'tabler:map',
+        callToAction: { text: 'Details', href: '/angebote/[slug]' },
+      },
+      {
+        title: '[OBJEKT_3]',
+        description: '[KURZTEXT_3]',
+        icon: 'tabler:plant-2',
+        callToAction: { text: 'Details', href: '/angebote/[slug]' },
+      },
     ]}
   />
 

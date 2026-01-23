@@ -5,13 +5,16 @@ import Features from '~/components/widgets/Features.astro';
 
 const metadata = {
   title: 'Regionen – AstroWind Agrar Template',
-  description: '[REGIONEN_SUBTITLE]'
+  description: '[REGIONEN_SUBTITLE]',
 };
 ---
 
 <Layout metadata={metadata}>
-  <Hero id="regionen" actions={[]}
-    image={{ src: '~/assets/images/placeholders/placeholder-region.jpg', alt: '[REGIONEN_BILD]' }}>
+  <Hero
+    id="regionen"
+    actions={[]}
+    image={{ src: '~/assets/images/placeholders/placeholder-region.jpg', alt: '[REGIONEN_BILD]' }}
+  >
     <Fragment slot="title">Unsere Regionen in Deutschland</Fragment>
     <Fragment slot="subtitle">[REGIONEN_SUBTITLE]</Fragment>
   </Hero>
@@ -23,15 +26,60 @@ const metadata = {
     subtitle="[REGIONEN_GRID_SUBTITLE]"
     columns={3}
     items={[
-      { title: '[BUNDESLAND_1_NAME]', description: '[BUNDESLAND_1_TEXT]', icon: 'tabler:map', callToAction: { text: 'Details', href: '/regionen/[slug]' } },
-      { title: '[BUNDESLAND_2_NAME]', description: '[BUNDESLAND_2_TEXT]', icon: 'tabler:map', callToAction: { text: 'Details', href: '/regionen/[slug]' } },
-      { title: '[BUNDESLAND_3_NAME]', description: '[BUNDESLAND_3_TEXT]', icon: 'tabler:map', callToAction: { text: 'Details', href: '/regionen/[slug]' } },
-      { title: '[BUNDESLAND_4_NAME]', description: '[BUNDESLAND_4_TEXT]', icon: 'tabler:map', callToAction: { text: 'Details', href: '/regionen/[slug]' } },
-      { title: '[BUNDESLAND_5_NAME]', description: '[BUNDESLAND_5_TEXT]', icon: 'tabler:map', callToAction: { text: 'Details', href: '/regionen/[slug]' } },
-      { title: '[BUNDESLAND_6_NAME]', description: '[BUNDESLAND_6_TEXT]', icon: 'tabler:map', callToAction: { text: 'Details', href: '/regionen/[slug]' } },
-      { title: '[BUNDESLAND_7_NAME]', description: '[BUNDESLAND_7_TEXT]', icon: 'tabler:map', callToAction: { text: 'Details', href: '/regionen/[slug]' } },
-      { title: '[BUNDESLAND_8_NAME]', description: '[BUNDESLAND_8_TEXT]', icon: 'tabler:map', callToAction: { text: 'Details', href: '/regionen/[slug]' } },
-      { title: '[BUNDESLAND_9_NAME]', description: '[BUNDESLAND_9_TEXT]', icon: 'tabler:map', callToAction: { text: 'Details', href: '/regionen/[slug]' } },
+      {
+        title: '[BUNDESLAND_1_NAME]',
+        description: '[BUNDESLAND_1_TEXT]',
+        icon: 'tabler:map',
+        callToAction: { text: 'Details', href: '/regionen/[slug]' },
+      },
+      {
+        title: '[BUNDESLAND_2_NAME]',
+        description: '[BUNDESLAND_2_TEXT]',
+        icon: 'tabler:map',
+        callToAction: { text: 'Details', href: '/regionen/[slug]' },
+      },
+      {
+        title: '[BUNDESLAND_3_NAME]',
+        description: '[BUNDESLAND_3_TEXT]',
+        icon: 'tabler:map',
+        callToAction: { text: 'Details', href: '/regionen/[slug]' },
+      },
+      {
+        title: '[BUNDESLAND_4_NAME]',
+        description: '[BUNDESLAND_4_TEXT]',
+        icon: 'tabler:map',
+        callToAction: { text: 'Details', href: '/regionen/[slug]' },
+      },
+      {
+        title: '[BUNDESLAND_5_NAME]',
+        description: '[BUNDESLAND_5_TEXT]',
+        icon: 'tabler:map',
+        callToAction: { text: 'Details', href: '/regionen/[slug]' },
+      },
+      {
+        title: '[BUNDESLAND_6_NAME]',
+        description: '[BUNDESLAND_6_TEXT]',
+        icon: 'tabler:map',
+        callToAction: { text: 'Details', href: '/regionen/[slug]' },
+      },
+      {
+        title: '[BUNDESLAND_7_NAME]',
+        description: '[BUNDESLAND_7_TEXT]',
+        icon: 'tabler:map',
+        callToAction: { text: 'Details', href: '/regionen/[slug]' },
+      },
+      {
+        title: '[BUNDESLAND_8_NAME]',
+        description: '[BUNDESLAND_8_TEXT]',
+        icon: 'tabler:map',
+        callToAction: { text: 'Details', href: '/regionen/[slug]' },
+      },
+      {
+        title: '[BUNDESLAND_9_NAME]',
+        description: '[BUNDESLAND_9_TEXT]',
+        icon: 'tabler:map',
+        callToAction: { text: 'Details', href: '/regionen/[slug]' },
+      },
     ]}
   />
 </Layout>
