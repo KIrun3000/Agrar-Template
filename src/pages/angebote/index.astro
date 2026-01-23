@@ -1,0 +1,172 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import { ANGEBOTE } from '~/data/angebote';
+
+const searchParams = Astro.url.searchParams;
+const filterBundesland = searchParams.get('bundesland');
+const filterTyp = searchParams.get('typ');
+const filterStatus = searchParams.get('status');
+const sort = searchParams.get('sort') ?? 'neu';
+
+let angebote = [...ANGEBOTE];
+
+if (filterBundesland) angebote = angebote.filter((a) => a.bundesland === filterBundesland);
+if (filterTyp) angebote = angebote.filter((a) => a.typ === filterTyp);
+if (filterStatus) angebote = angebote.filter((a) => a.status === filterStatus);
+
+if (sort === 'flaeche-desc') {
+  angebote.sort((a, b) => b.flaecheGesamtHa - a.flaecheGesamtHa);
+} else {
+  angebote.sort((a, b) => (a.id < b.id ? 1 : -1));
+}
+
+const uniqueBundeslaender = [...new Set(ANGEBOTE.map((a) => a.bundesland))].sort();
+const uniqueTypen = [...new Set(ANGEBOTE.map((a) => a.typ))].sort();
+const uniqueStatus = [...new Set(ANGEBOTE.map((a) => a.status))].sort();
+
+const metadata = {
+  title: 'Aktuelle Angebote',
+  description: 'Übersicht aller aktuell verfügbaren Agrar- und Forstimmobilien.',
+};
+---
+
+<Layout metadata={metadata}>
+  <section class="px-6 sm:px-6 py-10 sm:py-14 lg:py-16 mx-auto max-w-6xl">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-8">
+      <div>
+        <p class="text-sm uppercase tracking-wide text-secondary">Angebote</p>
+        <h1 class="text-3xl font-bold">Aktuelle Angebote</h1>
+        <p class="text-muted mt-2">
+          Übersicht aller aktuell verfügbaren Agrar- und Forstimmobilien. Filter nach Bundesland, Nutzungstyp und
+          Status.
+        </p>
+      </div>
+      <form class="flex gap-2 items-center text-sm text-muted" method="get">
+        <label for="sort" class="font-semibold">Sortierung</label>
+        <select
+          id="sort"
+          name="sort"
+          class="py-2 px-3 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+        >
+          <option value="neu" selected={sort === 'neu'}>Neueste zuerst</option>
+          <option value="flaeche-desc" selected={sort === 'flaeche-desc'}>Fläche absteigend</option>
+        </select>
+        <button type="submit" class="btn-tertiary">OK</button>
+      </form>
+    </div>
+
+    <form class="grid gap-4 md:grid-cols-4 bg-white/70 dark:bg-slate-900/60 p-6 rounded-xl shadow mb-8" method="get">
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-semibold" for="bundesland">Bundesland</label>
+        <select
+          id="bundesland"
+          name="bundesland"
+          class="py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+        >
+          <option value="">Alle</option>
+          {
+            uniqueBundeslaender.map((bl) => (
+              <option value={bl} selected={bl === filterBundesland}>
+                {bl}
+              </option>
+            ))
+          }
+        </select>
+      </div>
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-semibold" for="typ">Nutzung</label>
+        <select
+          id="typ"
+          name="typ"
+          class="py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+        >
+          <option value="">Alle</option>
+          {
+            uniqueTypen.map((typ) => (
+              <option value={typ} selected={typ === filterTyp}>
+                {typ}
+              </option>
+            ))
+          }
+        </select>
+      </div>
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-semibold" for="status">Status</label>
+        <select
+          id="status"
+          name="status"
+          class="py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+        >
+          <option value="">Alle</option>
+          {
+            uniqueStatus.map((st) => (
+              <option value={st} selected={st === filterStatus}>
+                {st}
+              </option>
+            ))
+          }
+        </select>
+      </div>
+      <div class="flex items-end gap-2">
+        <button class="btn-secondary w-full" type="submit">Filtern</button>
+        <button class="btn-tertiary w-full" type="button" onclick="window.location.href=window.location.pathname"
+          >Reset</button
+        >
+      </div>
+    </form>
+
+    <div class="grid gap-6 md:grid-cols-2">
+      {
+        angebote.map((angebot) => {
+          const statusClass =
+            angebot.status === 'Neu'
+              ? 'bg-emerald-100 text-emerald-700'
+              : angebot.status === 'Reserviert'
+                ? 'bg-amber-100 text-amber-700'
+                : 'bg-slate-200 text-slate-600';
+
+          return (
+            <article class="border border-gray-200 dark:border-gray-800 rounded-xl p-6 bg-white dark:bg-slate-900 shadow-sm">
+              <div class="flex items-center justify-between mb-2">
+                <p class="text-sm font-mono text-slate-500">{angebot.id}</p>
+                <span class={`inline-flex rounded-full px-2 py-0.5 text-xs ${statusClass}`}>{angebot.status}</span>
+              </div>
+
+              <h2 class="text-lg font-semibold leading-snug">
+                <a class="hover:underline" href={`/angebote/${angebot.slug}`}>
+                  {angebot.beschreibungKurz}
+                </a>
+              </h2>
+
+              <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
+                {angebot.bundesland}
+                {angebot.regionKurz && ` · ${angebot.regionKurz}`}
+              </p>
+
+              <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">
+                {angebot.flaecheGesamtHa} ha · {angebot.typ}
+                {angebot.bodenpunkteKern && ` · ca. ${angebot.bodenpunkteKern} BP`}
+                {angebot.niederschlagMm && ` · ca. ${angebot.niederschlagMm} mm`}
+                {angebot.pachtBis && ` · ${angebot.pachtBis}`}
+              </p>
+
+              <p class="mt-2 text-sm font-semibold text-default">{angebot.kaufpreisText}</p>
+
+              <div class="mt-4 flex justify-between items-center">
+                <a
+                  class="inline-flex items-center text-sm font-semibold text-primary hover:underline"
+                  href={`/angebote/${angebot.slug}`}
+                >
+                  Details ansehen
+                </a>
+                <span class="text-xs text-muted">{angebot.typ}</span>
+              </div>
+            </article>
+          );
+        })
+      }
+    </div>
+
+    {angebote.length === 0 && <p class="mt-6 text-muted">Keine Angebote für diese Filter gefunden.</p>}
+  </section>
+</Layout>

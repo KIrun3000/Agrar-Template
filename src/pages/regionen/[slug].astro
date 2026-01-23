@@ -1,0 +1,76 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Hero from '~/components/widgets/Hero.astro';
+import Content from '~/components/widgets/Content.astro';
+import Features from '~/components/widgets/Features.astro';
+
+export function getStaticPaths() {
+  return [{ params: { slug: 'musterregion' }, props: { region: '[BUNDESLAND]', intro: '[REGION_INTRO]' } }];
+}
+
+const { region = '[BUNDESLAND]', intro = '[REGION_INTRO]' } = Astro.props;
+
+const metadata = {
+  title: `Region ${region}`,
+  description: intro,
+};
+---
+
+<Layout metadata={metadata}>
+  <Hero
+    id="region-hero"
+    image={{ src: '~/assets/images/placeholders/placeholder-region.jpg', alt: '[REGION_BILD]' }}
+    actions={[]}
+  >
+    <Fragment slot="title">Agrarimmobilien in {region}</Fragment>
+    <Fragment slot="subtitle">{intro}</Fragment>
+  </Hero>
+
+  <Content id="markt" title="Markt & Besonderheiten" items={[{ title: '[MARKT_TITEL]', description: '[MARKT_TEXT]' }]}>
+    <Fragment slot="content">[MARKT_TEXT_LANG]</Fragment>
+  </Content>
+
+  <Features
+    id="region-objekte"
+    tagline="Objekte in dieser Region"
+    title={`Objekte in ${region}`}
+    subtitle="[REGION_OBJEKTE_TEXT]"
+    columns={3}
+    items={[
+      {
+        title: '[OBJEKT_A]',
+        description: '[KURZTEXT_A]',
+        icon: 'tabler:map-pin',
+        callToAction: { text: 'Details', href: '/angebote/[slug]' },
+      },
+      {
+        title: '[OBJEKT_B]',
+        description: '[KURZTEXT_B]',
+        icon: 'tabler:tractor',
+        callToAction: { text: 'Details', href: '/angebote/[slug]' },
+      },
+      {
+        title: '[OBJEKT_C]',
+        description: '[KURZTEXT_C]',
+        icon: 'tabler:plant-2',
+        callToAction: { text: 'Details', href: '/angebote/[slug]' },
+      },
+    ]}
+  />
+
+  <Content
+    id="verkaeufer-tipps"
+    title="Was Verkäufer beachten sollten"
+    items={[{ title: '[VERKAEUFER_TITEL]', description: '[VERKAEUFER_TIPPS]' }]}
+  >
+    <Fragment slot="content">[VERKAEUFER_TIPPS_LANG]</Fragment>
+  </Content>
+
+  <Content
+    id="kaeufer-tipps"
+    title="Was Käufer beachten sollten"
+    items={[{ title: '[KAEUFER_TITEL]', description: '[KAEUFER_TIPPS]' }]}
+  >
+    <Fragment slot="content">[KAEUFER_TIPPS_LANG]</Fragment>
+  </Content>
+</Layout>

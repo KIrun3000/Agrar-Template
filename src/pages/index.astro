@@ -2,398 +2,260 @@
 import Layout from '~/layouts/PageLayout.astro';
 
 import Hero from '~/components/widgets/Hero.astro';
-import Note from '~/components/widgets/Note.astro';
 import Features from '~/components/widgets/Features.astro';
-import Features2 from '~/components/widgets/Features2.astro';
-import Steps from '~/components/widgets/Steps.astro';
 import Content from '~/components/widgets/Content.astro';
-import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
-import FAQs from '~/components/widgets/FAQs.astro';
 import Stats from '~/components/widgets/Stats.astro';
+import Features2 from '~/components/widgets/Features2.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
+import Contact from '~/components/widgets/Contact.astro';
 
 const metadata = {
-  title: 'AstroWind — Free template for creating websites with Astro + Tailwind CSS',
+  title: 'Voß Agrarimmobilien – Agrar- und Forstimmobilien',
+  description:
+    'Diskrete Vermarktung von Ackerland, Grünland, Wald und Agrarbetrieben in Deutschland und der EU. Seit über 15 Jahren Ihr Partner für professionelle Vermittlung.',
   ignoreTitleTemplate: true,
 };
 ---
 
 <Layout metadata={metadata}>
-  <!-- Hero Widget ******************* -->
-
   <Hero
+    id="start"
     actions={[
-      {
-        variant: 'primary',
-        text: 'Get template',
-        href: 'https://github.com/arthelokyo/astrowind',
-        target: '_blank',
-        icon: 'tabler:download',
-      },
-      { text: 'Learn more', href: '#features' },
+      { variant: 'primary', text: 'Aktuelle Angebote', href: '/angebote' },
+      { text: 'Kontakt aufnehmen', href: '/kontakt' },
     ]}
-    image={{ src: '~/assets/images/hero-image.png', alt: 'AstroWind Hero Image' }}
+    image={{ src: '~/assets/images/hero-image.png', alt: '[OBJEKT_BILD]' }}
   >
-    <Fragment slot="title">
-      Free template for <span class="hidden xl:inline">creating websites with</span>
-      <span class="text-accent dark:text-white"> Astro 5.0</span> + Tailwind CSS
-    </Fragment>
-
+    <Fragment slot="title">Agrar- und Forstimmobilien – Ihr spezialisierter Makler für große Flächen</Fragment>
     <Fragment slot="subtitle">
-      <span class="hidden sm:inline">
-        <span class="font-semibold">AstroWind</span> is a free, customizable and production-ready template for Astro 5.0
-        + Tailwind CSS.</span
-      >
-      <span class="block mb-1 sm:hidden font-bold text-blue-600">AstroWind: Production-ready.</span>
-      Suitable for Startups, Small Business, SaaS websites, Professional Portfolios, Marketing websites, Landing Pages &
-      Blogs.
+      Diskrete Vermarktung von Ackerland, Grünland, Wald und Agrarbetrieben in Deutschland und der EU. Seit über 15
+      Jahren Ihr Partner für professionelle Vermittlung.
+    </Fragment>
+    <Fragment slot="content">
+      <div class="mt-6 max-w-xl mx-auto grid gap-4 bg-white/80 dark:bg-slate-900/70 p-4 rounded-xl shadow">
+        <div class="flex flex-col gap-3">
+          <label class="text-sm font-semibold" for="hero-name">Name</label>
+          <input
+            id="hero-name"
+            name="name"
+            type="text"
+            placeholder="[NAME]"
+            class="py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+          />
+          <label class="text-sm font-semibold" for="hero-email">E-Mail</label>
+          <input
+            id="hero-email"
+            name="email"
+            type="email"
+            placeholder="[EMAIL]"
+            class="py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+          />
+          <button class="btn-primary">Anfrage senden</button>
+          <p class="text-xs text-muted">
+            Ihre Daten werden vertraulich behandelt. Nach Absenden erhalten Sie eine Bestätigungsmail.
+          </p>
+        </div>
+      </div>
     </Fragment>
   </Hero>
 
-  <!-- Note Widget ******************* -->
-
-  <Note title="Philosophy:" description="Simplicity, Best Practices and High Performance" />
-
-  <!-- Features Widget *************** -->
-
   <Features
-    id="features"
-    tagline="Features"
-    title="What you get with AstroWind"
-    subtitle="One of the most professional and comprehensive templates currently on the market. Most starred & forked Astro theme in 2022, 2023 and 2024."
+    id="highlights"
+    tagline="Aktuelle Highlights"
+    title="Aktuelle Highlights"
+    subtitle="Ausgewählte Angebote aus unserem Portfolio. Viele weitere Objekte vermarkten wir diskret außerhalb dieser Website – sprechen Sie uns auf Ihre Wünsche an."
+    columns={3}
     items={[
       {
-        title: 'Astro + Tailwind CSS Integration',
-        description:
-          'A seamless integration between two great frameworks that offer high productivity, performance and versatility.',
-        icon: 'tabler:brand-tailwind',
+        title: '73 ha Ackerland, südl. LK Vorpommern-Greifswald',
+        description: 'Mecklenburg-Vorpommern · 73 ha • Acker • 45-65 BP • verpachtet bis 2027',
+        icon: 'tabler:home',
+        callToAction: { text: 'Details ansehen', href: '/angebote/mv-3152-73ha-ackerland-vorpommern' },
       },
       {
-        title: 'Ready-to-use Components',
-        description:
-          'Widgets made with Tailwind CSS ready to be used in Marketing Websites, SaaS, Blogs, Personal Profiles, Small Business...',
-        icon: 'tabler:components',
+        title: '156 ha Gutshof mit Hofstelle, Brandenburg',
+        description: 'Brandenburg · 156 ha • Villa • Acker/Wald • Pferdehaltung • Jagd',
+        icon: 'tabler:map',
+        callToAction: { text: 'Details ansehen', href: '/angebote/bb-3169-gutshof-brandenburg' },
       },
       {
-        title: 'Best Practices',
-        description:
-          'Creating secure, efficient, and user-friendly websites that deliver exceptional experiences and lasting value.',
-        icon: 'tabler:list-check',
+        title: '2.100 ha Ackerbaubetrieb, Rumänien',
+        description: 'Rumänien · 2.100 ha • Schwarzerde • 80-100 BP • verpachtet',
+        icon: 'tabler:tractor',
+        callToAction: { text: 'Details ansehen', href: '/angebote/ro-ackerland' },
       },
       {
-        title: 'Excellent Page Speed',
-        description:
-          'Having a good page speed impacts organic search ranking, improves user experience (UI/UX) and increase conversion rates.',
-        icon: 'tabler:rocket',
+        title: '95 ha Waldfläche mit Ackerland, Brandenburg',
+        description: 'Brandenburg · 95 ha • 78 ha Wald • 16 ha Acker • Kiefern 20-80 J.',
+        icon: 'tabler:building',
+        callToAction: { text: 'Details ansehen', href: '/angebote/bb-3223-wald-und-acker-brandenburg' },
       },
       {
-        title: 'Search Engine Optimization (SEO)',
-        description:
-          "SEO lies in its ability to enhance a website's visibility, driving organic traffic and enabling it to reach a wider audience.",
-        icon: 'tabler:arrows-right-left',
+        title: '65 ha Ackerland östlich Magdeburg',
+        description: 'Sachsen-Anhalt · 65 ha • Acker • 45 BP • verpachtet bis 2026',
+        icon: 'tabler:plant-2',
+        callToAction: { text: 'Details ansehen', href: '/angebote/st-3254-ackerland-magdeburg' },
       },
       {
-        title: 'Open to new ideas and contributions',
-        description:
-          'Embracing a culture that is open to new ideas and contributions is integral fostering innovation, collaboration, and a dynamic user experience.',
-        icon: 'tabler:bulb',
+        title: '8 ha Ackerland mit Ostseestrand, Fehmarn',
+        description: 'Schleswig-Holstein · 8 ha • Acker • 65+ BP • inkl. 1.055 m² Strand',
+        icon: 'tabler:map-pin',
+        callToAction: { text: 'Details ansehen', href: '/angebote/sh-3238-ackerland-fehmarn' },
       },
     ]}
   />
 
-  <!-- Content Widget **************** -->
-
   <Content
-    isReversed
-    tagline="Inside template"
-    title="AstroWind's Blueprint: Fun Meets Functionality!"
+    id="verkaeufer"
+    tagline="Für Verkäufer"
+    title="Für Verkäufer"
     items={[
       {
-        title: 'Built on top of Astro 5.0',
+        title: 'Unsere Leistungen',
         description:
-          'Benefiting from the performance and developer-friendly features of this modern static site generator.',
-      },
-      {
-        title: 'Styled using Tailwind CSS',
-        description:
-          'Facilitating rapid design and consistent styling with this highly popular utility-first CSS framework.',
-      },
-      {
-        title: 'Cross-browser compatibility',
-        description:
-          'Ensure your website looks and functions consistently across various web browsers, delivering a seamless experience to all users.',
+          '• Marktgerechte Bewertung auf Basis von Bodenpunkten, Pachtstrukturen und regionaler Nachfrage\n• Diskrete Vermarktung über unser Investoren- und Käufernetzwerk, oft ohne öffentliche Ausschreibung\n• Strukturierte Käuferauswahl und professionelle Begleitung bis zum Abschluss\n• Erfahrung mit Betriebsnachfolgen, Vermögensstrukturierung und Verkauf arrondierter Großflächen\n\nGerne geben wir Ihnen eine erste, unverbindliche Einschätzung Ihrer Fläche.',
       },
     ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-      alt: 'Colorful Image',
-    }}
+    image={{ src: '~/assets/images/placeholders/placeholder-verkaeufer.jpg', alt: '[BILD_VERKAEUFER]' }}
   >
     <Fragment slot="content">
-      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Building on modern foundations</h3>
-      Gain a competitive advantage by incorporating industry leading practices
-    </Fragment>
-
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+      Sie planen den Verkauf von Ackerland, Grünland, Wald oder eines gesamten Agrarbetriebs? Wir begleiten Sie diskret
+      und strukturiert durch den gesamten Prozess – von der ersten Bewertung bis zum Notartermin.
     </Fragment>
   </Content>
 
-  <!-- Content Widget **************** -->
-
   <Content
-    isAfterContent
-    items={[
-      {
-        title: 'High level of customization',
-        description: `Tailor the template effortlessly to match your brand's identity and requirements, making your website distinct and saving you time.`,
-      },
-      {
-        title: 'Multiple layout possibilities',
-        description:
-          'Explore various layout options to find the structure that best presents your content, enhancing user engagement and navigation.',
-      },
-      {
-        title: 'Fully responsive design',
-        description:
-          "Ensure your website's optimal performance on various devices and screen sizes, providing a consistent and enjoyable user experience.",
-      },
-      {
-        title: 'Integration of media',
-        description:
-          'Seamlessly incorporate images, videos, and multimedia elements that enhance your content and engage visitors effectively.',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1600132806370-bf17e65e942f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2194&q=80',
-      alt: 'Blueprint Image',
-    }}
-  >
-    <Fragment slot="content">Ensure your online presence truly represents you.</Fragment>
-
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
-
-  <!-- Content Widget **************** -->
-
-  <Content
+    id="investoren"
     isReversed
-    isAfterContent
+    tagline="Für Investoren"
+    title="Für Investoren"
     items={[
       {
-        title: 'Enhanced user engagement',
+        title: 'Investment-Profile',
         description:
-          'Captivate your audience with interactive elements, intuitive navigation, and visually appealing layouts, encouraging longer visits.',
-      },
-      {
-        title: 'Continuous improvement',
-        description:
-          'Ensure your website stays aligned with the latest trends and technologies through regular updates and enhancements.',
-      },
-      {
-        title: 'Time and resource efficiency',
-        description:
-          'Skip the time-consuming process of building a website from scratch and launch your online presence sooner with AstroWind.',
-      },
-      {
-        title: 'Community support',
-        description: `Join the growing AstroWind community for insights, resources, and assistance, ensuring you're never alone on your web development journey.`,
+          '• Strukturierte Datenräume mit Bodenqualität (BP), Niederschlagsdaten, Pachtverträgen und Ertragsprognosen\n• Objekte mit klaren Renditestrukturen – viele langfristig verpachtet mit Pachtrenditen von 2,5-3,5%\n• Zugang zu Off-Market-Beständen, die nicht öffentlich ausgeschrieben werden\n• Spezialisierung auf Family Offices, institutionelle Investoren und vermögende Privatanleger\n\nHinterlegen Sie Ihr Suchprofil – wir informieren Sie frühzeitig über passende Angebote.',
       },
     ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1611462985358-60d3498e0364?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-      alt: 'Astronauts Image',
-    }}
+    image={{ src: '~/assets/images/placeholders/placeholder-investoren.jpg', alt: '[BILD_INVESTOREN]' }}
   >
-    <Fragment slot="content">Designed to foster growth and success.</Fragment>
-
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    <Fragment slot="content">
+      Sie suchen nach langfristigen Investments in Agrarflächen, Wald oder Agrarbetriebe? Wir vermitteln Objekte im In-
+      und Ausland – von mittelgroßen Flächen in Deutschland bis zu Großbetrieben mit mehreren tausend Hektar in
+      Rumänien, Tschechien oder Lettland.
     </Fragment>
   </Content>
-
-  <!-- Steps Widget ****************** -->
-
-  <Steps
-    title="Get your dream website up and running in no time with AstroWind."
-    items={[
-      {
-        title: 'Step 1: <span class="font-medium">Download</span>',
-        description:
-          "Kickstart with GitHub! Either fork the AstroWind template or simply click 'Use this template'. Your canvas awaits, ready for your digital masterpiece. In just a few clicks, you've already set the foundation.",
-        icon: 'tabler:package',
-      },
-      {
-        title: 'Step 2: <span class="font-medium">Add content</span>',
-        description:
-          "Pour your vision into it. Add images, text, and all that jazz to breathe life into your digital space. Remember, it's the content that tells your story, so make it captivating.",
-        icon: 'tabler:letter-case',
-      },
-      {
-        title: 'Step 3: <span class="font-medium">Customize styles</span>',
-        description:
-          'Give it your personal touch. Tailor colors, fonts, and layouts until it feels just right. Your unique flair, amplified by AstroWind! Precision in design ensures a seamless user experience.',
-        icon: 'tabler:paint',
-      },
-      {
-        title: 'Ready!',
-        icon: 'tabler:check',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1616198814651-e71f960c3180?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80',
-      alt: 'Steps image',
-    }}
-  />
-
-  <!-- Features2 Widget ************** -->
-
-  <Features2
-    title="Most used widgets"
-    subtitle="Provides frequently used components for building websites using Tailwind CSS"
-    tagline="Components"
-    items={[
-      {
-        title: 'Headers',
-        description: "Ever tried driving without GPS? Boom! That's why websites need headers for direction.",
-        icon: 'flat-color-icons:template',
-      },
-      {
-        title: 'Heros',
-        description:
-          "Picture a superhero landing – epic, right? That's the job of a Hero section, making grand entrances!",
-        icon: 'flat-color-icons:gallery',
-      },
-      {
-        title: 'Features',
-        description:
-          'Where websites strut their stuff and show off superpowers. No holding back on the bragging rights here!',
-        icon: 'flat-color-icons:approval',
-      },
-      {
-        title: 'Content',
-        description:
-          "Dive into the meat and potatoes of a site; without it, you'd just be window shopping. Content is king.",
-        icon: 'flat-color-icons:document',
-      },
-      {
-        title: 'Call-to-Action',
-        description:
-          'That enthusiastic friend who\'s always urging, "Do it! Do it!"? Yeah, that\'s this button nudging you towards adventure.',
-        icon: 'flat-color-icons:advertising',
-      },
-      {
-        title: 'Pricing',
-        description: 'Behold the dessert menu of the website world. Tempting choices await, can you resist?',
-        icon: 'flat-color-icons:currency-exchange',
-      },
-      {
-        title: 'Testimonial',
-        description: 'Step into the gossip corner! Here, other visitors spill the beans and share the juicy details.',
-        icon: 'flat-color-icons:voice-presentation',
-      },
-      {
-        title: 'Contact',
-        description:
-          'Like a digital mailbox, but faster! Drop a line, ask a question, or send a virtual high-five. Ding! Message in.',
-        icon: 'flat-color-icons:business-contact',
-      },
-      {
-        title: 'Footers',
-        description: "The footer's like the credits of a movie but sprinkled with easter eggs. Time to hunt!",
-        icon: 'flat-color-icons:database',
-      },
-    ]}
-  >
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Features2>
-
-  <!-- HighlightedPosts Widget ******* -->
-
-  <BlogLatestPosts
-    title="Find out more content in our Blog"
-    information={`The blog is used to display AstroWind documentation.
-                        Each new article will be an important step that you will need to know to be an expert in creating a website using Astro + Tailwind CSS.
-                        Astro is a very interesting technology. Thanks.
-                `}
-  />
-
-  <!-- FAQs Widget ******************* -->
-
-  <FAQs
-    title="Frequently Asked Questions"
-    subtitle="Dive into the following questions to gain insights into the powerful features that AstroWind offers and how it can elevate your web development journey."
-    tagline="FAQs"
-    classes={{ container: 'max-w-6xl' }}
-    items={[
-      {
-        title: 'Why AstroWind?',
-        description:
-          "Michael Knight a young loner on a crusade to champion the cause of the innocent. The helpless. The powerless in a world of criminals who operate above the law. Here he comes Here comes Speed Racer. He's a demon on wheels.",
-      },
-      {
-        title: 'What do I need to start?',
-        description:
-          'Space, the final frontier. These are the voyages of the Starship Enterprise. Its five-year mission: to explore strange new worlds. Many say exploration is part of our destiny, but it’s actually our duty to future generations.',
-      },
-      {
-        title: 'How to install the Astro + Tailwind CSS template?',
-        description:
-          "Well, the way they make shows is, they make one show. That show's called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they're going to make more shows.",
-      },
-      {
-        title: "What's something that you don't understand?",
-        description:
-          "A flower in my garden, a mystery in my panties. Heart attack never stopped old Big Bear. I didn't even know we were calling him Big Bear.",
-      },
-      {
-        title: 'What is something that you would like to try again?',
-        description:
-          "A business big enough that it could be listed on the NASDAQ goes belly up. Disappears! It ceases to exist without me. No, you clearly don't know who you're talking to, so let me clue you in.",
-      },
-      {
-        title: 'If you could only ask one question to each person you meet, what would that question be?',
-        description:
-          "This is not about revenge. This is about justice. A lot of things can change in twelve years, Admiral. Well, that's certainly good to know. About four years. I got tired of hearing how young I looked.",
-      },
-    ]}
-  />
-
-  <!-- Stats Widget ****************** -->
 
   <Stats
+    id="trust"
     stats={[
-      { title: 'Downloads', amount: '132K' },
-      { title: 'Stars', amount: '24.8K' },
-      { title: 'Forks', amount: '10.3K' },
-      { title: 'Users', amount: '48.4K' },
+      { title: 'Hektar vermittelt (letzte 3 Jahre)', amount: '2.500+' },
+      { title: 'Jahre Markterfahrung', amount: '15' },
+      { title: 'Länder & Regionen', amount: '8' },
+      { title: 'Durchschnittliche Antwortzeit', amount: '< 48h' },
     ]}
   />
 
-  <!-- CallToAction Widget *********** -->
-
-  <CallToAction
-    actions={[
+  <Features2
+    id="regionen"
+    tagline="Regionen & Länder"
+    title="Regionen & Länder"
+    subtitle="Wir vermitteln Agrarflächen und Betriebe in ausgewählten Regionen Deutschlands und der EU mit Fokus auf Nord- und Ostdeutschland sowie Osteuropa."
+    items={[
       {
-        variant: 'primary',
-        text: 'Get template',
-        href: 'https://github.com/arthelokyo/astrowind',
-        target: '_blank',
-        icon: 'tabler:download',
+        title: 'Mecklenburg-Vorpommern',
+        description: 'Große Ackerflächen ab 50 ha, strukturstarke Betriebe, BP 40-70',
+        icon: 'flat-color-icons:gallery',
+        callToAction: { text: 'Mehr erfahren', href: '/regionen/mecklenburg-vorpommern' },
+      },
+      {
+        title: 'Brandenburg',
+        description: 'Arrondierte Flächen, Gutshöfe, Wald- und Jagdimmobilien, Berlin-nah',
+        icon: 'flat-color-icons:approval',
+        callToAction: { text: 'Mehr erfahren', href: '/regionen/brandenburg' },
+      },
+      {
+        title: 'Sachsen-Anhalt',
+        description: 'Hochwertige Schwarzerdeböden, BP 60-90, Hochertragsstandorte',
+        icon: 'flat-color-icons:document',
+        callToAction: { text: 'Mehr erfahren', href: '/regionen/sachsen-anhalt' },
+      },
+      {
+        title: 'Rumänien',
+        description: 'Großbetriebe 500-5.000 ha, Schwarzerde, BP 80-100, mechanisiert',
+        icon: 'flat-color-icons:gallery',
+        callToAction: { text: 'Mehr erfahren', href: '/laender/rumaenien' },
+      },
+      {
+        title: 'Tschechien',
+        description: 'Strukturierte Betriebe, EU-Rechtsrahmen, stabile Pachterträge',
+        icon: 'flat-color-icons:approval',
+        callToAction: { text: 'Mehr erfahren', href: '/laender/tschechien' },
+      },
+      {
+        title: 'Lettland',
+        description: 'Aufstrebender Markt, moderate Preise, EU-Mitglied seit 2004',
+        icon: 'flat-color-icons:document',
+        callToAction: { text: 'Mehr erfahren', href: '/laender/lettland' },
+      },
+      {
+        title: 'Thüringen',
+        description: 'Mittelgebirgslagen, Acker/Grünland-Mix, Forstflächen',
+        icon: 'flat-color-icons:gallery',
+        callToAction: { text: 'Mehr erfahren', href: '/regionen/thueringen' },
+      },
+      {
+        title: 'Portugal',
+        description: 'Agroforstsysteme, Weinbau, touristische Entwicklungspotenziale',
+        icon: 'flat-color-icons:approval',
+        callToAction: { text: 'Mehr erfahren', href: '/laender/portugal' },
+      },
+    ]}
+  />
+
+  <Content
+    id="ueber-uns"
+    title="Über uns"
+    items={[
+      {
+        title: 'Unsere Arbeitsweise',
+        description:
+          'Wir arbeiten eng mit Eigentümern, Family Offices und institutionellen Investoren zusammen. Viele unserer Mandate werden nicht öffentlich ausgeschrieben, sondern über unser Netzwerk diskret platziert.\n\n**Kernkompetenzen:**\n• Due Diligence und Bewertung von Agrarflächen\n• Diskrete Vermarktung großer Einheiten (oft > 100 ha)\n• Internationale Mandate (Deutschland, Rumänien, Tschechien, Lettland, Portugal)\n• Begleitung von Betriebsnachfolgen und Vermögensumstrukturierungen',
       },
     ]}
   >
-    <Fragment slot="title">
-      Astro&nbsp;+&nbsp;<br class="block sm:hidden" /><span class="sm:whitespace-nowrap">Tailwind CSS</span>
+    <Fragment slot="content">
+      Seit über 15 Jahren sind wir als spezialisierter Makler für Agrar- und Forstimmobilien tätig. Unser Schwerpunkt
+      liegt auf großen Flächen und komplexen Betriebsstrukturen – diskret, strukturiert und mit tiefem Marktverständnis.
     </Fragment>
+  </Content>
 
+  <CallToAction
+    id="cta"
+    actions={[
+      { variant: 'primary', text: 'Mehr erfahren', href: '/ueber-uns' },
+      { text: 'Kontakt aufnehmen', href: '/kontakt' },
+    ]}
+  >
+    <Fragment slot="title">Interesse geweckt?</Fragment>
     <Fragment slot="subtitle">
-      Be very surprised by these huge fake numbers you are seeing on this page. <br class="hidden md:inline" />Don't
-      waste more time! :P
+      Kontaktieren Sie uns für ein unverbindliches Erstgespräch oder fordern Sie weitere Informationen zu unseren
+      aktuellen Angeboten an.
     </Fragment>
   </CallToAction>
+
+  <Contact
+    id="kontakt"
+    tagline="Kontakt aufnehmen"
+    title="Kontakt aufnehmen"
+    subtitle="Sie haben Fragen zu einem Objekt oder möchten eine Ersteinschätzung für Ihre Fläche? Kontaktieren Sie uns – wir melden uns innerhalb von 48 Stunden."
+    inputs={[
+      { label: 'Name', name: 'name', type: 'text', placeholder: '[NAME]' },
+      { label: 'E-Mail', name: 'email', type: 'email', placeholder: '[EMAIL]', autocomplete: 'email' },
+      { label: 'Telefon', name: 'phone', type: 'tel', placeholder: '[TELEFON_OPTIONAL]' },
+      { label: 'Projektbezug', name: 'projekt', type: 'text', placeholder: '[PROJEKTBEZUG_DROPDOWN]' },
+    ]}
+    textarea={{ label: 'Nachricht', name: 'message', placeholder: '[NACHRICHT]' }}
+    button="Anfrage senden"
+    description="Formular-Endpoint muss konfiguriert werden."
+  />
 </Layout>

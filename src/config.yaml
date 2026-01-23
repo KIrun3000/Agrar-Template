@@ -1,61 +1,61 @@
 site:
-  name: AstroWind
-  site: 'https://astrowind.vercel.app'
+  name: 'Voß Agrarimmobilien'
+  site: 'https://agrar-template.example.com'
   base: '/'
   trailingSlash: false
 
-  googleSiteVerificationId: orcPxI47GSa-cRvY11tUe6iGg2IO_RPvnA1q95iEM3M
+  googleSiteVerificationId: null
 
 # Default SEO metadata
 metadata:
   title:
-    default: AstroWind
-    template: '%s — AstroWind'
-  description: "\U0001F680 Suitable for Startups, Small Business, Sass Websites, Professional Portfolios, Marketing Websites, Landing Pages & Blogs."
+    default: 'Voß Agrarimmobilien – Spezialist für Agrarflächen in Deutschland & EU'
+    template: '%s — Voß Agrarimmobilien'
+  description: 'Diskrete Vermarktung von Ackerland, Grünland, Wald und Agrarbetrieben. Seit über 15 Jahren Ihr Partner für professionelle Agrarimmobilien in Deutschland, Rumänien, Tschechien und der EU.'
   robots:
     index: true
     follow: true
   openGraph:
-    site_name: AstroWind
+    site_name: Voß Agrarimmobilien
     images:
       - url: '~/assets/images/default.png'
         width: 1200
         height: 628
     type: website
   twitter:
-    handle: '@arthelokyo'
-    site: '@arthelokyo'
+    handle: null
+    site: null
     cardType: summary_large_image
 
 i18n:
-  language: en
+  language: de
   textDirection: ltr
 
 apps:
   blog:
-    isEnabled: true
-    postsPerPage: 6
+    isEnabled: false
+    postsPerPage: 12
 
     post:
-      isEnabled: true
-      permalink: '/%slug%' # Variables: %slug%, %year%, %month%, %day%, %hour%, %minute%, %second%, %category%
+      isEnabled: false
+      permalink: '/angebote/%slug%' # Variables: %slug%, %year%, %month%, %day%, %hour%, %minute%, %second%, %category%
       robots:
         index: true
 
     list:
-      isEnabled: true
-      pathname: 'blog' # Blog main path, you can change this to "articles" (/articles)
+      isEnabled: false
+      pathname: 'angebote' # Blog main path, you can change this to "articles" (/articles)
       robots:
         index: true
 
     category:
-      isEnabled: true
+      isEnabled: false
       pathname: 'category' # Category main path /category/some-category, you can change this to "group" (/group/some-category)
       robots:
         index: true
 
     tag:
-      isEnabled: true
+      isEnabled: false
       pathname: 'tag' # Tag main path /tag/some-tag, you can change this to "topics" (/topics/some-category)
       robots:
         index: false

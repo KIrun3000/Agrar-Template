@@ -1,0 +1,208 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Content from '~/components/widgets/Content.astro';
+import Features from '~/components/widgets/Features.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import Contact from '~/components/widgets/Contact.astro';
+import { ANGEBOTE } from '~/data/angebote';
+import type { Item } from '~/types';
+
+export const getStaticPaths = () => {
+  return ANGEBOTE.map((angebot) => ({
+    params: { slug: angebot.slug },
+  }));
+};
+
+const { slug } = Astro.params;
+const angebot = ANGEBOTE.find((a) => a.slug === slug);
+
+if (!angebot) {
+  return Astro.redirect('/404', 302);
+}
+
+const metadata = {
+  title: `${angebot.id} – ${angebot.beschreibungKurz}`,
+  description: angebot.beschreibungKurz,
+};
+---
+
+<Layout metadata={metadata}>
+  <section class="px-6 sm:px-6 py-10 sm:py-14 lg:py-16 mx-auto max-w-6xl">
+    <div class="grid gap-8 lg:grid-cols-[2fr_1fr]">
+      <div>
+        <p class="text-sm text-secondary font-semibold">{angebot.id}</p>
+        <h1 class="text-3xl font-bold leading-tight mt-1">{angebot.beschreibungKurz}</h1>
+        <p class="text-muted mt-2">
+          {angebot.bundesland}
+          {angebot.regionKurz && ` · ${angebot.regionKurz}`} · {angebot.typ} · {angebot.flaecheGesamtHa} ha
+        </p>
+      </div>
+      <div
+        class="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-slate-900 p-4 text-sm space-y-2"
+      >
+        <div class="flex justify-between">
+          <span>Bundesland</span><span class="font-medium">{angebot.bundesland}</span>
+        </div>
+        {
+          angebot.regionKurz && (
+            <div class="flex justify-between">
+              <>
+                <span>Region</span>
+                <span class="font-medium">{angebot.regionKurz}</span>
+              </>
+            </div>
+          )
+        }
+        <div class="flex justify-between">
+          <span>Gesamtfläche</span><span class="font-medium">{angebot.flaecheGesamtHa} ha</span>
+        </div>
+        {
+          angebot.flaecheAckerHa && (
+            <div class="flex justify-between">
+              <>
+                <span>Ackerland</span>
+                <span class="font-medium">{angebot.flaecheAckerHa} ha</span>
+              </>
+            </div>
+          )
+        }
+        {
+          angebot.flaecheWaldHa && (
+            <div class="flex justify-between">
+              <>
+                <span>Wald</span>
+                <span class="font-medium">{angebot.flaecheWaldHa} ha</span>
+              </>
+            </div>
+          )
+        }
+        {
+          angebot.flaecheGruenHa && (
+            <div class="flex justify-between">
+              <>
+                <span>Grünland</span>
+                <span class="font-medium">{angebot.flaecheGruenHa} ha</span>
+              </>
+            </div>
+          )
+        }
+        {
+          angebot.bodenpunkteKern && (
+            <div class="flex justify-between">
+              <>
+                <span>Bodenpunkte (Kern)</span>
+                <span class="font-medium">ca. {angebot.bodenpunkteKern} BP</span>
+              </>
+            </div>
+          )
+        }
+        {
+          angebot.niederschlagMm && (
+            <div class="flex justify-between">
+              <>
+                <span>Niederschlag</span>
+                <span class="font-medium">ca. {angebot.niederschlagMm} mm</span>
+              </>
+            </div>
+          )
+        }
+        {
+          angebot.pachtBis && (
+            <div class="flex justify-between">
+              <>
+                <span>Pacht</span>
+                <span class="font-medium">{angebot.pachtBis}</span>
+              </>
+            </div>
+          )
+        }
+        <div class="flex justify-between"><span>Status</span><span class="font-medium">{angebot.status}</span></div>
+        <div class="flex justify-between">
+          <span>Kaufpreis</span><span class="font-medium">{angebot.kaufpreisText}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid gap-10 lg:grid-cols-[2fr_1fr] mt-10">
+      <div class="prose dark:prose-invert max-w-none">
+        <h2>Objektbeschreibung</h2>
+        <p>{angebot.beschreibungLang}</p>
+      </div>
+      <div class="space-y-4">
+        <div class="border border-gray-200 dark:border-gray-800 rounded-lg p-4 bg-white dark:bg-slate-900">
+          <h3 class="text-lg font-semibold">Weitere Informationen</h3>
+          <p class="text-sm text-muted mt-2">Weitere Details und Unterlagen stellen wir auf Anfrage zur Verfügung.</p>
+          <a class="mt-4 inline-flex items-center justify-center btn-primary w-full" href="/kontakt">Exposé anfragen</a>
+        </div>
+      </div>
+    </div>
+
+    <Content
+      id="kennzahlen"
+      title="Kennzahlen"
+      items={(
+        [
+          { title: 'Gesamtfläche', description: `${angebot.flaecheGesamtHa} ha` },
+          angebot.flaecheAckerHa ? { title: 'Ackerland', description: `${angebot.flaecheAckerHa} ha` } : null,
+          angebot.flaecheGruenHa ? { title: 'Grünland', description: `${angebot.flaecheGruenHa} ha` } : null,
+          angebot.flaecheWaldHa ? { title: 'Wald', description: `${angebot.flaecheWaldHa} ha` } : null,
+          angebot.bodenpunkteKern
+            ? { title: 'Bodenpunkte (Kern)', description: `ca. ${angebot.bodenpunkteKern} BP` }
+            : null,
+          angebot.niederschlagMm ? { title: 'Niederschlag', description: `ca. ${angebot.niederschlagMm} mm` } : null,
+          angebot.pachtBis ? { title: 'Pacht', description: angebot.pachtBis } : null,
+          { title: 'Status', description: angebot.status },
+          { title: 'Kaufpreis', description: angebot.kaufpreisText },
+        ] as (Item | null)[]
+      ).filter(Boolean) as Item[]}
+    />
+
+    <Features
+      id="weitere-info"
+      tagline="Hinweise"
+      title="Weitere Informationen"
+      columns={2}
+      items={[
+        {
+          title: 'Datenraum',
+          description: 'Auf Anfrage stellen wir Datenraumzugang mit Flurkarten, Pachtverträgen und Bonitäten bereit.',
+          icon: 'tabler:folder',
+        },
+        {
+          title: 'Besichtigung',
+          description: 'Besichtigungen nach Abstimmung und Vertraulichkeitserklärung möglich.',
+          icon: 'tabler:map-search',
+        },
+      ]}
+    />
+
+    <CallToAction
+      id="kontakt"
+      actions={[
+        { variant: 'primary', text: 'Exposé anfragen', href: '/kontakt' },
+        { text: 'Zur Übersicht', href: '/angebote' },
+      ]}
+    >
+      <Fragment slot="title">Interesse an {angebot.id}?</Fragment>
+      <Fragment slot="subtitle"
+        >Schreiben Sie uns, um das vollständige Exposé und weitere Kennzahlen zu erhalten.</Fragment
+      >
+    </CallToAction>
+
+    <Contact
+      id="kontakt-form"
+      tagline="Kontakt"
+      title="Objektanfrage stellen"
+      subtitle="Ihre Nachricht wird innerhalb von 48 Stunden beantwortet."
+      inputs={[
+        { label: 'Name', name: 'name', type: 'text', placeholder: 'Ihr Name' },
+        { label: 'E-Mail', name: 'email', type: 'email', placeholder: 'beispiel@domain.de', autocomplete: 'email' },
+        { label: 'Telefon', name: 'phone', type: 'tel', placeholder: 'Telefon (optional)' },
+        { label: 'Objekt', name: 'object', type: 'text', placeholder: angebot.id },
+      ]}
+      textarea={{ label: 'Fragen oder Hinweise', name: 'message', placeholder: 'Ihre Nachricht' }}
+      button="Exposé anfordern"
+      description="Formular-Endpoint muss noch angebunden werden."
+    />
+  </section>
+</Layout>

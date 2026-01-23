@@ -1,0 +1,46 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Hero from '~/components/widgets/Hero.astro';
+import Contact from '~/components/widgets/Contact.astro';
+import Content from '~/components/widgets/Content.astro';
+
+const metadata = {
+  title: 'Kontakt – AstroWind Agrar Template',
+  description: '[KONTAKT_BESCHREIBUNG]',
+};
+---
+
+<Layout metadata={metadata}>
+  <Hero
+    id="kontakt"
+    actions={[]}
+    image={{ src: '~/assets/images/placeholders/placeholder-hero.jpg', alt: '[KONTAKT_BILD]' }}
+  >
+    <Fragment slot="title">Kontakt</Fragment>
+    <Fragment slot="subtitle">[KONTAKT_BESCHREIBUNG]</Fragment>
+  </Hero>
+
+  <Contact
+    id="kontakt-form"
+    tagline="Kontakt aufnehmen"
+    title="Kontakt aufnehmen"
+    subtitle="[KONTAKT_HINWEIS]"
+    inputs={[
+      { label: 'Name', name: 'name', type: 'text', placeholder: '[NAME]' },
+      { label: 'E-Mail', name: 'email', type: 'email', placeholder: '[EMAIL]', autocomplete: 'email' },
+      { label: 'Telefon', name: 'phone', type: 'tel', placeholder: '[TELEFON]' },
+      { label: 'Projektbezug', name: 'projekt', type: 'text', placeholder: '[PROJEKTBEZUG]' },
+    ]}
+    textarea={{ label: 'Nachricht', name: 'message', placeholder: '[NACHRICHT]' }}
+    button="Anfrage senden"
+    description="Formular-Endpoint muss konfiguriert werden."
+  />
+
+  <Content id="adresse" title="Kontaktdaten" items={[{ title: '[ADRESSE_TITEL]', description: '[ADRESSE_TEXT]' }]}>
+    <Fragment slot="content">[ADRESSE_ZUSATZ]</Fragment>
+  </Content>
+
+  <Content id="karte" title="Karte" items={[{ title: '[KARTE_HINWEIS]', description: '[KARTE_TEXT]' }]}>
+    <Fragment slot="content">[KARTE_PLACEHOLDER]</Fragment>
+  </Content>
+</Layout>
