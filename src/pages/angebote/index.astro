@@ -1,6 +1,7 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import { ANGEBOTE } from '~/data/angebote';
+import placeholderObj from '~/assets/images/placeholders/placeholder-objekt.jpg';
 
 const searchParams = Astro.url.searchParams;
 const filterBundesland = searchParams.get('bundesland');
@@ -23,7 +24,7 @@ if (sort === 'flaeche-desc') {
 const uniqueBundeslaender = [...new Set(ANGEBOTE.map((a) => a.bundesland))].sort();
 const uniqueTypen = [...new Set(ANGEBOTE.map((a) => a.typ))].sort();
 const uniqueStatus = [...new Set(ANGEBOTE.map((a) => a.status))].sort();
-const placeholderImage = '/assets/images/placeholders/placeholder-objekt.jpg';
+const placeholderImage = placeholderObj.src;
 const withImages = angebote.filter((a) => a.image);
 const variantTop = (withImages.length >= 3 ? withImages : angebote).slice(0, 3);
 const variantLeft = (withImages.length >= 6 ? withImages : angebote).slice(3, 6);
