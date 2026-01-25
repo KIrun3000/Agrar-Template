@@ -1,5 +1,5 @@
 site:
-  name: 'Voß Agrarimmobilien'
+  name: 'Muster Agrarimmobilien'
   site: 'https://agrar-template.example.com'
   base: '/'
   trailingSlash: false
@@ -9,14 +9,14 @@ site:
 # Default SEO metadata
 metadata:
   title:
-    default: 'Voß Agrarimmobilien – Spezialist für Agrarflächen in Deutschland & EU'
-    template: '%s — Voß Agrarimmobilien'
+    default: 'Muster Agrarimmobilien – Spezialist für Agrarflächen in Deutschland & EU'
+    template: '%s — Muster Agrarimmobilien'
   description: 'Diskrete Vermarktung von Ackerland, Grünland, Wald und Agrarbetrieben. Seit über 15 Jahren Ihr Partner für professionelle Agrarimmobilien in Deutschland, Rumänien, Tschechien und der EU.'
   robots:
     index: true
     follow: true
   openGraph:
-    site_name: Voß Agrarimmobilien
+    site_name: Muster Agrarimmobilien
     images:
       - url: '~/assets/images/default.png'
         width: 1200

@@ -78,6 +78,6 @@ export const footerData = {
     { ariaLabel: 'Facebook', icon: 'tabler:brand-facebook', href: '#' },
   ],
   footNote: `
-    Voß Agrarimmobilien · Ihr Spezialist für Agrarflächen seit über 15 Jahren.
+    Muster Agrarimmobilien · Ihr Spezialist für Agrarflächen seit über 15 Jahren.
   `,
 };
