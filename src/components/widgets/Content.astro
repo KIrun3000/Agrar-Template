@@ -23,6 +23,24 @@ const {
   classes = {},
   bg = await Astro.slots.render('bg'),
 } = Astro.props;
+
+const normalizedImage =
+  image && typeof image === 'object'
+    ? {
+        ...image,
+        width: (image as Record<string, unknown>)?.width ?? 1200,
+        height: (image as Record<string, unknown>)?.height ?? 800,
+      }
+    : image;
+
+const normalizedWidth =
+  typeof normalizedImage === 'object' && normalizedImage && 'width' in normalizedImage
+    ? (normalizedImage as Record<string, unknown>).width
+    : 1200;
+const normalizedHeight =
+  typeof normalizedImage === 'object' && normalizedImage && 'height' in normalizedImage
+    ? (normalizedImage as Record<string, unknown>).height
+    : 800;
 ---
 
 <WidgetWrapper
@@ -77,12 +95,12 @@ const {
               ) : (
                 <Image
                   class="mx-auto w-full rounded-lg bg-gray-500 shadow-lg"
-                  width={500}
-                  height={500}
+                  width={normalizedWidth as number}
+                  height={normalizedHeight as number}
                   widths={[400, 768]}
                   sizes="(max-width: 768px) 100vw, 432px"
                   layout="responsive"
-                  {...image}
+                  {...(normalizedImage ?? {})}
                 />
               )}
             </div>
