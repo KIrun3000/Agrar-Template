@@ -23,6 +23,10 @@ if (sort === 'flaeche-desc') {
 const uniqueBundeslaender = [...new Set(ANGEBOTE.map((a) => a.bundesland))].sort();
 const uniqueTypen = [...new Set(ANGEBOTE.map((a) => a.typ))].sort();
 const uniqueStatus = [...new Set(ANGEBOTE.map((a) => a.status))].sort();
+const placeholderImage = '/assets/images/placeholders/placeholder-objekt.jpg';
+const withImages = angebote.filter((a) => a.image);
+const variantTop = (withImages.length >= 3 ? withImages : angebote).slice(0, 3);
+const variantLeft = (withImages.length >= 6 ? withImages : angebote).slice(3, 6);
 
 const metadata = {
   title: 'Aktuelle Angebote',
@@ -168,5 +172,79 @@ const metadata = {
     </div>
 
     {angebote.length === 0 && <p class="mt-6 text-muted">Keine Angebote für diese Filter gefunden.</p>}
+
+    <div class="mt-12 space-y-6">
+      <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-bold">Variante A: Bild oben (Beispiel)</h2>
+        <span class="text-sm text-muted">3 Beispielkarten</span>
+      </div>
+      <div class="grid gap-6 md:grid-cols-3">
+        {variantTop.map((angebot) => (
+          <article class="border border-gray-200 dark:border-gray-800 rounded-xl p-4 bg-white dark:bg-slate-900 shadow-sm">
+            <img
+              src={angebot.image || placeholderImage}
+              alt={angebot.beschreibungKurz}
+              class="w-full h-40 object-cover rounded-lg mb-4"
+              loading="lazy"
+            />
+            <div class="flex items-center justify-between mb-2">
+              <p class="text-sm font-mono text-slate-500">{angebot.id}</p>
+              <span class="inline-flex rounded-full px-2 py-0.5 text-xs bg-emerald-100 text-emerald-700">
+                {angebot.status}
+              </span>
+            </div>
+            <h3 class="text-lg font-semibold leading-snug">
+              <a class="hover:underline" href={`/angebote/`}>{angebot.beschreibungKurz}</a>
+            </h3>
+            <p class="mt-2 text-sm text-muted">
+              {angebot.bundesland}
+              {angebot.regionKurz && ` · `}
+            </p>
+            <p class="mt-1 text-sm text-muted">
+              {angebot.flaecheGesamtHa} ha · {angebot.typ} {angebot.bodenpunkteKern && `· ca.  BP`}
+            </p>
+            <p class="mt-2 text-sm font-semibold text-default">{angebot.kaufpreisText}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <div class="mt-12 space-y-6">
+      <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-bold">Variante B: Bild links (Beispiel)</h2>
+        <span class="text-sm text-muted">3 Beispielkarten</span>
+      </div>
+      <div class="space-y-4">
+        {variantLeft.map((angebot) => (
+          <article class="flex gap-4 border border-gray-200 dark:border-gray-800 rounded-xl p-4 bg-white dark:bg-slate-900 shadow-sm">
+            <img
+              src={angebot.image || placeholderImage}
+              alt={angebot.beschreibungKurz}
+              class="w-32 h-28 object-cover rounded-lg"
+              loading="lazy"
+            />
+            <div class="flex-1">
+              <div class="flex items-center justify-between mb-1">
+                <p class="text-sm font-mono text-slate-500">{angebot.id}</p>
+                <span class="inline-flex rounded-full px-2 py-0.5 text-xs bg-amber-100 text-amber-700">
+                  {angebot.status}
+                </span>
+              </div>
+              <h3 class="text-lg font-semibold leading-snug">
+                <a class="hover:underline" href={`/angebote/`}>{angebot.beschreibungKurz}</a>
+              </h3>
+              <p class="mt-1 text-sm text-muted">
+                {angebot.bundesland}
+                {angebot.regionKurz && ` · `}
+              </p>
+              <p class="mt-1 text-sm text-muted">
+                {angebot.flaecheGesamtHa} ha · {angebot.typ} {angebot.bodenpunkteKern && `· ca.  BP`}
+              </p>
+              <p class="mt-2 text-sm font-semibold text-default">{angebot.kaufpreisText}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
   </section>
 </Layout>

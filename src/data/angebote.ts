@@ -42,6 +42,7 @@ export const ANGEBOTE: Angebot[] = [
     beschreibungLang:
       'Ca. 24,3 ha arrondierter Grundbesitz im Landkreis Schorfheide, davon ca. 21,7 ha Ackerfläche, 0,5 ha Grünland und ca. 2,09 ha sonstige Flächen. Pachtfrei nach der Ernte 2026. In der Kernfläche ca. 40 Bodenpunkte, durchschnittlicher Jahresniederschlag ca. 600 mm.',
     slug: 'bb-3251-arrondierter-grundbesitz-schorfheide',
+    image: 'https://cdn.pixabay.com/photo/2016/11/29/05/08/agriculture-1866559_1280.jpg',
   },
   {
     id: 'BB-3250',
@@ -58,6 +59,7 @@ export const ANGEBOTE: Angebot[] = [
     beschreibungLang:
       'Ca. 9,75 ha Wald in einem Flurstück südöstlich von Berlin. Holzbestand überwiegend Kiefern. Niederschlag ca. 620 mm pro Jahr. Weitere Details auf Anfrage.',
     slug: 'bb-3250-waldflaeche-suedoestlich-berlin',
+    image: 'https://cdn.pixabay.com/photo/2016/11/29/05/06/forest-1866550_1280.jpg',
   },
   {
     id: 'BB-3247',
@@ -76,6 +78,7 @@ export const ANGEBOTE: Angebot[] = [
     beschreibungLang:
       '5,92 ha Ackerland in einem Flurstück zwischen Brandenburg und Nauen. In der Kernfläche ca. 40 Bodenpunkte, Niederschläge ca. 575 mm. Aktuell mit einer Pachtrendite von ca. 2,6 %. Weitere Details auf Anfrage.',
     slug: 'bb-3247-ackerland-brandenburg-nauen',
+    image: 'https://cdn.pixabay.com/photo/2018/01/15/07/51/fields-3082054_1280.jpg',
   },
   {
     id: 'MV-3152',
@@ -93,6 +96,7 @@ export const ANGEBOTE: Angebot[] = [
     beschreibungLang:
       '73 ha zusammenhängende Ackerfläche im Süden des Landkreises Vorpommern-Greifswald. Kernbodenpunkte 45-65, gute Erreichbarkeit, Pachtvertrag bis 2027.',
     slug: 'mv-3152-73ha-ackerland-vorpommern',
+    image: 'https://cdn.pixabay.com/photo/2017/08/07/22/01/wheat-2602587_1280.jpg',
   },
   {
     id: 'BB-3169',
@@ -109,6 +113,7 @@ export const ANGEBOTE: Angebot[] = [
     beschreibungLang:
       '156 ha Gutshof in Brandenburg mit historischer Villa, Acker- und Waldflächen sowie Möglichkeiten für Pferdehaltung und Jagd. Details und Unterlagen auf Anfrage.',
     slug: 'bb-3169-gutshof-brandenburg',
+    image: 'https://cdn.pixabay.com/photo/2016/03/27/17/56/castle-1286572_1280.jpg',
   },
   {
     id: 'RO-2100',
@@ -124,6 +129,7 @@ export const ANGEBOTE: Angebot[] = [
     beschreibungLang:
       'Großer Ackerbaubetrieb in Rumänien mit ca. 2.100 ha Schwarzerdeflächen, 80-100 Bodenpunkte. Aktuell verpachtet, moderne Bewirtschaftung, weitere Kennzahlen auf Anfrage.',
     slug: 'ro-ackerland',
+    image: 'https://cdn.pixabay.com/photo/2018/04/18/18/56/farm-3331013_1280.jpg',
   },
   {
     id: 'BB-3223',
@@ -139,6 +145,7 @@ export const ANGEBOTE: Angebot[] = [
     beschreibungLang:
       '95 ha Objekt in Brandenburg mit 78 ha Wald (überwiegend Kiefer, 20-80 Jahre) und 16 ha Ackerfläche. Ruhige Lage, jagdliche Nutzung möglich.',
     slug: 'bb-3223-wald-und-acker-brandenburg',
+    image: 'https://cdn.pixabay.com/photo/2016/11/23/14/45/forest-1850663_1280.jpg',
   },
   {
     id: 'ST-3254',
@@ -155,6 +162,7 @@ export const ANGEBOTE: Angebot[] = [
     beschreibungLang:
       'Zusammenhängende 65 ha Ackerflächen östlich von Magdeburg, ca. 45 Bodenpunkte, laufender Pachtvertrag bis 2026.',
     slug: 'st-3254-ackerland-magdeburg',
+    image: 'https://cdn.pixabay.com/photo/2016/11/29/09/08/cereal-1867213_1280.jpg',
   },
   {
     id: 'SH-3238',
