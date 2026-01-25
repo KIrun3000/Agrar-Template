@@ -17,6 +17,7 @@ export type Angebot = {
   beschreibungKurz: string;
   beschreibungLang: string;
   slug: string;
+  image?: string;
 };
 
 export const ANGEBOTE: Angebot[] = [
@@ -169,5 +170,59 @@ export const ANGEBOTE: Angebot[] = [
     beschreibungLang:
       'Seltene 8 ha Ackerfläche auf Fehmarn, ca. 65+ BP, inklusive 1.055 m² Ostseestrandabschnitt. Verfügbarkeit und Konditionen auf Anfrage.',
     slug: 'sh-3238-ackerland-fehmarn',
+    image: 'https://cdn.pixabay.com/photo/2018/01/15/07/51/baltic-sea-3082052_1280.jpg',
+  },
+  {
+    id: 'MUSTER-001',
+    status: 'Neu',
+    bundesland: 'Niedersachsen',
+    regionKurz: 'Heidekreis',
+    typ: 'Ackerland',
+    flaecheGesamtHa: 48.5,
+    flaecheAckerHa: 48.5,
+    bodenpunkteKern: 55,
+    pachtBis: 'verpachtet bis 2028',
+    kaufpreisText: 'Kaufpreis auf Anfrage',
+    beschreibungKurz: '48,5 ha Ackerland im Heidekreis, arrondiert, ca. 55 BP, verlässliche Pacht bis 2028.',
+    beschreibungLang:
+      'Arrondierte Ackerfläche von rund 48,5 ha im Heidekreis. Kernbodenpunkte ca. 55, gute Erreichbarkeit und Bewässerungsoptionen in der Nähe. Verpachtet bis 2028 an regionalen Betrieb, solide Pachtstruktur.',
+    slug: 'muster-001-ackerland-heidekreis',
+    image: 'https://cdn.pixabay.com/photo/2016/11/29/05/08/agriculture-1866559_1280.jpg',
+  },
+  {
+    id: 'MUSTER-002',
+    status: 'Reserviert',
+    bundesland: 'Bayern',
+    regionKurz: 'Oberpfalz',
+    typ: 'Acker/Wald',
+    flaecheGesamtHa: 62,
+    flaecheAckerHa: 40,
+    flaecheWaldHa: 22,
+    bodenpunkteKern: 60,
+    niederschlagMm: 750,
+    kaufpreisText: 'Kaufpreis: 1.250.000 €',
+    beschreibungKurz: '62 ha Mischung aus Acker- und Waldflächen in der Oberpfalz, gute BP, stabile Niederschläge.',
+    beschreibungLang:
+      '62 ha arrondierte Flächen in der Oberpfalz: ca. 40 ha Acker mit ca. 60 BP und 22 ha ertragsfähiger Mischwald. Durchschnittlicher Niederschlag ca. 750 mm. Erschlossen, Zufahrt über landwirtschaftlichen Weg, Hofstelle in 5 km Entfernung.',
+    slug: 'muster-002-acker-wald-oberpfalz',
+    image: 'https://cdn.pixabay.com/photo/2019/08/24/11/00/landscape-4426267_1280.jpg',
+  },
+  {
+    id: 'MUSTER-003',
+    status: 'Neu',
+    bundesland: 'Brandenburg',
+    regionKurz: 'Prignitz',
+    typ: 'Betrieb',
+    flaecheGesamtHa: 180,
+    flaecheAckerHa: 120,
+    flaecheGruenHa: 40,
+    flaecheWaldHa: 20,
+    bodenpunkteKern: 45,
+    kaufpreisText: 'Kaufpreis auf Anfrage',
+    beschreibungKurz: '180 ha Mischbetrieb in der Prignitz mit Acker-, Grünland- und Waldanteilen, Hofstelle möglich.',
+    beschreibungLang:
+      'Musterbetrieb in der Prignitz mit insgesamt ca. 180 ha: 120 ha Ackerflächen (Ø 45 BP), 40 ha Grünland und 20 ha Wald. Option auf Zupacht umliegender Flächen. Hofstelle in Reichweite, Energieanschluss und Wasser vorhanden. Eignet sich für Ackerbau, Mutterkuhhaltung und Forstbewirtschaftung.',
+    slug: 'muster-003-mischbetrieb-prignitz',
+    image: 'https://cdn.pixabay.com/photo/2018/03/08/17/18/pasture-3204850_1280.jpg',
   },
 ];
