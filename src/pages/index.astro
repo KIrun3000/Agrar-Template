@@ -25,38 +25,25 @@ const metadata = {
       { variant: 'primary', text: 'Aktuelle Angebote', href: '/angebote' },
       { text: 'Kontakt aufnehmen', href: '/kontakt' },
     ]}
-    image={{ src: '~/assets/images/hero-image.png', alt: '[OBJEKT_BILD]' }}
+    bg={
+      `<div class="absolute inset-0">
+        <video
+          class="w-full h-full object-cover"
+          src="https://cdn.coverr.co/videos/coverr-wheat-field-5175/1080p.mp4"
+          autoplay
+          muted
+          loop
+          playsinline
+          poster="https://cdn.coverr.co/videos/coverr-wheat-field-5175/1080p.mp4?poster"
+        ></video>
+        <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/55 to-black/70"></div>
+      </div>`
+    }
   >
     <Fragment slot="title">Agrar- und Forstimmobilien – Ihr spezialisierter Makler für große Flächen</Fragment>
     <Fragment slot="subtitle">
       Diskrete Vermarktung von Ackerland, Grünland, Wald und Agrarbetrieben in Deutschland und der EU. Seit über 15
       Jahren Ihr Partner für professionelle Vermittlung.
-    </Fragment>
-    <Fragment slot="content">
-      <div class="mt-6 max-w-xl mx-auto grid gap-4 bg-white/80 dark:bg-slate-900/70 p-4 rounded-xl shadow">
-        <div class="flex flex-col gap-3">
-          <label class="text-sm font-semibold" for="hero-name">Name</label>
-          <input
-            id="hero-name"
-            name="name"
-            type="text"
-            placeholder="[NAME]"
-            class="py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
-          />
-          <label class="text-sm font-semibold" for="hero-email">E-Mail</label>
-          <input
-            id="hero-email"
-            name="email"
-            type="email"
-            placeholder="[EMAIL]"
-            class="py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
-          />
-          <button class="btn-primary">Anfrage senden</button>
-          <p class="text-xs text-muted">
-            Ihre Daten werden vertraulich behandelt. Nach Absenden erhalten Sie eine Bestätigungsmail.
-          </p>
-        </div>
-      </div>
     </Fragment>
   </Hero>
 
