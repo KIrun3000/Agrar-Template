@@ -1,17 +1,7 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import Content from '~/components/widgets/Content.astro';
-import Features from '~/components/widgets/Features.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
-import Contact from '~/components/widgets/Contact.astro';
 import { ANGEBOTE } from '~/data/angebote';
-import type { Item } from '~/types';
-
-export const getStaticPaths = () => {
-  return ANGEBOTE.map((angebot) => ({
-    params: { slug: angebot.slug },
-  }));
-};
+import placeholderObj from '~/assets/images/placeholders/placeholder-objekt.jpg';
 
 const { slug } = Astro.params;
 const angebot = ANGEBOTE.find((a) => a.slug === slug);
@@ -20,189 +10,302 @@ if (!angebot) {
   return Astro.redirect('/404', 302);
 }
 
-const metadata = {
-  title: `${angebot.id} – ${angebot.beschreibungKurz}`,
-  description: angebot.beschreibungKurz,
-};
+const preisNumber = typeof angebot.kaufpreis === 'number' ? angebot.kaufpreis : null;
+const euroProHa =
+  preisNumber && angebot.flaecheGesamtHa ? Math.round((preisNumber / angebot.flaecheGesamtHa) * 100) / 100 : null;
+
+const imageSrc = angebot.image || placeholderObj.src;
+
+const chips = [
+  { label: 'Kategorie', value: angebot.typ },
+  {
+    label: 'Region',
+    value: angebot.regionKurz ? `${angebot.bundesland} · ${angebot.regionKurz}` : angebot.bundesland,
+  },
+  { label: 'Gesamtfläche', value: `${angebot.flaecheGesamtHa} ha` },
+  { label: 'Preis', value: angebot.kaufpreisText },
+  { label: '€/ha', value: euroProHa ? `${euroProHa.toLocaleString('de-DE')} €` : '—' },
+  { label: 'Angebotsart', value: angebot.kaufpreisText?.toLowerCase().includes('pacht') ? 'Pacht' : 'Verkauf' },
+  { label: 'Verfügbarkeit', value: angebot.pachtBis ?? 'nach Absprache' },
+  { label: 'Pachtstatus', value: angebot.pachtBis ? angebot.pachtBis : 'pachtfrei' },
+  {
+    label: 'Schutzstatus',
+    value: angebot.typ.includes('Naturschutz') ? 'Natura/LSG (Demo)' : 'kein besonderer Status bekannt',
+  },
+  {
+    label: 'Kernkennzahl',
+    value:
+      angebot.typ === 'Wald / Forstfläche'
+        ? 'Baumartenmix (Demo)'
+        : angebot.typ === 'Ackerland'
+          ? 'Ackerzahl (Demo)'
+          : angebot.typ === 'Grünland / Weide'
+            ? 'Grünlandzahl (Demo)'
+            : angebot.typ === 'Jagd / Eigenjagd / Jagdgenossenschaft'
+              ? 'Eigenjagd (BJagdG §7) (Demo)'
+              : angebot.typ === 'Teich / Fischerei / Gewässerflächen'
+                ? 'WHG §8 Wasserrecht (Demo)'
+                : '—',
+  },
+].filter(Boolean);
+
+const tabs = [
+  'Überblick',
+  'Flächen & Kataster',
+  'Bewirtschaftung & Kennzahlen',
+  'Recht & Verträge',
+  'Restriktionen & Schutz',
+  'Dokumente',
+  'Kontakt',
+];
 ---
 
-<Layout metadata={metadata}>
+<Layout metadata={{ title: `${angebot.id} – ${angebot.beschreibungKurz}`, description: angebot.beschreibungKurz }}>
   <section class="px-6 sm:px-6 py-10 sm:py-14 lg:py-16 mx-auto max-w-6xl">
-    <div class="grid gap-8 lg:grid-cols-[2fr_1fr]">
-      <div>
-        <p class="text-sm text-secondary font-semibold">{angebot.id}</p>
-        <h1 class="text-3xl font-bold leading-tight mt-1">{angebot.beschreibungKurz}</h1>
-        <p class="text-muted mt-2">
+    <div class="grid gap-6 lg:grid-cols-[1.8fr_1fr] items-start">
+      <div class="space-y-3">
+        <img src={imageSrc} alt={angebot.beschreibungKurz} class="w-full h-72 object-cover rounded-xl shadow" loading="lazy" />
+        <h1 class="text-3xl font-bold leading-tight">{angebot.beschreibungKurz}</h1>
+        <p class="text-muted">
           {angebot.bundesland}
           {angebot.regionKurz && ` · ${angebot.regionKurz}`} · {angebot.typ} · {angebot.flaecheGesamtHa} ha
         </p>
+        <div class="flex flex-wrap gap-2 pt-2">
+          {chips.map((chip) => (
+            <span class="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-xs font-medium">
+              <span class="text-slate-500 mr-2">{chip.label}:</span> {chip.value}
+            </span>
+          ))}
+        </div>
+        <div class="flex gap-3 pt-4">
+          <a class="btn-primary" href="/kontakt">Exposé anfordern</a>
+          <a class="btn-secondary" href="/kontakt">Besichtigung anfragen</a>
+        </div>
       </div>
-      <div
-        class="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-slate-900 p-4 text-sm space-y-2"
-      >
-        <div class="flex justify-between">
-          <span>Bundesland</span><span class="font-medium">{angebot.bundesland}</span>
-        </div>
-        {
-          angebot.regionKurz && (
-            <div class="flex justify-between">
-              <>
-                <span>Region</span>
-                <span class="font-medium">{angebot.regionKurz}</span>
-              </>
-            </div>
-          )
-        }
-        <div class="flex justify-between">
-          <span>Gesamtfläche</span><span class="font-medium">{angebot.flaecheGesamtHa} ha</span>
-        </div>
-        {
-          angebot.flaecheAckerHa && (
-            <div class="flex justify-between">
-              <>
-                <span>Ackerland</span>
-                <span class="font-medium">{angebot.flaecheAckerHa} ha</span>
-              </>
-            </div>
-          )
-        }
-        {
-          angebot.flaecheWaldHa && (
-            <div class="flex justify-between">
-              <>
-                <span>Wald</span>
-                <span class="font-medium">{angebot.flaecheWaldHa} ha</span>
-              </>
-            </div>
-          )
-        }
-        {
-          angebot.flaecheGruenHa && (
-            <div class="flex justify-between">
-              <>
-                <span>Grünland</span>
-                <span class="font-medium">{angebot.flaecheGruenHa} ha</span>
-              </>
-            </div>
-          )
-        }
-        {
-          angebot.bodenpunkteKern && (
-            <div class="flex justify-between">
-              <>
-                <span>Bodenpunkte (Kern)</span>
-                <span class="font-medium">ca. {angebot.bodenpunkteKern} BP</span>
-              </>
-            </div>
-          )
-        }
-        {
-          angebot.niederschlagMm && (
-            <div class="flex justify-between">
-              <>
-                <span>Niederschlag</span>
-                <span class="font-medium">ca. {angebot.niederschlagMm} mm</span>
-              </>
-            </div>
-          )
-        }
-        {
-          angebot.pachtBis && (
-            <div class="flex justify-between">
-              <>
-                <span>Pacht</span>
-                <span class="font-medium">{angebot.pachtBis}</span>
-              </>
-            </div>
-          )
-        }
+      <div class="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-slate-900 p-4 text-sm space-y-2 shadow-sm">
+        <div class="flex justify-between"><span>Objekt</span><span class="font-medium">{angebot.id}</span></div>
+        <div class="flex justify-between"><span>Kaufpreis</span><span class="font-medium">{angebot.kaufpreisText}</span></div>
+        <div class="flex justify-between"><span>Fläche</span><span class="font-medium">{angebot.flaecheGesamtHa} ha</span></div>
+        {angebot.flaecheAckerHa && (
+          <div class="flex justify-between"><span>Acker</span><span class="font-medium">{angebot.flaecheAckerHa} ha</span></div>
+        )}
+        {angebot.flaecheGruenHa && (
+          <div class="flex justify-between"><span>Grünland</span><span class="font-medium">{angebot.flaecheGruenHa} ha</span></div>
+        )}
+        {angebot.flaecheWaldHa && (
+          <div class="flex justify-between"><span>Wald</span><span class="font-medium">{angebot.flaecheWaldHa} ha</span></div>
+        )}
+        {angebot.bodenpunkteKern && (
+          <div class="flex justify-between"><span>Bodenpunkte</span><span class="font-medium">ca. {angebot.bodenpunkteKern}</span></div>
+        )}
+        {angebot.pachtBis && (
+          <div class="flex justify-between"><span>Pachtstatus</span><span class="font-medium">{angebot.pachtBis}</span></div>
+        )}
         <div class="flex justify-between"><span>Status</span><span class="font-medium">{angebot.status}</span></div>
-        <div class="flex justify-between">
-          <span>Kaufpreis</span><span class="font-medium">{angebot.kaufpreisText}</span>
-        </div>
       </div>
     </div>
 
-    <div class="grid gap-10 lg:grid-cols-[2fr_1fr] mt-10">
-      <div class="prose dark:prose-invert max-w-none">
-        <h2>Objektbeschreibung</h2>
-        <p>{angebot.beschreibungLang}</p>
+    <div class="mt-10">
+      <div class="flex flex-wrap gap-2 mb-6" role="tablist">
+        {tabs.map((tab, idx) => (
+          <button
+            type="button"
+            class="tab-btn rounded-full px-4 py-2 text-sm border border-gray-200 dark:border-gray-800 data-[active=true]:bg-primary data-[active=true]:text-white"
+            data-tab={`tab-${idx}`}
+            aria-controls={`tab-${idx}`}
+            aria-selected={idx === 0}
+            role="tab"
+          >
+            {tab}
+          </button>
+        ))}
       </div>
-      <div class="space-y-4">
-        <div class="border border-gray-200 dark:border-gray-800 rounded-lg p-4 bg-white dark:bg-slate-900">
-          <h3 class="text-lg font-semibold">Weitere Informationen</h3>
-          <p class="text-sm text-muted mt-2">Weitere Details und Unterlagen stellen wir auf Anfrage zur Verfügung.</p>
-          <a class="mt-4 inline-flex items-center justify-center btn-primary w-full" href="/kontakt">Exposé anfragen</a>
-        </div>
+
+      <div class="space-y-8">
+        <article id="tab-0" class="tab-panel" role="tabpanel">
+          <h2 class="text-xl font-semibold mb-3">Überblick</h2>
+          <p class="text-muted mb-4">{angebot.beschreibungLang}</p>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Arrondierte Lage mit solider Erschließung (Demo).</li>
+            <li>Direkter Zugang zu Flächeninformationen auf Anfrage (Demo).</li>
+            <li>Vertrauliche Vermarktung über Muster Agrarimmobilien.</li>
+          </ul>
+          <p class="text-xs text-muted mt-4">Angaben beispielhaft, keine Garantie.</p>
+        </article>
+
+        <article id="tab-1" class="tab-panel hidden" role="tabpanel">
+          <h2 class="text-xl font-semibold mb-3">Flächen & Kataster</h2>
+          <p class="text-sm text-muted mb-2">Flurstücksübersicht wird im Exposé bereitgestellt (Demo).</p>
+          <p class="text-sm text-muted">Kartenansicht verfügbar (Quelle: ALKIS, Demo).</p>
+          <p class="text-xs text-muted mt-3">Amtliche Flächenangaben gemäß ALKIS; verbindlich sind nur geprüfte Auszüge.</p>
+        </article>
+
+        <article id="tab-2" class="tab-panel hidden" role="tabpanel">
+          <h2 class="text-xl font-semibold mb-3">Bewirtschaftung & Kennzahlen</h2>
+          {
+            angebot.typ === 'Wald / Forstfläche' ? (
+              <ul class="list-disc pl-5 space-y-1">
+                <li>Baumartenmix: Kiefer/Laub (Demo)</li>
+                <li>Vorrat (Schätzung): 200–250 m³/ha (Demo)</li>
+                <li>Waldzustand: stabile Bestände, Pflege nach LSG-Vorgaben</li>
+              </ul>
+            ) : angebot.typ === 'Ackerland' ? (
+              <ul class="list-disc pl-5 space-y-1">
+                <li>Ackerzahl (Demo): 50–60</li>
+                <li>Bewirtschaftung: Marktfrucht, 24 m Arbeitsbreite möglich</li>
+                <li>Drainage: teilflächig (Demo)</li>
+              </ul>
+            ) : angebot.typ === 'Grünland / Weide' ? (
+              <ul class="list-disc pl-5 space-y-1">
+                <li>Grünlandzahl (Demo): 35–45</li>
+                <li>Nutzung: 2–3 Schnitte / Weide</li>
+                <li>Wasserhaushalt: gute Wasserführung</li>
+              </ul>
+            ) : angebot.typ === 'Landwirtschaftlicher Betrieb / Hofstelle' ? (
+              <ul class="list-disc pl-5 space-y-1">
+                <li>Betriebstyp: gemischter Betrieb (Demo)</li>
+                <li>Gebäude: Wohnhaus, Halle, Lager (Demo)</li>
+                <li>Anschlüsse: Strom, Wasser, Internet (Demo)</li>
+              </ul>
+            ) : angebot.typ === 'Jagd / Eigenjagd / Jagdgenossenschaft' ? (
+              <ul class="list-disc pl-5 space-y-1">
+                <li>Eigenjagdbezirk (BJagdG §7, Demo)</li>
+                <li>Revier: Feld-Wald-Mosaik, Kanzeln/Kirrungen vorhanden</li>
+                <li>Pachtvertrag auf Anfrage</li>
+              </ul>
+            ) : angebot.typ === 'Teich / Fischerei / Gewässerflächen' ? (
+              <ul class="list-disc pl-5 space-y-1">
+                <li>Gewässertyp: Teichanlage (Demo)</li>
+                <li>Wasserrecht: WHG §8 Erlaubnis erforderlich (Demo)</li>
+                <li>Zulauf/Ablauf: Quellzulauf, gedrosselter Ablauf</li>
+              </ul>
+            ) : angebot.typ === 'Sonderkulturen' ? (
+              <ul class="list-disc pl-5 space-y-1">
+                <li>Kulturart: Sonderkultur (z. B. Beeren) (Demo)</li>
+                <li>Pflanzjahr: 2018 (Demo)</li>
+                <li>Bewässerung: Tröpfchen/Frostschutz (Demo)</li>
+              </ul>
+            ) : angebot.typ === 'Naturschutz-/Öko-/Ausgleichs-/Stilllegungsflächen' ? (
+              <ul class="list-disc pl-5 space-y-1">
+                <li>Schutzstatus: LSG/Natura (Demo)</li>
+                <li>Nutzungsrestriktionen: Mahdtermine, keine Düngung (Demo)</li>
+                <li>Vertragsnaturschutz: Laufzeiten auf Anfrage</li>
+              </ul>
+            ) : (
+              <p class="text-sm text-muted">Details auf Anfrage.</p>
+            )
+          }
+        </article>
+
+        <article id="tab-3" class="tab-panel hidden" role="tabpanel">
+          <h2 class="text-xl font-semibold mb-3">Recht & Verträge</h2>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Rechte & Lasten: {angebot.pachtBis ? 'Pachtvertrag vorhanden (Details auf Anfrage)' : 'keine bekannten Lasten (Demo)'}</li>
+            <li>GrdstVG / LPachtVG: Anzeigepflicht kann bestehen (orientierend).</li>
+            {angebot.typ === 'Jagd / Eigenjagd / Jagdgenossenschaft' && <li>Jagd: BJagdG §7 (Hinweis, Länder können abweichen).</li>}
+            {angebot.typ === 'Teich / Fischerei / Gewässerflächen' && <li>Wasserrecht nach WHG §8 erforderlich (Demo).</li>}
+          </ul>
+        </article>
+
+        <article id="tab-4" class="tab-panel hidden" role="tabpanel">
+          <h2 class="text-xl font-semibold mb-3">Restriktionen & Schutz</h2>
+          <ul class="list-disc pl-5 space-y-1">
+            {angebot.typ.includes('Naturschutz') ? (
+              <>
+                <li>Schutzstatus: Natura/LSG (Demo)</li>
+                <li>Nutzungsauflagen: extensive Nutzung, Mahd ab 15.07. (Demo)</li>
+              </>
+            ) : (
+              <>
+                <li>Derzeit keine besonderen Schutzauflagen bekannt (Demo).</li>
+              </>
+            )}
+          </ul>
+        </article>
+
+        <article id="tab-5" class="tab-panel hidden" role="tabpanel">
+          <h2 class="text-xl font-semibold mb-3">Dokumente</h2>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between border border-gray-200 dark:border-gray-800 rounded-lg p-3">
+              <div>
+                <p class="font-semibold">Lageplan (PDF)</p>
+                <p class="text-xs text-muted">Stand: 2025-12-01 · Sichtbarkeit: öffentlich</p>
+              </div>
+              <span class="text-sm text-primary">Download</span>
+            </div>
+            <div class="flex items-center justify-between border border-gray-200 dark:border-gray-800 rounded-lg p-3">
+              <div>
+                <p class="font-semibold">Detailunterlagen</p>
+                <p class="text-xs text-muted">Stand: 2025-12-01 · Sichtbarkeit: nach Anfrage</p>
+              </div>
+              <span class="text-sm text-primary">Anfordern</span>
+            </div>
+            <p class="text-xs text-muted">Bestimmte Dokumente nur nach Identitäts-/Interessensprüfung.</p>
+          </div>
+        </article>
+
+        <article id="tab-6" class="tab-panel hidden" role="tabpanel">
+          <h2 class="text-xl font-semibold mb-3">Kontakt / Exposé</h2>
+          <p class="text-sm text-muted mb-3">Ansprechpartner: Muster Agrarimmobilien · Tel. +49 30 000000 · kontakt@muster-agrar.de</p>
+          <form class="grid gap-3 md:grid-cols-2">
+            <label class="flex flex-col gap-1 text-sm">
+              <span>Name</span>
+              <input class="input" type="text" name="name" placeholder="Ihr Name" />
+            </label>
+            <label class="flex flex-col gap-1 text-sm">
+              <span>E-Mail</span>
+              <input class="input" type="email" name="email" placeholder="beispiel@domain.de" />
+            </label>
+            <label class="flex flex-col gap-1 text-sm">
+              <span>Telefon (optional)</span>
+              <input class="input" type="tel" name="phone" placeholder="Telefon" />
+            </label>
+            <label class="flex flex-col gap-1 text-sm">
+              <span>Objekt</span>
+              <input class="input" type="text" name="object" value={angebot.id} readonly />
+            </label>
+            <label class="flex flex-col gap-1 text-sm md:col-span-2">
+              <span>Nachricht</span>
+              <textarea class="input min-h-[120px]" name="message" placeholder="Ihre Nachricht"></textarea>
+            </label>
+            <div class="md:col-span-2 flex gap-3">
+              <button type="submit" class="btn-primary">Exposé anfordern</button>
+              <button type="button" class="btn-secondary">Besichtigung anfragen</button>
+            </div>
+            <p class="text-xs text-muted md:col-span-2">Antwort binnen 24–48h (Service-Angabe, unverbindlich).</p>
+          </form>
+        </article>
       </div>
     </div>
 
-    <Content
-      id="kennzahlen"
-      title="Kennzahlen"
-      items={(
-        [
-          { title: 'Gesamtfläche', description: `${angebot.flaecheGesamtHa} ha` },
-          angebot.flaecheAckerHa ? { title: 'Ackerland', description: `${angebot.flaecheAckerHa} ha` } : null,
-          angebot.flaecheGruenHa ? { title: 'Grünland', description: `${angebot.flaecheGruenHa} ha` } : null,
-          angebot.flaecheWaldHa ? { title: 'Wald', description: `${angebot.flaecheWaldHa} ha` } : null,
-          angebot.bodenpunkteKern
-            ? { title: 'Bodenpunkte (Kern)', description: `ca. ${angebot.bodenpunkteKern} BP` }
-            : null,
-          angebot.niederschlagMm ? { title: 'Niederschlag', description: `ca. ${angebot.niederschlagMm} mm` } : null,
-          angebot.pachtBis ? { title: 'Pacht', description: angebot.pachtBis } : null,
-          { title: 'Status', description: angebot.status },
-          { title: 'Kaufpreis', description: angebot.kaufpreisText },
-        ] as (Item | null)[]
-      ).filter(Boolean) as Item[]}
-    />
-
-    <Features
-      id="weitere-info"
-      tagline="Hinweise"
-      title="Weitere Informationen"
-      columns={2}
-      items={[
-        {
-          title: 'Datenraum',
-          description: 'Auf Anfrage stellen wir Datenraumzugang mit Flurkarten, Pachtverträgen und Bonitäten bereit.',
-          icon: 'tabler:folder',
-        },
-        {
-          title: 'Besichtigung',
-          description: 'Besichtigungen nach Abstimmung und Vertraulichkeitserklärung möglich.',
-          icon: 'tabler:map-search',
-        },
-      ]}
-    />
-
-    <CallToAction
-      id="kontakt"
-      actions={[
-        { variant: 'primary', text: 'Exposé anfragen', href: '/kontakt' },
-        { text: 'Zur Übersicht', href: '/angebote' },
-      ]}
-    >
-      <Fragment slot="title">Interesse an {angebot.id}?</Fragment>
-      <Fragment slot="subtitle"
-        >Schreiben Sie uns, um das vollständige Exposé und weitere Kennzahlen zu erhalten.</Fragment
-      >
-    </CallToAction>
-
-    <Contact
-      id="kontakt-form"
-      tagline="Kontakt"
-      title="Objektanfrage stellen"
-      subtitle="Ihre Nachricht wird innerhalb von 48 Stunden beantwortet."
-      inputs={[
-        { label: 'Name', name: 'name', type: 'text', placeholder: 'Ihr Name' },
-        { label: 'E-Mail', name: 'email', type: 'email', placeholder: 'beispiel@domain.de', autocomplete: 'email' },
-        { label: 'Telefon', name: 'phone', type: 'tel', placeholder: 'Telefon (optional)' },
-        { label: 'Objekt', name: 'object', type: 'text', placeholder: angebot.id },
-      ]}
-      textarea={{ label: 'Fragen oder Hinweise', name: 'message', placeholder: 'Ihre Nachricht' }}
-      button="Exposé anfordern"
-      description="Formular-Endpoint muss noch angebunden werden."
-    />
+    <div class="mt-10 text-xs text-muted border-t border-gray-200 dark:border-gray-800 pt-4">
+      Alle Angaben sind DEMO-Beispiele, unverbindlich und ohne Gewähr; keine Rechts- oder Beschaffenheitsgarantie. Verbindlich sind ausschließlich geprüfte Unterlagen nach Anfrage.
+    </div>
   </section>
 </Layout>
+
+<style>
+  .tab-panel.hidden { display: none; }
+  .tab-btn[data-active="true"] { border-color: transparent; }
+  .input {
+    @apply w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 px-3 py-2;
+  }
+</style>
+
+<script>
+const buttons = document.querySelectorAll<HTMLButtonElement>('.tab-btn');
+const panels = document.querySelectorAll<HTMLElement>('.tab-panel');
+
+  function activate(id: string) {
+    buttons.forEach((btn) => (btn.dataset.active = (btn.dataset.tab === id).toString()));
+    panels.forEach((panel) => panel.classList.toggle('hidden', panel.id !== id));
+  }
+
+  buttons.forEach((btn, idx) => {
+    if (idx === 0) btn.dataset.active = 'true';
+    btn.addEventListener('click', () => activate(btn.dataset.tab || 'tab-0'));
+  });
+
+  // initialize
+  activate('tab-0');
+</script>
