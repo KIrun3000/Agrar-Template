@@ -1,0 +1,159 @@
+<script is:inline>
+  (() => {
+    const forms = document.querySelectorAll('form[data-validate]');
+    if (!forms.length) return;
+
+    const messages = {
+      valueMissing: 'Bitte dieses Feld ausfüllen.',
+      typeMismatchEmail: 'Bitte eine gültige E-Mail-Adresse eingeben.',
+      rangeUnderflow: (min) => `Wert muss mindestens ${min} sein.`,
+      rangeOverflow: (max) => `Wert darf höchstens ${max} sein.`,
+      stepMismatch: 'Bitte einen gültigen Wert eingeben.',
+      rangeInvalid: 'Bitte prüfen Sie die Min-/Max-Angaben.',
+      checkboxGroup: 'Bitte mindestens eine Option auswählen.',
+    };
+
+    const getErrorMessage = (field) => {
+      if (field.validity.valueMissing) {
+        return field.dataset.errorMessage || messages.valueMissing;
+      }
+      if (field.validity.typeMismatch && field.type === 'email') {
+        return messages.typeMismatchEmail;
+      }
+      if (field.validity.rangeUnderflow) {
+        return messages.rangeUnderflow(field.min);
+      }
+      if (field.validity.rangeOverflow) {
+        return messages.rangeOverflow(field.max);
+      }
+      if (field.validity.stepMismatch) {
+        return messages.stepMismatch;
+      }
+      return messages.valueMissing;
+    };
+
+    const showError = (field, message) => {
+      const errorEl = field.form?.querySelector(`[data-error-for="${field.id}"]`);
+      if (errorEl) {
+        errorEl.textContent = message;
+        errorEl.classList.remove('hidden');
+      }
+      field.setAttribute('aria-invalid', 'true');
+    };
+
+    const clearError = (field) => {
+      const errorEl = field.form?.querySelector(`[data-error-for="${field.id}"]`);
+      if (errorEl) {
+        errorEl.textContent = '';
+        errorEl.classList.add('hidden');
+      }
+      field.removeAttribute('aria-invalid');
+    };
+
+    const validateField = (field) => {
+      if (field.disabled || field.type === 'hidden') return true;
+      if (field.checkValidity()) {
+        clearError(field);
+        return true;
+      }
+      showError(field, getErrorMessage(field));
+      return false;
+    };
+
+    const validateCheckboxGroups = (form) => {
+      let valid = true;
+      const groups = form.querySelectorAll('[data-required-group]');
+      groups.forEach((group) => {
+        const groupName = group.dataset.requiredGroup;
+        const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+        const anyChecked = Array.from(checkboxes).some((checkbox) => checkbox.checked);
+        const errorEl = group.querySelector(`[data-group-error="${groupName}"]`);
+        if (!anyChecked) {
+          if (errorEl) {
+            errorEl.textContent = messages.checkboxGroup;
+            errorEl.classList.remove('hidden');
+          }
+          valid = false;
+        } else if (errorEl) {
+          errorEl.textContent = '';
+          errorEl.classList.add('hidden');
+        }
+      });
+      return valid;
+    };
+
+    const validateRangeGroups = (form) => {
+      let valid = true;
+      const groups = form.querySelectorAll('[data-range-group]');
+      groups.forEach((group) => {
+        const minField = group.querySelector('[data-range-min]');
+        const maxField = group.querySelector('[data-range-max]');
+        const errorEl = group.querySelector('[data-range-error]');
+        if (!minField || !maxField || !errorEl) return;
+        if (!minField.value || !maxField.value) {
+          errorEl.textContent = '';
+          errorEl.classList.add('hidden');
+          return;
+        }
+        if (Number(minField.value) > Number(maxField.value)) {
+          errorEl.textContent = messages.rangeInvalid;
+          errorEl.classList.remove('hidden');
+          maxField.setAttribute('aria-invalid', 'true');
+          valid = false;
+        } else {
+          errorEl.textContent = '';
+          errorEl.classList.add('hidden');
+          maxField.removeAttribute('aria-invalid');
+        }
+      });
+      return valid;
+    };
+
+    const focusFirstError = (form) => {
+      const invalid = form.querySelector('[aria-invalid="true"]');
+      if (invalid) {
+        invalid.focus({ preventScroll: false });
+        return;
+      }
+      const groupError = form.querySelector('[data-group-error]:not(.hidden)');
+      if (groupError) {
+        groupError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
+
+    forms.forEach((form) => {
+      form.addEventListener('submit', (event) => {
+        let valid = true;
+        form.querySelectorAll('input, select, textarea').forEach((field) => {
+          if (!validateField(field)) valid = false;
+        });
+        if (!validateCheckboxGroups(form)) valid = false;
+        if (!validateRangeGroups(form)) valid = false;
+
+        if (!valid) {
+          event.preventDefault();
+          focusFirstError(form);
+        }
+      });
+
+      form.addEventListener('input', (event) => {
+        const field = event.target;
+        if (field instanceof HTMLElement && field.matches('input, select, textarea')) {
+          validateField(field);
+          if (field.matches('[data-range-min],[data-range-max]')) {
+            validateRangeGroups(form);
+          }
+        }
+      });
+
+      form.addEventListener('change', (event) => {
+        const field = event.target;
+        if (field instanceof HTMLElement && field.matches('input[type="checkbox"]')) {
+          if (field.closest('[data-required-group]')) {
+            validateCheckboxGroups(form);
+          }
+        }
+      });
+    });
+  })();
+</script>

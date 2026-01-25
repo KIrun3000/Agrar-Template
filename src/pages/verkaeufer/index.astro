@@ -1,74 +1,360 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import Hero from '~/components/widgets/Hero.astro';
-import Steps from '~/components/widgets/Steps.astro';
-import Features from '~/components/widgets/Features.astro';
-import FAQs from '~/components/widgets/FAQs.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
+import SectionHeader from '~/components/sections/SectionHeader.astro';
+import TrustStatsRow from '~/components/sections/TrustStatsRow.astro';
+import StepList from '~/components/sections/StepList.astro';
+import ContactCard from '~/components/sections/ContactCard.astro';
+import FormValidationScript from '~/components/forms/FormValidationScript.astro';
 
 const metadata = {
-  title: 'Für Verkäufer – AstroWind Agrar Template',
-  description: '[VERKAEUFER_INTRO]',
+  title: 'Immobilie verkaufen – Muster Agrarimmobilien',
+  description:
+    'Diskrete Vermarktung von Agrar- und Forstimmobilien mit fundierter Bewertung, Käuferqualifizierung und Notarbegleitung.',
 };
+
+const trustItems = ['15 Jahre Markterfahrung', 'Antwortzeit < 48h', 'Off-Market möglich'];
+
+const serviceCards = [
+  {
+    title: 'Diskretion vor Reichweite',
+    description: 'Off-Market Vermarktung auf Wunsch, ohne unnötige Streuung sensibler Daten.',
+  },
+  {
+    title: 'Käuferqualifizierung',
+    description: 'Bonität, Nutzungskonzept und Timing werden vorab geprüft und abgestimmt.',
+  },
+  {
+    title: 'Fundierte Bewertung',
+    description: 'Bodenpunkte, Pacht, Lage und Struktur fließen in die Marktpreiseinschätzung ein.',
+  },
+  {
+    title: 'Notar & Prozessbegleitung',
+    description: 'Begleitung von der Strategie bis zur Beurkundung und Übergabe.',
+  },
+];
+
+const processSteps = [
+  {
+    title: 'Datenaufnahme',
+    description: 'Kurzgespräch zu Objekt, Ziel und Zeitplan – effizient und diskret.',
+  },
+  {
+    title: 'Bewertung & Strategie',
+    description: 'Preisindikation, Käuferprofil und Vermarktungskanal werden festgelegt.',
+  },
+  {
+    title: 'Vermarktung & Auswahl',
+    description: 'Gezielte Ansprache, geprüfte Interessenten, strukturierte Kommunikation.',
+  },
+  {
+    title: 'Notar & Übergabe',
+    description: 'Verhandlung, Vertrag und Übergabe begleiten wir bis zum Abschluss.',
+  },
+];
+
+const bundeslaender = [
+  'Baden-Württemberg',
+  'Bayern',
+  'Berlin',
+  'Brandenburg',
+  'Bremen',
+  'Hamburg',
+  'Hessen',
+  'Mecklenburg-Vorpommern',
+  'Niedersachsen',
+  'Nordrhein-Westfalen',
+  'Rheinland-Pfalz',
+  'Saarland',
+  'Sachsen',
+  'Sachsen-Anhalt',
+  'Schleswig-Holstein',
+  'Thüringen',
+];
+
+const immobilienTypen = ['Ackerland', 'Grünland', 'Wald', 'Betrieb/Hofstelle', 'Jagd', 'Wasser', 'Sonstiges'];
+
+const submitted = Astro.url.searchParams.get('submitted') === '1';
+
+const inputBase =
+  'mt-1 w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 px-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 focus:outline-none transition';
+const labelBase = 'text-sm font-semibold text-slate-700 dark:text-slate-200';
+const errorBase = 'mt-1 text-xs text-rose-600 hidden';
+const checkboxBase = 'h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500';
 ---
 
 <Layout metadata={metadata}>
-  <Hero id="verkaeufer" actions={[{ text: 'Kontakt', href: '/kontakt' }]}>
-    <Fragment slot="title">Für Verkäufer</Fragment>
-    <Fragment slot="subtitle">[VERKAEUFER_INTRO]</Fragment>
-  </Hero>
+  <section id="verkauf" class="relative overflow-hidden bg-white dark:bg-slate-950">
+    <div class="mx-auto max-w-6xl px-6 pt-16 pb-12 sm:pt-20 sm:pb-16 lg:pt-24">
+      <SectionHeader
+        eyebrow="Verkauf"
+        title="Agrarimmobilie diskret verkaufen"
+        description="Wir begleiten Sie von der fundierten Bewertung bis zur notariellen Übergabe. Diskret, strukturiert und mit geprüftem Käufernetzwerk."
+        titleAs="h1"
+        size="lg"
+        align="center"
+      />
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a class="btn-primary w-full sm:w-auto" href="#kontakt">Kostenlose Ersteinschätzung</a>
+        <a class="btn-secondary w-full sm:w-auto" href="#prozess">Ablauf ansehen</a>
+      </div>
+      <TrustStatsRow items={trustItems} />
+    </div>
+  </section>
 
-  <Steps
-    id="prozess"
-    tagline="Prozess"
-    title="Unser Prozess"
-    items={[
-      { title: '[STEP_1_TITLE]', description: '[STEP_1_TEXT]', icon: 'tabler:number-1' },
-      { title: '[STEP_2_TITLE]', description: '[STEP_2_TEXT]', icon: 'tabler:number-2' },
-      { title: '[STEP_3_TITLE]', description: '[STEP_3_TEXT]', icon: 'tabler:number-3' },
-      { title: '[STEP_4_TITLE]', description: '[STEP_4_TEXT]', icon: 'tabler:number-4' },
-    ]}
-  />
+  <section id="leistungen" class="bg-slate-50/70 dark:bg-slate-900/30 py-12 sm:py-16">
+    <div class="mx-auto max-w-6xl px-6">
+      <SectionHeader
+        eyebrow="Vertrauen"
+        title="Sicher & zielgerichtet vermarkten"
+        description="Klare Prozesse, geprüfte Käufer und die passende Strategie für Ihre Agrar- oder Forstimmobilie."
+      />
+      <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {serviceCards.map((item) => (
+          <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-slate-900 p-5 shadow-sm">
+            <h3 class="text-lg font-semibold text-emerald-950 dark:text-white">{item.title}</h3>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
 
-  <Features
-    id="leistungen"
-    tagline="Leistungen"
-    title="Leistungen für Verkäufer"
-    subtitle="[LEISTUNGEN_TEXT]"
-    columns={3}
-    items={[
-      { title: '[LEISTUNG_1]', description: '[LEISTUNG_1_TEXT]', icon: 'tabler:certificate' },
-      { title: '[LEISTUNG_2]', description: '[LEISTUNG_2_TEXT]', icon: 'tabler:scale' },
-      { title: '[LEISTUNG_3]', description: '[LEISTUNG_3_TEXT]', icon: 'tabler:shield-check' },
-      { title: '[LEISTUNG_4]', description: '[LEISTUNG_4_TEXT]', icon: 'tabler:map' },
-      { title: '[LEISTUNG_5]', description: '[LEISTUNG_5_TEXT]', icon: 'tabler:report-analytics' },
-      { title: '[LEISTUNG_6]', description: '[LEISTUNG_6_TEXT]', icon: 'tabler:heart' },
-    ]}
-  />
+  <section id="prozess" class="py-12 sm:py-16">
+    <div class="mx-auto max-w-6xl px-6">
+      <SectionHeader
+        eyebrow="Ablauf"
+        title="In vier Schritten zum Abschluss"
+        description="Ein klarer Prozess, damit Sie jederzeit wissen, wo wir stehen."
+      />
+      <div class="mt-8">
+        <StepList items={processSteps} columns={4} />
+      </div>
+    </div>
+  </section>
 
-  <FAQs
-    id="faq"
-    tagline="FAQ"
-    title="Häufige Fragen"
-    subtitle="[FAQ_TEXT]"
-    items={[
-      { title: '[FAQ_1_Q]', description: '[FAQ_1_A]' },
-      { title: '[FAQ_2_Q]', description: '[FAQ_2_A]' },
-      { title: '[FAQ_3_Q]', description: '[FAQ_3_A]' },
-      { title: '[FAQ_4_Q]', description: '[FAQ_4_A]' },
-      { title: '[FAQ_5_Q]', description: '[FAQ_5_A]' },
-    ]}
-    classes={{ container: 'max-w-5xl' }}
-  />
+  <section id="kontakt" class="bg-slate-50/70 dark:bg-slate-900/30 py-12 sm:py-16">
+    <div class="mx-auto max-w-6xl px-6">
+      <SectionHeader
+        eyebrow="Kontakt"
+        title="Kostenlose Ersteinschätzung anfragen"
+        description="Senden Sie uns die Eckdaten – wir melden uns persönlich und diskret zurück."
+      />
+      <div class="mt-8 grid gap-6 lg:grid-cols-[1fr,1.2fr]">
+        <ContactCard
+          title="Ihre Anfrage in 2 Minuten"
+          description="Keine Bindung, keine Verpflichtung. Wir melden uns innerhalb von 48 Stunden mit einer ersten Einschätzung."
+          items={[
+            'Diskrete Erstberatung auf Wunsch Off-Market.',
+            'Transparente Markt- und Preisindikation.',
+            'Persönliche Begleitung bis zur Übergabe.',
+            'Geprüfte Interessenten und klare Kommunikation.',
+          ]}
+          note="Unterlagen vorhanden? Wir senden bei Bedarf einen sicheren Upload-Link."
+        />
+        <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-slate-900 p-6 lg:p-8 shadow-sm">
+          {submitted && (
+            <div class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800">
+              Danke! Wir melden uns zeitnah bei Ihnen zurück.
+            </div>
+          )}
+          <form class="space-y-5" data-validate novalidate>
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label class={labelBase} for="seller-name">
+                  Name <span class="text-rose-600">*</span>
+                </label>
+                <input
+                  id="seller-name"
+                  name="name"
+                  type="text"
+                  required
+                  autocomplete="name"
+                  class={inputBase}
+                  aria-describedby="seller-name-error"
+                />
+                <p id="seller-name-error" class={errorBase} data-error-for="seller-name" aria-live="polite"></p>
+              </div>
+              <div>
+                <label class={labelBase} for="seller-email">
+                  E-Mail <span class="text-rose-600">*</span>
+                </label>
+                <input
+                  id="seller-email"
+                  name="email"
+                  type="email"
+                  required
+                  autocomplete="email"
+                  class={inputBase}
+                  aria-describedby="seller-email-error"
+                />
+                <p id="seller-email-error" class={errorBase} data-error-for="seller-email" aria-live="polite"></p>
+              </div>
+            </div>
 
-  <CallToAction
-    id="cta"
-    actions={[
-      { variant: 'primary', text: 'Ersteinschätzung anfragen', href: '/kontakt' },
-      { text: 'Mehr erfahren', href: '/ueber-uns' },
-    ]}
-  >
-    <Fragment slot="title">[CTA_VERKAEUFER_TITLE]</Fragment>
-    <Fragment slot="subtitle">[CTA_VERKAEUFER_SUBTITLE]</Fragment>
-  </CallToAction>
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label class={labelBase} for="seller-type">
+                  Art der Immobilie <span class="text-rose-600">*</span>
+                </label>
+                <select id="seller-type" name="immobilienart" required class={inputBase} aria-describedby="seller-type-error">
+                  <option value="">Bitte auswählen</option>
+                  {immobilienTypen.map((typ) => (
+                    <option value={typ}>{typ}</option>
+                  ))}
+                </select>
+                <p id="seller-type-error" class={errorBase} data-error-for="seller-type" aria-live="polite"></p>
+              </div>
+              <div>
+                <label class={labelBase} for="seller-goal">
+                  Ziel <span class="text-rose-600">*</span>
+                </label>
+                <select id="seller-goal" name="ziel" required class={inputBase} aria-describedby="seller-goal-error">
+                  <option value="">Bitte auswählen</option>
+                  <option value="verkaufen">Verkaufen</option>
+                  <option value="verpachten">Verpachten</option>
+                  <option value="beratung">Beratung</option>
+                </select>
+                <p id="seller-goal-error" class={errorBase} data-error-for="seller-goal" aria-live="polite"></p>
+              </div>
+            </div>
+
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label class={labelBase} for="seller-state">
+                  Bundesland <span class="text-rose-600">*</span>
+                </label>
+                <select id="seller-state" name="bundesland" required class={inputBase} aria-describedby="seller-state-error">
+                  <option value="">Bitte auswählen</option>
+                  {bundeslaender.map((land) => (
+                    <option value={land}>{land}</option>
+                  ))}
+                </select>
+                <p id="seller-state-error" class={errorBase} data-error-for="seller-state" aria-live="polite"></p>
+              </div>
+              <div>
+                <label class={labelBase} for="seller-location">
+                  Ort / PLZ <span class="text-rose-600">*</span>
+                </label>
+                <input
+                  id="seller-location"
+                  name="lage"
+                  type="text"
+                  required
+                  autocomplete="postal-code"
+                  class={inputBase}
+                  aria-describedby="seller-location-error"
+                />
+                <p id="seller-location-error" class={errorBase} data-error-for="seller-location" aria-live="polite"></p>
+              </div>
+            </div>
+
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label class={labelBase} for="seller-area">
+                  Fläche (ha) <span class="text-rose-600">*</span>
+                </label>
+                <input
+                  id="seller-area"
+                  name="flaeche"
+                  type="number"
+                  min="0"
+                  step="0.1"
+                  inputmode="decimal"
+                  required
+                  class={inputBase}
+                  aria-describedby="seller-area-error"
+                />
+                <p id="seller-area-error" class={errorBase} data-error-for="seller-area" aria-live="polite"></p>
+              </div>
+              <div>
+                <label class={labelBase} for="seller-bp">Bodenpunkte / BP</label>
+                <input
+                  id="seller-bp"
+                  name="bodenpunkte"
+                  type="number"
+                  min="0"
+                  step="1"
+                  inputmode="numeric"
+                  class={inputBase}
+                  aria-describedby="seller-bp-error"
+                />
+                <p id="seller-bp-error" class={errorBase} data-error-for="seller-bp" aria-live="polite"></p>
+              </div>
+            </div>
+
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label class={labelBase} for="seller-lease-status">Pachtstatus</label>
+                <select id="seller-lease-status" name="pachtstatus" class={inputBase} aria-describedby="seller-lease-status-error">
+                  <option value="">Bitte auswählen</option>
+                  <option value="frei">Frei</option>
+                  <option value="verpachtet">Verpachtet</option>
+                  <option value="teilweise">Teils/teils</option>
+                  <option value="unklar">Unklar</option>
+                </select>
+                <p id="seller-lease-status-error" class={errorBase} data-error-for="seller-lease-status" aria-live="polite"></p>
+              </div>
+              <div>
+                <label class={labelBase} for="seller-timeline">Zeitplan</label>
+                <select id="seller-timeline" name="zeitplan" class={inputBase} aria-describedby="seller-timeline-error">
+                  <option value="">Bitte auswählen</option>
+                  <option value="sofort">Sofort</option>
+                  <option value="3-6">3–6 Monate</option>
+                  <option value="6-12">6–12 Monate</option>
+                  <option value="flexibel">Flexibel</option>
+                </select>
+                <p id="seller-timeline-error" class={errorBase} data-error-for="seller-timeline" aria-live="polite"></p>
+              </div>
+            </div>
+
+            <div>
+              <label class={labelBase} for="seller-message">Nachricht</label>
+              <textarea
+                id="seller-message"
+                name="message"
+                rows="4"
+                class={inputBase}
+                aria-describedby="seller-message-error"
+              ></textarea>
+              <p id="seller-message-error" class={errorBase} data-error-for="seller-message" aria-live="polite"></p>
+              <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                Dokumente vorhanden? Wir senden Ihnen gerne einen sicheren Upload-Link.
+              </p>
+            </div>
+
+            <div>
+              <label class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300" for="seller-privacy">
+                <input
+                  id="seller-privacy"
+                  name="privacy"
+                  type="checkbox"
+                  required
+                  class={checkboxBase}
+                  data-error-message="Bitte stimmen Sie der Datenschutzerklärung zu."
+                  aria-describedby="seller-privacy-error"
+                />
+                <span>
+                  Ich stimme der Verarbeitung meiner Angaben gemäß der Datenschutzerklärung zu.
+                  <span class="text-rose-600"> *</span>
+                </span>
+              </label>
+              <p id="seller-privacy-error" class={errorBase} data-error-for="seller-privacy" aria-live="polite"></p>
+            </div>
+
+            <div class="hidden" aria-hidden="true">
+              <label for="seller-company">Firma</label>
+              <input id="seller-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+            </div>
+
+            <div class="space-y-3">
+              <button type="submit" class="btn-primary w-full">Ersteinschätzung anfragen</button>
+              <p class="text-center text-xs text-slate-500 dark:text-slate-400">Antwort innerhalb von 48h.</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <FormValidationScript />
 </Layout>
