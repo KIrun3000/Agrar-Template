@@ -76,62 +76,62 @@ const metadata = {
     {
       (() => {
         const placeholderImage = placeholderObj.src;
-        const highlightOffers = ANGEBOTE.filter((a) => a.status === 'Neu').slice(0, 6);
+        const highlightOffers = ANGEBOTE.filter((a) => a.status === 'Neu').slice(0, 5);
 
         return (
-          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {highlightOffers.map((angebot) => {
-              const statusClass =
-                angebot.status === 'Neu'
-                  ? 'bg-emerald-100 text-emerald-700'
-                  : angebot.status === 'Reserviert'
-                    ? 'bg-amber-100 text-amber-700'
-                    : 'bg-slate-200 text-slate-600';
+          <>
+            <div class="grid gap-4 sm:gap-5 grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+              {highlightOffers.map((angebot) => {
+                const statusClass =
+                  angebot.status === 'Neu'
+                    ? 'bg-emerald-100 text-emerald-700'
+                    : angebot.status === 'Reserviert'
+                      ? 'bg-amber-100 text-amber-700'
+                      : 'bg-slate-200 text-slate-600';
 
-              return (
-                <article class="border border-gray-200 dark:border-gray-800 rounded-xl p-4 bg-white dark:bg-slate-900 shadow-sm flex flex-col gap-3">
-                  <div class="relative">
-                    <img
-                      src={angebot.image || placeholderImage}
-                      alt={angebot.beschreibungKurz}
-                      class="w-full h-40 object-cover rounded-lg"
-                      loading="lazy"
-                    />
-                    <span
-                      class={`absolute top-2 left-2 inline-flex rounded-full px-2 py-0.5 text-xs ${statusClass} backdrop-blur`}
-                    >
-                      {angebot.status}
-                    </span>
-                  </div>
-                  <div class="flex items-center justify-between">
-                    <p class="text-sm font-mono text-slate-500">{angebot.id}</p>
-                    <span class="text-xs text-muted">{angebot.typ}</span>
-                  </div>
-                  <h3 class="text-lg font-semibold leading-snug">
-                    <a class="hover:underline" href={`/angebote/${angebot.slug}`}>
+                return (
+                  <a
+                    class="group border border-gray-200 dark:border-gray-800 rounded-xl p-3 bg-white dark:bg-slate-900 shadow-sm flex flex-col gap-2 transition-transform duration-150 hover:-translate-y-1"
+                    href={`/angebote/${angebot.slug}`}
+                  >
+                    <div class="relative">
+                      <img
+                        src={angebot.image || placeholderImage}
+                        alt={angebot.beschreibungKurz}
+                        class="w-full h-32 object-cover rounded-lg"
+                        loading="lazy"
+                      />
+                      <span
+                        class={`absolute top-2 left-2 inline-flex rounded-full px-2 py-0.5 text-xs ${statusClass} backdrop-blur`}
+                      >
+                        {angebot.status}
+                      </span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <p class="text-xs font-mono text-slate-500">{angebot.id}</p>
+                      <span class="text-xs text-muted">{angebot.typ}</span>
+                    </div>
+                    <h3 class="text-base font-semibold leading-snug group-hover:underline">
                       {angebot.beschreibungKurz}
-                    </a>
-                  </h3>
-                  <p class="text-sm text-slate-600 dark:text-slate-400">
-                    {angebot.bundesland}
-                    {angebot.regionKurz && ` · ${angebot.regionKurz}`}
-                  </p>
-                  <p class="text-sm text-slate-600 dark:text-slate-400">
-                    {angebot.flaecheGesamtHa} ha · {angebot.typ}
-                    {angebot.bodenpunkteKern && ` · ca. ${angebot.bodenpunkteKern} BP`}
-                    {angebot.niederschlagMm && ` · ca. ${angebot.niederschlagMm} mm`}
-                  </p>
-                  <p class="text-sm font-semibold text-default">{angebot.kaufpreisText}</p>
-                  <div class="flex items-center justify-between pt-1">
-                    <a class="inline-flex items-center text-sm font-semibold text-primary hover:underline" href={`/angebote/${angebot.slug}`}>
-                      Details ansehen
-                    </a>
-                    <span class="text-xs text-muted">Direkt verfügbar</span>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
+                    </h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-400">
+                      {angebot.bundesland}
+                      {angebot.regionKurz && ` · ${angebot.regionKurz}`}
+                    </p>
+                    <p class="text-xs text-slate-600 dark:text-slate-400">
+                      {angebot.flaecheGesamtHa} ha · {angebot.typ}
+                      {angebot.bodenpunkteKern && ` · ca. ${angebot.bodenpunkteKern} BP`}
+                      {angebot.niederschlagMm && ` · ca. ${angebot.niederschlagMm} mm`}
+                    </p>
+                    <p class="text-sm font-semibold text-default">{angebot.kaufpreisText}</p>
+                  </a>
+                );
+              })}
+            </div>
+            <div class="mt-8 flex justify-center">
+              <a class="btn-secondary" href="/angebote">Alle Angebote anzeigen</a>
+            </div>
+          </>
         );
       })()
     }
