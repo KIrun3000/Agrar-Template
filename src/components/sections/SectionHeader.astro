@@ -9,10 +9,10 @@ const TitleTag = titleAs;
 
 <div class={`space-y-3 ${alignClass} ${className}`.trim()}>
   {eyebrow && <p class="text-sm font-semibold uppercase tracking-[0.2em] text-secondary">{eyebrow}</p>}
-  {title && <TitleTag class={`${titleSize} font-semibold text-emerald-950 dark:text-white`}>{title}</TitleTag>}
+  {title && <TitleTag class={`${titleSize} font-semibold text-heading`}>{title}</TitleTag>}
   {
     description && (
-      <p class={`text-base sm:text-lg text-slate-600 dark:text-slate-300 ${isCenter ? 'mx-auto max-w-3xl' : 'max-w-3xl'}`}>
+      <p class={`text-base sm:text-lg text-muted ${isCenter ? 'mx-auto max-w-3xl' : 'max-w-3xl'}`}>
         {description}
       </p>
     )

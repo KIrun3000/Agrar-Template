@@ -41,14 +41,14 @@ if (thirdMetric) metrics.push(thirdMetric);
 
 const metricsCols = metrics.length === 3 ? 'grid-cols-3' : 'grid-cols-2';
 const regionLabel = listing.region ? `${listing.bundesland} · ${listing.region}` : listing.bundesland;
-const href = `/angebote/${listing.slug}`;
+const href = listing.href ?? `/angebote/${listing.slug}`;
 const imageSrc = listing.image ?? '';
 const titleClamp = 'display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;';
 const regionClamp = 'display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;';
 const titleClass = variant === 'highlight' ? 'text-base' : 'text-lg';
 ---
 
-<article class="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-slate-900 shadow-sm transition-transform duration-150 hover:-translate-y-1">
+<article class="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-card-border bg-card shadow-sm transition-transform duration-150 hover:-translate-y-1">
   <a href={href} class="absolute inset-0 z-10" aria-label={`${listing.title} – Details ansehen`} tabindex="-1"></a>
 
   <div class="relative z-20 flex h-full flex-col">
@@ -65,34 +65,34 @@ const titleClass = variant === 'highlight' ? 'text-base' : 'text-lg';
       <span
         class={`absolute left-3 top-3 inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${
           status.tone === 'success'
-            ? 'bg-emerald-100 text-emerald-700'
+            ? 'bg-success/15 text-success'
             : status.tone === 'warning'
-              ? 'bg-amber-100 text-amber-700'
+              ? 'bg-warning/15 text-warning'
               : status.tone === 'muted'
-                ? 'bg-slate-200 text-slate-600'
-                : 'bg-slate-100 text-slate-700'
+                ? 'bg-muted/20 text-muted'
+                : 'bg-surface/70 text-default'
         }`}
       >
         {status.label}
       </span>
-      <span class="absolute right-3 top-3 inline-flex items-center rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur dark:bg-slate-900/80 dark:text-slate-200">
+      <span class="absolute right-3 top-3 inline-flex items-center rounded-full bg-card/85 px-2.5 py-1 text-xs font-semibold text-default shadow-sm backdrop-blur border border-card-border/60">
         {category.label}
       </span>
     </div>
 
     <div class="flex flex-1 flex-col gap-3 px-1 pb-4 pt-4">
-      <h3 class={`${titleClass} font-semibold leading-tight text-emerald-950 dark:text-white`} style={titleClamp}>
+      <h3 class={`${titleClass} font-semibold leading-tight text-heading`} style={titleClamp}>
         {listing.title}
       </h3>
-      <p class="text-sm text-slate-600 dark:text-slate-400" style={regionClamp}>
+      <p class="text-sm text-muted" style={regionClamp}>
         {regionLabel}
       </p>
 
-      <div class={`grid ${metricsCols} gap-3 text-xs text-slate-500 dark:text-slate-400`}>
+      <div class={`grid ${metricsCols} gap-3 text-xs text-muted`}>
         {metrics.map((metric) => (
           <div class="flex flex-col">
             <span class="uppercase tracking-wide">{metric.label}</span>
-            <span class="text-sm font-semibold text-emerald-950 dark:text-white">{metric.value}</span>
+            <span class="text-sm font-semibold text-heading">{metric.value}</span>
           </div>
         ))}
       </div>
@@ -100,7 +100,7 @@ const titleClass = variant === 'highlight' ? 'text-base' : 'text-lg';
       {visibleChips.length > 0 && (
         <div class="flex flex-wrap gap-2">
           {visibleChips.map((chip) => (
-            <span class="inline-flex items-center rounded-full border border-emerald-100 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-800 dark:border-emerald-900/40 dark:bg-emerald-900/20 dark:text-emerald-200">
+            <span class="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
               {chip.label}: {chip.value}
             </span>
           ))}

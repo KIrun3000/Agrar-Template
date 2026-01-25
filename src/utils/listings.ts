@@ -16,6 +16,7 @@ export type ListingPriceKind = 'sale' | 'lease' | 'request';
 export interface Listing {
   id: string;
   slug: string;
+  href?: string;
   title: string;
   status: string;
   bundesland: string;
@@ -281,6 +282,7 @@ export const mapAngebotToListing = (angebot: Angebot, imageFallback?: string): L
   const listing: Listing = {
     id: angebot.id,
     slug: angebot.slug,
+    href: `/angebote/${angebot.slug}`,
     title: angebot.beschreibungKurz,
     status: angebot.status,
     bundesland: angebot.bundesland,
