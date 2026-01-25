@@ -32,7 +32,12 @@ const metadata = {
     id="start"
     actions={[
       { variant: 'primary', text: 'Kaufen', href: '/angebote' },
-      { text: 'Verkaufen', href: '/kontakt' },
+      {
+        text: 'Verkaufen',
+        href: '/kontakt',
+        class:
+          'bg-white text-slate-900 border border-slate-200 hover:bg-slate-50 shadow-sm dark:bg-slate-900 dark:text-white dark:border-slate-700 dark:hover:bg-slate-800',
+      },
     ]}
     bg={
       `<div class="absolute inset-0">
@@ -59,27 +64,49 @@ const metadata = {
   </Hero>
 
   <section id="highlights" class="px-6 sm:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-6xl">
-    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
-      <div>
-        <p class="text-sm uppercase tracking-wide text-secondary">Aktuelle Highlights</p>
-        <h2 class="text-3xl font-bold">Aktuelle Highlights</h2>
-        <p class="text-muted mt-2 max-w-3xl">
-          Ausgewählte Angebote aus unserem Portfolio. Viele weitere Objekte vermarkten wir diskret außerhalb dieser
-          Website – sprechen Sie uns auf Ihre Wünsche an.
-        </p>
-      </div>
-      <a class="btn-secondary self-start" href="/angebote">Alle Angebote ansehen</a>
+    <div class="mb-8 text-center">
+      <p class="text-sm uppercase tracking-wide text-secondary">Aktuelle Highlights</p>
+      <h2 class="text-3xl font-bold">Aktuelle Highlights</h2>
+      <p class="text-muted mt-2 max-w-2xl mx-auto">
+        Ausgewählte Angebote aus unserem Portfolio. Viele weitere Objekte vermarkten wir diskret außerhalb dieser
+        Website – sprechen Sie uns auf Ihre Wünsche an.
+      </p>
     </div>
 
     {
       (() => {
         const placeholderImage = placeholderObj.src;
-        const highlightOffers = ANGEBOTE.filter((a) => a.status === 'Neu').slice(0, 5);
+        const highlightOffers = ANGEBOTE.filter((a) => a.status === 'Neu');
+        const highlightPageSize = 4;
+        const highlightPages = Math.ceil(highlightOffers.length / highlightPageSize);
+        const highlightHasPager = highlightOffers.length > highlightPageSize;
+        const highlightPayload = JSON.stringify(
+          highlightOffers.map((angebot) => ({
+            id: angebot.id,
+            status: angebot.status,
+            image: angebot.image || placeholderImage,
+            beschreibungKurz: angebot.beschreibungKurz,
+            bundesland: angebot.bundesland,
+            regionKurz: angebot.regionKurz ?? '',
+            typ: angebot.typ,
+            flaecheGesamtHa: angebot.flaecheGesamtHa,
+            bodenpunkteKern: angebot.bodenpunkteKern ?? null,
+            niederschlagMm: angebot.niederschlagMm ?? null,
+            kaufpreisText: angebot.kaufpreisText,
+            slug: angebot.slug,
+          }))
+        ).replace(/</g, '\\u003c');
 
         return (
           <>
-            <div class="grid gap-4 sm:gap-5 grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
-              {highlightOffers.map((angebot) => {
+            <div
+              id="highlights-grid"
+              data-items={highlightPayload}
+              data-page-size={highlightPageSize}
+              data-total-pages={highlightPages}
+              class="grid gap-4 sm:gap-5 grid-cols-1 xs:grid-cols-2 lg:grid-cols-4"
+            >
+              {highlightOffers.slice(0, highlightPageSize).map((angebot) => {
                 const statusClass =
                   angebot.status === 'Neu'
                     ? 'bg-emerald-100 text-emerald-700'
@@ -128,9 +155,99 @@ const metadata = {
                 );
               })}
             </div>
+            {highlightHasPager && (
+              <div class="mt-6 flex items-center justify-center gap-3">
+                <button
+                  type="button"
+                  class="btn-secondary py-2 px-4 text-sm disabled:opacity-40 disabled:cursor-not-allowed"
+                  data-highlights-prev
+                  disabled
+                >
+                  Zurück
+                </button>
+                <span class="text-sm text-muted" data-highlights-page>
+                  1 / {highlightPages}
+                </span>
+                <button
+                  type="button"
+                  class="btn-secondary py-2 px-4 text-sm disabled:opacity-40 disabled:cursor-not-allowed"
+                  data-highlights-next
+                >
+                  Weiter
+                </button>
+              </div>
+            )}
             <div class="mt-8 flex justify-center">
               <a class="btn-secondary" href="/angebote">Alle Angebote anzeigen</a>
             </div>
+            {highlightHasPager && (
+              <script is:inline>
+                const grid = document.getElementById('highlights-grid');
+                const prevBtn = document.querySelector('[data-highlights-prev]');
+                const nextBtn = document.querySelector('[data-highlights-next]');
+                const pageLabel = document.querySelector('[data-highlights-page]');
+
+                if (grid) {
+                  const items = JSON.parse(grid.dataset.items || '[]');
+                  const pageSize = parseInt(grid.dataset.pageSize || '4', 10);
+                  const totalPages = Math.ceil(items.length / pageSize);
+                  let pageIndex = 0;
+
+                  const statusClass = (status) =>
+                    status === 'Neu'
+                      ? 'bg-emerald-100 text-emerald-700'
+                      : status === 'Reserviert'
+                        ? 'bg-amber-100 text-amber-700'
+                        : 'bg-slate-200 text-slate-600';
+
+                  const renderCard = (item) => {
+                    const region = item.regionKurz ? ` · ${item.regionKurz}` : '';
+                    const bp = item.bodenpunkteKern ? ` · ca. ${item.bodenpunkteKern} BP` : '';
+                    const rain = item.niederschlagMm ? ` · ca. ${item.niederschlagMm} mm` : '';
+                    return `
+                      <a class="group border border-gray-200 dark:border-gray-800 rounded-xl p-3 bg-white dark:bg-slate-900 shadow-sm flex flex-col gap-2 transition-transform duration-150 hover:-translate-y-1" href="/angebote/${item.slug}">
+                        <div class="relative">
+                          <img src="${item.image}" alt="${item.beschreibungKurz}" class="w-full h-32 object-cover rounded-lg" loading="lazy" width="640" height="256" />
+                          <span class="absolute top-2 left-2 inline-flex rounded-full px-2 py-0.5 text-xs ${statusClass(item.status)} backdrop-blur">${item.status}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                          <p class="text-xs font-mono text-slate-500">${item.id}</p>
+                          <span class="text-xs text-muted">${item.typ}</span>
+                        </div>
+                        <h3 class="text-base font-semibold leading-snug group-hover:underline">${item.beschreibungKurz}</h3>
+                        <p class="text-xs text-slate-600 dark:text-slate-400">${item.bundesland}${region}</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-400">${item.flaecheGesamtHa} ha · ${item.typ}${bp}${rain}</p>
+                        <p class="text-sm font-semibold text-default">${item.kaufpreisText}</p>
+                      </a>`;
+                  };
+
+                  const render = () => {
+                    const start = pageIndex * pageSize;
+                    const pageItems = items.slice(start, start + pageSize);
+                    grid.innerHTML = pageItems.map(renderCard).join('');
+                    if (pageLabel) pageLabel.textContent = `${pageIndex + 1} / ${totalPages}`;
+                    if (prevBtn) prevBtn.disabled = pageIndex === 0;
+                    if (nextBtn) nextBtn.disabled = pageIndex >= totalPages - 1;
+                  };
+
+                  if (prevBtn) prevBtn.addEventListener('click', () => {
+                    if (pageIndex > 0) {
+                      pageIndex -= 1;
+                      render();
+                    }
+                  });
+
+                  if (nextBtn) nextBtn.addEventListener('click', () => {
+                    if (pageIndex < totalPages - 1) {
+                      pageIndex += 1;
+                      render();
+                    }
+                  });
+
+                  render();
+                }
+              </script>
+            )}
           </>
         );
       })()
