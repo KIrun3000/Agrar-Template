@@ -133,12 +133,14 @@ const metadata = {
           return (
             <article class="border border-gray-200 dark:border-gray-800 rounded-xl p-6 bg-white dark:bg-slate-900 shadow-sm">
               <div class="mb-4">
-                <img
-                  src={angebot.image || placeholderImage}
-                  alt={angebot.beschreibungKurz}
-                  class="w-full h-40 object-cover rounded-lg"
-                  loading="lazy"
-                />
+              <img
+                src={angebot.image || placeholderImage}
+                alt={angebot.beschreibungKurz}
+                class="w-full h-40 object-cover rounded-lg"
+                loading="lazy"
+                width="800"
+                height="450"
+              />
               </div>
               <div class="flex items-center justify-between mb-2">
                 <p class="text-sm font-mono text-slate-500">{angebot.id}</p>
@@ -196,6 +198,8 @@ const metadata = {
                 alt={angebot.beschreibungKurz}
                 class="w-full h-40 object-cover rounded-lg mb-4"
                 loading="lazy"
+                width="800"
+                height="450"
               />
               <div class="flex items-center justify-between mb-2">
                 <p class="text-sm font-mono text-slate-500">{angebot.id}</p>
@@ -236,6 +240,8 @@ const metadata = {
                 alt={angebot.beschreibungKurz}
                 class="w-32 h-28 object-cover rounded-lg"
                 loading="lazy"
+                width="320"
+                height="224"
               />
               <div class="flex-1">
                 <div class="flex items-center justify-between mb-1">

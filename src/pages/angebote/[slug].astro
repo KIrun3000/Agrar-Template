@@ -70,7 +70,14 @@ const tabs = [
   <section class="px-6 sm:px-6 py-10 sm:py-14 lg:py-16 mx-auto max-w-6xl">
     <div class="grid gap-6 lg:grid-cols-[1.8fr_1fr] items-start">
       <div class="space-y-3">
-        <img src={imageSrc} alt={angebot.beschreibungKurz} class="w-full h-72 object-cover rounded-xl shadow" loading="lazy" />
+        <img
+          src={imageSrc}
+          alt={angebot.beschreibungKurz}
+          class="w-full h-72 object-cover rounded-xl shadow"
+          loading="lazy"
+          width="1200"
+          height="675"
+        />
         <h1 class="text-3xl font-bold leading-tight">{angebot.beschreibungKurz}</h1>
         <p class="text-muted">
           {angebot.bundesland}
