@@ -1,0 +1,76 @@
+---
+import WidgetWrapper from '~/components/ui/WidgetWrapper.astro';
+import Headline from '~/components/ui/Headline.astro';
+
+export interface MediaCardItem {
+  imageSrc: string;
+  imageAlt: string;
+  badge?: string;
+  code?: string;
+  headline: string;
+  meta?: string;
+  ctaLabel?: string;
+  href?: string;
+}
+
+const { id, eyebrow, title, description, items = [] } = Astro.props as {
+  id?: string;
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  items?: MediaCardItem[];
+};
+---
+
+<WidgetWrapper id={id}>
+  <Headline
+    title={title}
+    subtitle={description}
+    tagline={eyebrow}
+    classes={{
+      container: 'max-w-3xl',
+      subtitle: 'text-muted',
+    }}
+  />
+  <div class="space-y-4 mt-6">
+    {
+      items.map((item) => (
+        <article class="flex flex-col sm:flex-row gap-4 border border-gray-200 dark:border-gray-800 rounded-xl p-4 bg-white dark:bg-slate-900 shadow-sm">
+          <img
+            src={item.imageSrc}
+            alt={item.imageAlt}
+            class="w-full sm:w-32 h-28 object-cover rounded-lg"
+            loading="lazy"
+            width="320"
+            height="224"
+          />
+          <div class="flex-1">
+            <div class="flex items-center justify-between mb-1">
+              {item.code && <p class="text-sm font-mono text-slate-500">{item.code}</p>}
+              {item.badge && (
+                <span class="inline-flex rounded-full px-2 py-0.5 text-xs bg-amber-100 text-amber-700">
+                  {item.badge}
+                </span>
+              )}
+            </div>
+            <h3 class="text-lg font-semibold leading-snug">
+              {item.href ? (
+                <a class="hover:underline" href={item.href}>
+                  {item.headline}
+                </a>
+              ) : (
+                item.headline
+              )}
+            </h3>
+            {item.meta && <p class="mt-1 text-sm text-muted">{item.meta}</p>}
+            {item.ctaLabel && item.href && (
+              <a class="mt-2 inline-flex items-center text-sm font-semibold text-primary hover:underline" href={item.href}>
+                {item.ctaLabel}
+              </a>
+            )}
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</WidgetWrapper>

@@ -1,6 +1,7 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import Hero from '~/components/widgets/Hero.astro';
+import MediaCardsLeft from '~/components/sections/MediaCardsLeft.astro';
 import Steps from '~/components/widgets/Steps.astro';
 import Features from '~/components/widgets/Features.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
@@ -10,6 +11,39 @@ const metadata = {
   title: 'Für Investoren – AstroWind Agrar Template',
   description: '[INVESTOREN_INTRO]',
 };
+
+const gesucheItems = [
+  {
+    code: 'GS-2001',
+    badge: 'Aktiv',
+    imageSrc: '/images/stock/acker.webp',
+    imageAlt: 'Ackerland gesucht',
+    headline: 'Ackerland ab 50 ha',
+    meta: 'Regionen: Brandenburg, Mecklenburg-Vorpommern, Sachsen-Anhalt · langfristiger Anlagehorizont',
+    ctaLabel: 'Profil anfragen',
+    href: '/kontakt?utm_source=gesuche',
+  },
+  {
+    code: 'GS-2002',
+    badge: 'Aktiv',
+    imageSrc: '/images/stock/wald.webp',
+    imageAlt: 'Waldflächen gesucht',
+    headline: 'Waldflächen 30–150 ha',
+    meta: 'Mischwald bevorzugt · Bestandsalter flexibel · ruhige Lagen',
+    ctaLabel: 'Profil anfragen',
+    href: '/kontakt?utm_source=gesuche',
+  },
+  {
+    code: 'GS-2003',
+    badge: 'Aktiv',
+    imageSrc: '/images/stock/wiese.webp',
+    imageAlt: 'Jagd- und Pachtgesuch',
+    headline: 'Eigenjagd / Jagdpacht',
+    meta: 'Nord- und Ostdeutschland · arrondierte Reviere gesucht',
+    ctaLabel: 'Profil anfragen',
+    href: '/kontakt?utm_source=gesuche',
+  },
+];
 ---
 
 <Layout metadata={metadata}>
@@ -17,6 +51,14 @@ const metadata = {
     <Fragment slot="title">Für Investoren</Fragment>
     <Fragment slot="subtitle">[INVESTOREN_INTRO]</Fragment>
   </Hero>
+
+  <MediaCardsLeft
+    id="gesuche"
+    eyebrow="Gesuche"
+    title="Aktuelle Gesuche"
+    description="Hinterlegte Suchprofile von Investoren und Familiengesellschaften. Diskret, strukturiert und mit klaren Kriterien."
+    items={gesucheItems}
+  />
 
   <Steps
     id="prozess"
