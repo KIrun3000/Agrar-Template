@@ -3,6 +3,12 @@ import Layout from '~/layouts/PageLayout.astro';
 import { ANGEBOTE } from '~/data/angebote';
 import placeholderObj from '~/assets/images/placeholders/placeholder-objekt.jpg';
 
+export const getStaticPaths = () => {
+  return ANGEBOTE.map((angebot) => ({
+    params: { slug: angebot.slug },
+  }));
+};
+
 const { slug } = Astro.params;
 const angebot = ANGEBOTE.find((a) => a.slug === slug);
 
