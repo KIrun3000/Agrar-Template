@@ -13,6 +13,12 @@ import sellerImg from '~/assets/images/stock/stock_fuer-verkaeufer.webp';
 import investorImg from '~/assets/images/stock/stock_fuer-investoren.webp';
 import teamImg from '~/assets/images/stock/stock_ueber-uns.webp';
 
+const kontaktInfo = {
+  firma: 'Muster Agrarimmobilien',
+  ansprechpartner: 'Luca Ingenbleek',
+  antwortzeit: '< 48h',
+};
+
 const metadata = {
   title: 'Muster Agrarimmobilien – Agrar- und Forstimmobilien',
   description:
@@ -133,8 +139,9 @@ const metadata = {
 
   <Content
     id="verkaeufer"
-    tagline="Für Verkäufer"
+    tagline="Service"
     title="Für Verkäufer"
+    subtitle="Sie planen den Verkauf von Ackerland, Grünland, Wald oder eines gesamten Agrarbetriebs? Wir begleiten Sie diskret und strukturiert durch den gesamten Prozess – von der ersten Bewertung bis zum Notartermin."
     items={[
       {
         title: 'Unsere Leistungen',
@@ -143,18 +150,14 @@ const metadata = {
       },
     ]}
     image={{ src: sellerImg, alt: '[BILD_VERKAEUFER]', width: sellerImg.width, height: sellerImg.height }}
-  >
-    <Fragment slot="content">
-      Sie planen den Verkauf von Ackerland, Grünland, Wald oder eines gesamten Agrarbetriebs? Wir begleiten Sie diskret
-      und strukturiert durch den gesamten Prozess – von der ersten Bewertung bis zum Notartermin.
-    </Fragment>
-  </Content>
+  />
 
   <Content
     id="investoren"
     isReversed
-    tagline="Für Investoren"
+    tagline="Investment"
     title="Für Investoren"
+    subtitle="Sie suchen nach langfristigen Investments in Agrarflächen, Wald oder Agrarbetriebe? Wir vermitteln Objekte im In- und Ausland – von mittelgroßen Flächen in Deutschland bis zu Großbetrieben mit mehreren tausend Hektar."
     items={[
       {
         title: 'Investment-Profile',
@@ -163,13 +166,7 @@ const metadata = {
       },
     ]}
     image={{ src: investorImg, alt: '[BILD_INVESTOREN]', width: investorImg.width, height: investorImg.height }}
-  >
-    <Fragment slot="content">
-      Sie suchen nach langfristigen Investments in Agrarflächen, Wald oder Agrarbetriebe? Wir vermitteln Objekte im In-
-      und Ausland – von mittelgroßen Flächen in Deutschland bis zu Großbetrieben mit mehreren tausend Hektar in
-      Rumänien, Tschechien oder Lettland.
-    </Fragment>
-  </Content>
+  />
 
   <Stats
     id="trust"
@@ -186,13 +183,8 @@ const metadata = {
     tagline="Regionen & Länder"
     title="Regionen & Länder"
     subtitle="Wir vermitteln Agrarflächen und Betriebe in ausgewählten Regionen Deutschlands und der EU mit Fokus auf Nord- und Ostdeutschland sowie Osteuropa."
+    columns={3}
     items={[
-      {
-        title: 'Mecklenburg-Vorpommern',
-        description: 'Große Ackerflächen ab 50 ha, strukturstarke Betriebe, BP 40-70',
-        icon: 'flat-color-icons:gallery',
-        callToAction: { text: 'Mehr erfahren', href: '/regionen/mecklenburg-vorpommern' },
-      },
       {
         title: 'Brandenburg',
         description: 'Arrondierte Flächen, Gutshöfe, Wald- und Jagdimmobilien, Berlin-nah',
@@ -200,47 +192,53 @@ const metadata = {
         callToAction: { text: 'Mehr erfahren', href: '/regionen/brandenburg' },
       },
       {
+        title: 'Mecklenburg-Vorpommern',
+        description: 'Große Ackerflächen ab 50 ha, strukturstarke Betriebe, BP 40-70',
+        icon: 'flat-color-icons:gallery',
+        callToAction: { text: 'Mehr erfahren', href: '/regionen/mecklenburg-vorpommern' },
+      },
+      {
         title: 'Sachsen-Anhalt',
         description: 'Hochwertige Schwarzerdeböden, BP 60-90, Hochertragsstandorte',
         icon: 'flat-color-icons:document',
         callToAction: { text: 'Mehr erfahren', href: '/regionen/sachsen-anhalt' },
       },
+    ]}
+  />
+
+  <Features2
+    id="leistungen"
+    tagline="Leistungen"
+    title="Unsere Leistungen"
+    subtitle="Wir begleiten Transaktionen diskret und strukturiert – von der ersten Bewertung bis zum erfolgreichen Abschluss."
+    columns={3}
+    items={[
       {
-        title: 'Rumänien',
-        description: 'Großbetriebe 500-5.000 ha, Schwarzerde, BP 80-100, mechanisiert',
-        icon: 'flat-color-icons:gallery',
-        callToAction: { text: 'Mehr erfahren', href: '/laender/rumaenien' },
+        title: 'Verkauf',
+        description: 'Diskrete Vermarktung, Käuferqualifizierung und Begleitung bis zum Notartermin.',
+        icon: 'flat-color-icons:assistant',
+        callToAction: { text: 'Kontakt aufnehmen', href: '/kontakt?utm_source=leistungen' },
       },
       {
-        title: 'Tschechien',
-        description: 'Strukturierte Betriebe, EU-Rechtsrahmen, stabile Pachterträge',
-        icon: 'flat-color-icons:approval',
-        callToAction: { text: 'Mehr erfahren', href: '/laender/tschechien' },
+        title: 'Bewertung',
+        description: 'Bodenpunkte, Pacht, Standortfaktoren und Marktpreise im fundierten Vergleich.',
+        icon: 'flat-color-icons:calculator',
+        callToAction: { text: 'Kontakt aufnehmen', href: '/kontakt?utm_source=leistungen' },
       },
       {
-        title: 'Lettland',
-        description: 'Aufstrebender Markt, moderate Preise, EU-Mitglied seit 2004',
-        icon: 'flat-color-icons:document',
-        callToAction: { text: 'Mehr erfahren', href: '/laender/lettland' },
-      },
-      {
-        title: 'Thüringen',
-        description: 'Mittelgebirgslagen, Acker/Grünland-Mix, Forstflächen',
-        icon: 'flat-color-icons:gallery',
-        callToAction: { text: 'Mehr erfahren', href: '/regionen/thueringen' },
-      },
-      {
-        title: 'Portugal',
-        description: 'Agroforstsysteme, Weinbau, touristische Entwicklungspotenziale',
-        icon: 'flat-color-icons:approval',
-        callToAction: { text: 'Mehr erfahren', href: '/laender/portugal' },
+        title: 'Beratung',
+        description: 'Strukturierung, Nachfolge und Portfolio-Strategie für Eigentümer und Investoren.',
+        icon: 'flat-color-icons:collaboration',
+        callToAction: { text: 'Kontakt aufnehmen', href: '/kontakt?utm_source=leistungen' },
       },
     ]}
   />
 
   <Content
     id="ueber-uns"
+    tagline="Unternehmen"
     title="Über uns"
+    subtitle="Unser Kernteam vereint Agraringenieure, Forstsachverständige und Transaktionsspezialisten. Wir arbeiten deutschlandweit mit regionalen Partnern und liefern belastbare Entscheidungsgrundlagen – von der ersten Standortanalyse bis zum Notartermin."
     items={[
       {
         title: 'Team, Historie & Philosophie',
@@ -249,13 +247,7 @@ const metadata = {
       },
     ]}
     image={{ src: teamImg, alt: 'Team Muster Agrarimmobilien', width: teamImg.width, height: teamImg.height }}
-  >
-    <Fragment slot="content">
-      Unser Kernteam vereint Agraringenieure, Forstsachverständige und Transaktionsspezialisten. Wir arbeiten
-      deutschlandweit mit regionalen Partnern, kennen die Unterschiede zwischen Geest, Löss und Auenstandorten und
-      liefern belastbare Entscheidungsgrundlagen – von der ersten Standortanalyse bis zum Notartermin.
-    </Fragment>
-  </Content>
+  />
 
   <CallToAction
     id="cta"
@@ -285,5 +277,23 @@ const metadata = {
     textarea={{ label: 'Nachricht', name: 'message', placeholder: '[NACHRICHT]' }}
     button="Anfrage senden"
     description="Formular-Endpoint muss konfiguriert werden."
-  />
+  >
+    <Fragment slot="info">
+      <div class="space-y-4">
+        <p class="text-sm uppercase tracking-wide text-secondary">Kontaktinfos</p>
+        <h3 class="text-xl font-semibold">{kontaktInfo.firma}</h3>
+        <dl class="space-y-2 text-sm">
+          <div class="flex items-center justify-between">
+            <dt class="text-muted">Ansprechpartner</dt>
+            <dd class="font-medium">{kontaktInfo.ansprechpartner}</dd>
+          </div>
+          <div class="flex items-center justify-between">
+            <dt class="text-muted">Antwortzeit</dt>
+            <dd class="font-medium">{kontaktInfo.antwortzeit}</dd>
+          </div>
+        </dl>
+        <p class="text-xs text-muted">Kontaktaufnahme ausschließlich über das Formular.</p>
+      </div>
+    </Fragment>
+  </Contact>
 </Layout>

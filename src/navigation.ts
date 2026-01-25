@@ -3,36 +3,16 @@ import { getPermalink, getBlogPermalink, getAsset } from './utils/permalinks';
 export const headerData = {
   links: [
     {
-      text: 'Startseite',
-      href: getPermalink('/', 'home'),
-    },
-    {
       text: 'Angebote',
       href: getPermalink('/angebote'),
     },
     {
-      text: 'Regionen',
-      href: getPermalink('/regionen'),
-    },
-    {
-      text: 'Länder',
-      href: getPermalink('/laender'),
-    },
-    {
-      text: 'Für Verkäufer',
+      text: 'Immobilie verkaufen',
       href: getPermalink('/verkaeufer'),
     },
     {
-      text: 'Für Investoren',
+      text: 'Gesuche',
       href: getPermalink('/investoren'),
-    },
-    {
-      text: 'Über uns',
-      href: getPermalink('/ueber-uns'),
-    },
-    {
-      text: 'Kontakt',
-      href: getPermalink('/kontakt'),
     },
   ],
   actions: [{ text: 'Exposé anfragen', href: getPermalink('/kontakt') }],
