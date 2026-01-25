@@ -2,12 +2,13 @@
 import Layout from '~/layouts/PageLayout.astro';
 
 import Hero from '~/components/widgets/Hero.astro';
-import Features from '~/components/widgets/Features.astro';
 import Content from '~/components/widgets/Content.astro';
 import Stats from '~/components/widgets/Stats.astro';
 import Features2 from '~/components/widgets/Features2.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
 import Contact from '~/components/widgets/Contact.astro';
+import { ANGEBOTE } from '~/data/angebote';
+import placeholderObj from '~/assets/images/placeholders/placeholder-objekt.jpg';
 
 const metadata = {
   title: 'Voß Agrarimmobilien – Agrar- und Forstimmobilien',
@@ -59,57 +60,82 @@ const metadata = {
     </Fragment>
   </Hero>
 
-  <Features
-    id="highlights"
-    tagline="Aktuelle Highlights"
-    title="Aktuelle Highlights"
-    subtitle="Ausgewählte Angebote aus unserem Portfolio. Viele weitere Objekte vermarkten wir diskret außerhalb dieser Website – sprechen Sie uns auf Ihre Wünsche an."
-    columns={3}
-    items={[
-      {
-        title: '73 ha Ackerland, südl. LK Vorpommern-Greifswald',
-        description: 'Mecklenburg-Vorpommern · 73 ha • Acker • 45-65 BP • verpachtet bis 2027',
-        icon: 'tabler:home',
-        callToAction: { text: 'Details ansehen', href: '/angebote/mv-3152-73ha-ackerland-vorpommern' },
-      },
-      {
-        title: '156 ha Gutshof mit Hofstelle, Brandenburg',
-        description: 'Brandenburg · 156 ha • Villa • Acker/Wald • Pferdehaltung • Jagd',
-        icon: 'tabler:map',
-        callToAction: { text: 'Details ansehen', href: '/angebote/bb-3169-gutshof-brandenburg' },
-      },
-      {
-        title: '2.100 ha Ackerbaubetrieb, Rumänien',
-        description: 'Rumänien · 2.100 ha • Schwarzerde • 80-100 BP • verpachtet',
-        icon: 'tabler:tractor',
-        callToAction: { text: 'Details ansehen', href: '/angebote/ro-ackerland' },
-      },
-      {
-        title: '95 ha Waldfläche mit Ackerland, Brandenburg',
-        description: 'Brandenburg · 95 ha • 78 ha Wald • 16 ha Acker • Kiefern 20-80 J.',
-        icon: 'tabler:building',
-        callToAction: { text: 'Details ansehen', href: '/angebote/bb-3223-wald-und-acker-brandenburg' },
-      },
-      {
-        title: '48,5 ha Ackerland, Heidekreis',
-        description: 'Niedersachsen · 48,5 ha • Acker • ca. 55 BP • verpachtet bis 2028',
-        icon: 'tabler:plant-2',
-        callToAction: { text: 'Details ansehen', href: '/angebote/muster-001-ackerland-heidekreis' },
-      },
-      {
-        title: '62 ha Acker/Wald-Mix, Oberpfalz',
-        description: 'Bayern · 62 ha • 40 ha Acker • 22 ha Wald • ca. 60 BP',
-        icon: 'tabler:trees',
-        callToAction: { text: 'Details ansehen', href: '/angebote/muster-002-acker-wald-oberpfalz' },
-      },
-      {
-        title: '180 ha Mischbetrieb, Prignitz',
-        description: 'Brandenburg · 120 ha Acker • 40 ha Grünland • 20 ha Wald',
-        icon: 'tabler:tractor',
-        callToAction: { text: 'Details ansehen', href: '/angebote/muster-003-mischbetrieb-prignitz' },
-      },
-    ]}
-  />
+  <section id="highlights" class="px-6 sm:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-6xl">
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
+      <div>
+        <p class="text-sm uppercase tracking-wide text-secondary">Aktuelle Highlights</p>
+        <h2 class="text-3xl font-bold">Aktuelle Highlights</h2>
+        <p class="text-muted mt-2 max-w-3xl">
+          Ausgewählte Angebote aus unserem Portfolio. Viele weitere Objekte vermarkten wir diskret außerhalb dieser
+          Website – sprechen Sie uns auf Ihre Wünsche an.
+        </p>
+      </div>
+      <a class="btn-secondary self-start" href="/angebote">Alle Angebote ansehen</a>
+    </div>
+
+    {
+      (() => {
+        const placeholderImage = placeholderObj.src;
+        const highlightOffers = ANGEBOTE.filter((a) => a.status === 'Neu').slice(0, 6);
+
+        return (
+          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {highlightOffers.map((angebot) => {
+              const statusClass =
+                angebot.status === 'Neu'
+                  ? 'bg-emerald-100 text-emerald-700'
+                  : angebot.status === 'Reserviert'
+                    ? 'bg-amber-100 text-amber-700'
+                    : 'bg-slate-200 text-slate-600';
+
+              return (
+                <article class="border border-gray-200 dark:border-gray-800 rounded-xl p-4 bg-white dark:bg-slate-900 shadow-sm flex flex-col gap-3">
+                  <div class="relative">
+                    <img
+                      src={angebot.image || placeholderImage}
+                      alt={angebot.beschreibungKurz}
+                      class="w-full h-40 object-cover rounded-lg"
+                      loading="lazy"
+                    />
+                    <span
+                      class={`absolute top-2 left-2 inline-flex rounded-full px-2 py-0.5 text-xs ${statusClass} backdrop-blur`}
+                    >
+                      {angebot.status}
+                    </span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <p class="text-sm font-mono text-slate-500">{angebot.id}</p>
+                    <span class="text-xs text-muted">{angebot.typ}</span>
+                  </div>
+                  <h3 class="text-lg font-semibold leading-snug">
+                    <a class="hover:underline" href={`/angebote/${angebot.slug}`}>
+                      {angebot.beschreibungKurz}
+                    </a>
+                  </h3>
+                  <p class="text-sm text-slate-600 dark:text-slate-400">
+                    {angebot.bundesland}
+                    {angebot.regionKurz && ` · ${angebot.regionKurz}`}
+                  </p>
+                  <p class="text-sm text-slate-600 dark:text-slate-400">
+                    {angebot.flaecheGesamtHa} ha · {angebot.typ}
+                    {angebot.bodenpunkteKern && ` · ca. ${angebot.bodenpunkteKern} BP`}
+                    {angebot.niederschlagMm && ` · ca. ${angebot.niederschlagMm} mm`}
+                  </p>
+                  <p class="text-sm font-semibold text-default">{angebot.kaufpreisText}</p>
+                  <div class="flex items-center justify-between pt-1">
+                    <a class="inline-flex items-center text-sm font-semibold text-primary hover:underline" href={`/angebote/${angebot.slug}`}>
+                      Details ansehen
+                    </a>
+                    <span class="text-xs text-muted">Direkt verfügbar</span>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        );
+      })()
+    }
+  </section>
 
   <Content
     id="verkaeufer"
