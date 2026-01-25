@@ -1,116 +1,398 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import Hero from '~/components/widgets/Hero.astro';
-import MediaCardsLeft from '~/components/sections/MediaCardsLeft.astro';
-import Steps from '~/components/widgets/Steps.astro';
-import Features from '~/components/widgets/Features.astro';
-import FAQs from '~/components/widgets/FAQs.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
+import SectionHeader from '~/components/sections/SectionHeader.astro';
+import TrustStatsRow from '~/components/sections/TrustStatsRow.astro';
+import StepList from '~/components/sections/StepList.astro';
+import ContactCard from '~/components/sections/ContactCard.astro';
+import FormValidationScript from '~/components/forms/FormValidationScript.astro';
 
 const metadata = {
-  title: 'Für Investoren – AstroWind Agrar Template',
-  description: '[INVESTOREN_INTRO]',
+  title: 'Gesuche – Muster Agrarimmobilien',
+  description:
+    'Suchprofile für Agrar- und Forstimmobilien: strukturierte Kriterien, diskrete Kommunikation und passende Off-Market-Angebote.',
 };
 
-const gesucheItems = [
+const trustItems = ['Off-Market Zugang', 'Strukturierte Unterlagen', 'Antwortzeit < 48h'];
+
+const matchSteps = [
   {
-    code: 'GS-2001',
-    badge: 'Aktiv',
-    imageSrc: '/images/stock/acker.webp',
-    imageAlt: 'Ackerland gesucht',
-    headline: 'Ackerland ab 50 ha',
-    meta: 'Regionen: Brandenburg, Mecklenburg-Vorpommern, Sachsen-Anhalt · langfristiger Anlagehorizont',
-    ctaLabel: 'Profil anfragen',
-    href: '/kontakt?utm_source=gesuche',
+    title: 'Profil hinterlegen',
+    description: 'Kriterien, Regionen und Flächenspanne definieren – wir strukturieren Ihr Suchprofil.',
   },
   {
-    code: 'GS-2002',
-    badge: 'Aktiv',
-    imageSrc: '/images/stock/wald.webp',
-    imageAlt: 'Waldflächen gesucht',
-    headline: 'Waldflächen 30–150 ha',
-    meta: 'Mischwald bevorzugt · Bestandsalter flexibel · ruhige Lagen',
-    ctaLabel: 'Profil anfragen',
-    href: '/kontakt?utm_source=gesuche',
+    title: 'Screening & Vorauswahl',
+    description: 'Wir prüfen Angebot, Unterlagen und Passung, bevor wir ein Exposé freigeben.',
   },
   {
-    code: 'GS-2003',
-    badge: 'Aktiv',
-    imageSrc: '/images/stock/wiese.webp',
-    imageAlt: 'Jagd- und Pachtgesuch',
-    headline: 'Eigenjagd / Jagdpacht',
-    meta: 'Nord- und Ostdeutschland · arrondierte Reviere gesucht',
-    ctaLabel: 'Profil anfragen',
-    href: '/kontakt?utm_source=gesuche',
+    title: 'Angebot & Exposé',
+    description: 'Sie erhalten strukturierte Informationen und klare Entscheidungsgrundlagen.',
   },
 ];
+
+const suchtypen = ['Ackerland', 'Grünland', 'Wald', 'Betrieb/Hofstelle', 'Jagd', 'Wasser', 'Ausgleich/Öko'];
+
+const bundeslaender = [
+  'Baden-Württemberg',
+  'Bayern',
+  'Berlin',
+  'Brandenburg',
+  'Bremen',
+  'Hamburg',
+  'Hessen',
+  'Mecklenburg-Vorpommern',
+  'Niedersachsen',
+  'Nordrhein-Westfalen',
+  'Rheinland-Pfalz',
+  'Saarland',
+  'Sachsen',
+  'Sachsen-Anhalt',
+  'Schleswig-Holstein',
+  'Thüringen',
+];
+
+const submitted = Astro.url.searchParams.get('submitted') === '1';
+
+const inputBase =
+  'mt-1 w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 px-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 focus:outline-none transition';
+const labelBase = 'text-sm font-semibold text-slate-700 dark:text-slate-200';
+const errorBase = 'mt-1 text-xs text-rose-600 hidden';
+const checkboxBase = 'h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500';
 ---
 
 <Layout metadata={metadata}>
-  <Hero id="investoren" actions={[{ text: 'Suchprofil hinterlegen', href: '/kontakt' }]}>
-    <Fragment slot="title">Für Investoren</Fragment>
-    <Fragment slot="subtitle">[INVESTOREN_INTRO]</Fragment>
-  </Hero>
+  <section id="gesuche" class="relative overflow-hidden bg-white dark:bg-slate-950">
+    <div class="mx-auto max-w-6xl px-6 pt-16 pb-12 sm:pt-20 sm:pb-16 lg:pt-24">
+      <SectionHeader
+        eyebrow="Gesuche"
+        title="Suchprofil hinterlegen – passende Agrarimmobilien erhalten"
+        description="Wir finden passende Agrar- und Forstimmobilien für Ihr Profil – auch Off-Market. Sie erhalten strukturierte Unterlagen und klare Entscheidungsgrundlagen."
+        titleAs="h1"
+        size="lg"
+        align="center"
+      />
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a class="btn-primary w-full sm:w-auto" href="#kontakt">Suchprofil hinterlegen</a>
+        <a class="btn-secondary w-full sm:w-auto" href="#kontakt">Kontakt aufnehmen</a>
+      </div>
+      <TrustStatsRow items={trustItems} />
+    </div>
+  </section>
 
-  <MediaCardsLeft
-    id="gesuche"
-    eyebrow="Gesuche"
-    title="Aktuelle Gesuche"
-    description="Hinterlegte Suchprofile von Investoren und Familiengesellschaften. Diskret, strukturiert und mit klaren Kriterien."
-    items={gesucheItems}
-  />
+  <section id="matching" class="py-12 sm:py-16">
+    <div class="mx-auto max-w-6xl px-6">
+      <SectionHeader
+        eyebrow="Ablauf"
+        title="Wie wir matchen"
+        description="Ein klarer Prozess, damit Sie nur passende Angebote erhalten."
+      />
+      <div class="mt-8">
+        <StepList items={matchSteps} columns={3} />
+      </div>
+    </div>
+  </section>
 
-  <Steps
-    id="prozess"
-    tagline="Investmentprozess"
-    title="Investmentprozess"
-    items={[
-      { title: '[INV_STEP_1_TITLE]', description: '[INV_STEP_1_TEXT]', icon: 'tabler:number-1' },
-      { title: '[INV_STEP_2_TITLE]', description: '[INV_STEP_2_TEXT]', icon: 'tabler:number-2' },
-      { title: '[INV_STEP_3_TITLE]', description: '[INV_STEP_3_TEXT]', icon: 'tabler:number-3' },
-      { title: '[INV_STEP_4_TITLE]', description: '[INV_STEP_4_TEXT]', icon: 'tabler:number-4' },
-    ]}
-  />
+  <section id="kontakt" class="bg-slate-50/70 dark:bg-slate-900/30 py-12 sm:py-16">
+    <div class="mx-auto max-w-6xl px-6">
+      <SectionHeader
+        eyebrow="Kontakt"
+        title="Suchprofil hinterlegen"
+        description="Je klarer das Profil, desto passender die Angebote. Wir melden uns innerhalb von 48 Stunden."
+      />
+      <div class="mt-8 grid gap-6 lg:grid-cols-[1fr,1.2fr]">
+        <ContactCard
+          title="Diskret & strukturiert"
+          description="Wir arbeiten mit klaren Kriterien, geprüften Unterlagen und persönlicher Betreuung."
+          items={[
+            'Off-Market Zugang nach Wunsch.',
+            'Strukturierte Unterlagen statt Streuverlust.',
+            'Rückmeldung innerhalb von 48 Stunden.',
+            'Klare Kommunikation und Verfügbarkeit.',
+          ]}
+          note="Ihre Angaben behandeln wir vertraulich und verwenden sie ausschließlich für die Suche."
+        />
+        <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-slate-900 p-6 lg:p-8 shadow-sm">
+          {submitted && (
+            <div class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800">
+              Danke! Ihr Suchprofil ist bei uns eingegangen.
+            </div>
+          )}
+          <form class="space-y-5" data-validate novalidate>
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label class={labelBase} for="investor-name">
+                  Name <span class="text-rose-600">*</span>
+                </label>
+                <input
+                  id="investor-name"
+                  name="name"
+                  type="text"
+                  required
+                  autocomplete="name"
+                  class={inputBase}
+                  aria-describedby="investor-name-error"
+                />
+                <p id="investor-name-error" class={errorBase} data-error-for="investor-name" aria-live="polite"></p>
+              </div>
+              <div>
+                <label class={labelBase} for="investor-email">
+                  E-Mail <span class="text-rose-600">*</span>
+                </label>
+                <input
+                  id="investor-email"
+                  name="email"
+                  type="email"
+                  required
+                  autocomplete="email"
+                  class={inputBase}
+                  aria-describedby="investor-email-error"
+                />
+                <p id="investor-email-error" class={errorBase} data-error-for="investor-email" aria-live="polite"></p>
+              </div>
+            </div>
 
-  <Features
-    id="assetklassen"
-    tagline="Assetklassen"
-    title="Assetklassen"
-    subtitle="[ASSETKLASSEN_TEXT]"
-    columns={3}
-    items={[
-      { title: '[ASSET_1]', description: '[ASSET_1_TEXT]', icon: 'tabler:building-community' },
-      { title: '[ASSET_2]', description: '[ASSET_2_TEXT]', icon: 'tabler:tractor' },
-      { title: '[ASSET_3]', description: '[ASSET_3_TEXT]', icon: 'tabler:leaf' },
-      { title: '[ASSET_4]', description: '[ASSET_4_TEXT]', icon: 'tabler:plant-2' },
-      { title: '[ASSET_5]', description: '[ASSET_5_TEXT]', icon: 'tabler:chart-bar' },
-      { title: '[ASSET_6]', description: '[ASSET_6_TEXT]', icon: 'tabler:map' },
-    ]}
-  />
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label class={labelBase} for="investor-type">
+                  Investor-Typ <span class="text-rose-600">*</span>
+                </label>
+                <select id="investor-type" name="investorTyp" required class={inputBase} aria-describedby="investor-type-error">
+                  <option value="">Bitte auswählen</option>
+                  <option value="privat">Privat</option>
+                  <option value="family-office">Family Office</option>
+                  <option value="unternehmen">Unternehmen</option>
+                  <option value="institutionell">Institutionell</option>
+                  <option value="sonstiges">Sonstiges</option>
+                </select>
+                <p id="investor-type-error" class={errorBase} data-error-for="investor-type" aria-live="polite"></p>
+              </div>
+              <div>
+                <label class={labelBase} for="investor-timeline">Zeitplan</label>
+                <select id="investor-timeline" name="zeitplan" class={inputBase} aria-describedby="investor-timeline-error">
+                  <option value="">Bitte auswählen</option>
+                  <option value="sofort">Sofort</option>
+                  <option value="3-6">3–6 Monate</option>
+                  <option value="6-12">6–12 Monate</option>
+                  <option value="flexibel">Flexibel</option>
+                </select>
+                <p id="investor-timeline-error" class={errorBase} data-error-for="investor-timeline" aria-live="polite"></p>
+              </div>
+            </div>
 
-  <FAQs
-    id="faq"
-    tagline="FAQ"
-    title="Fragen von Investoren"
-    subtitle="[INV_FAQ_TEXT]"
-    items={[
-      { title: '[INV_FAQ_1_Q]', description: '[INV_FAQ_1_A]' },
-      { title: '[INV_FAQ_2_Q]', description: '[INV_FAQ_2_A]' },
-      { title: '[INV_FAQ_3_Q]', description: '[INV_FAQ_3_A]' },
-      { title: '[INV_FAQ_4_Q]', description: '[INV_FAQ_4_A]' },
-      { title: '[INV_FAQ_5_Q]', description: '[INV_FAQ_5_A]' },
-    ]}
-    classes={{ container: 'max-w-5xl' }}
-  />
+            <fieldset class="space-y-3" data-required-group="suchtyp" aria-describedby="investor-type-error-group">
+              <legend class={labelBase}>
+                Suchtyp <span class="text-rose-600">*</span>
+              </legend>
+              <div class="grid gap-2 sm:grid-cols-2">
+                {suchtypen.map((typ) => (
+                  <label class="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-300">
+                    <input class={checkboxBase} type="checkbox" name="suchtyp" value={typ} />
+                    <span>{typ}</span>
+                  </label>
+                ))}
+              </div>
+              <p
+                id="investor-type-error-group"
+                class="text-xs text-rose-600 hidden"
+                data-group-error="suchtyp"
+                aria-live="polite"
+              ></p>
+            </fieldset>
 
-  <CallToAction
-    id="cta"
-    actions={[
-      { variant: 'primary', text: 'Suchprofil hinterlegen', href: '/kontakt' },
-      { text: 'Angebote ansehen', href: '/angebote' },
-    ]}
-  >
-    <Fragment slot="title">[CTA_INVESTOREN_TITLE]</Fragment>
-    <Fragment slot="subtitle">[CTA_INVESTOREN_SUBTITLE]</Fragment>
-  </CallToAction>
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label class={labelBase} for="investor-regions">
+                  Regionen (Bundesländer) <span class="text-rose-600">*</span>
+                </label>
+                <select
+                  id="investor-regions"
+                  name="regionen"
+                  required
+                  multiple
+                  size="6"
+                  class={inputBase}
+                  aria-describedby="investor-regions-error"
+                >
+                  {bundeslaender.map((land) => (
+                    <option value={land}>{land}</option>
+                  ))}
+                </select>
+                <p id="investor-regions-error" class={errorBase} data-error-for="investor-regions" aria-live="polite"></p>
+              </div>
+              <div>
+                <label class={labelBase} for="investor-regions-extra">Weitere Regionen</label>
+                <input
+                  id="investor-regions-extra"
+                  name="regionenWeitere"
+                  type="text"
+                  class={inputBase}
+                  aria-describedby="investor-regions-extra-error"
+                />
+                <p
+                  id="investor-regions-extra-error"
+                  class={errorBase}
+                  data-error-for="investor-regions-extra"
+                  aria-live="polite"
+                ></p>
+              </div>
+            </div>
+
+            <div class="space-y-2" data-range-group="flaeche">
+              <p class={labelBase}>
+                Flächenspanne (ha) <span class="text-rose-600">*</span>
+              </p>
+              <div class="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label class="sr-only" for="investor-area-min">Fläche min</label>
+                  <input
+                    id="investor-area-min"
+                    name="flaecheMin"
+                    type="number"
+                    min="0"
+                    step="0.1"
+                    inputmode="decimal"
+                    required
+                    class={inputBase}
+                    data-range-min="flaeche"
+                    aria-describedby="investor-area-min-error"
+                    placeholder="Min. ha"
+                  />
+                  <p id="investor-area-min-error" class={errorBase} data-error-for="investor-area-min" aria-live="polite"></p>
+                </div>
+                <div>
+                  <label class="sr-only" for="investor-area-max">Fläche max</label>
+                  <input
+                    id="investor-area-max"
+                    name="flaecheMax"
+                    type="number"
+                    min="0"
+                    step="0.1"
+                    inputmode="decimal"
+                    required
+                    class={inputBase}
+                    data-range-max="flaeche"
+                    aria-describedby="investor-area-max-error"
+                    placeholder="Max. ha"
+                  />
+                  <p id="investor-area-max-error" class={errorBase} data-error-for="investor-area-max" aria-live="polite"></p>
+                </div>
+              </div>
+              <p class="text-xs text-rose-600 hidden" data-range-error aria-live="polite"></p>
+            </div>
+
+            <div class="space-y-2" data-range-group="budget">
+              <p class={labelBase}>Budget (optional, €)</p>
+              <div class="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label class="sr-only" for="investor-budget-min">Budget min</label>
+                  <input
+                    id="investor-budget-min"
+                    name="budgetMin"
+                    type="number"
+                    min="0"
+                    step="1000"
+                    inputmode="numeric"
+                    class={inputBase}
+                    data-range-min="budget"
+                    aria-describedby="investor-budget-min-error"
+                    placeholder="Min. Budget"
+                  />
+                  <p id="investor-budget-min-error" class={errorBase} data-error-for="investor-budget-min" aria-live="polite"></p>
+                </div>
+                <div>
+                  <label class="sr-only" for="investor-budget-max">Budget max</label>
+                  <input
+                    id="investor-budget-max"
+                    name="budgetMax"
+                    type="number"
+                    min="0"
+                    step="1000"
+                    inputmode="numeric"
+                    class={inputBase}
+                    data-range-max="budget"
+                    aria-describedby="investor-budget-max-error"
+                    placeholder="Max. Budget"
+                  />
+                  <p id="investor-budget-max-error" class={errorBase} data-error-for="investor-budget-max" aria-live="polite"></p>
+                </div>
+              </div>
+              <p class="text-xs text-rose-600 hidden" data-range-error aria-live="polite"></p>
+            </div>
+
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label class={labelBase} for="investor-preference">Pacht-/Renditepräferenz</label>
+                <select
+                  id="investor-preference"
+                  name="praeferenz"
+                  class={inputBase}
+                  aria-describedby="investor-preference-error"
+                >
+                  <option value="">Bitte auswählen</option>
+                  <option value="langfristig-pacht">Langfristig verpachtet</option>
+                  <option value="offen-pacht">Offen für Pacht</option>
+                  <option value="eigennutzung">Eigennutzung / Entwicklung</option>
+                  <option value="renditefokus">Renditefokus</option>
+                  <option value="flexibel">Flexibel</option>
+                </select>
+                <p id="investor-preference-error" class={errorBase} data-error-for="investor-preference" aria-live="polite"></p>
+              </div>
+              <div>
+                <label class={labelBase} for="investor-offmarket">Off-Market akzeptiert?</label>
+                <select id="investor-offmarket" name="offmarket" class={inputBase} aria-describedby="investor-offmarket-error">
+                  <option value="">Bitte auswählen</option>
+                  <option value="ja">Ja</option>
+                  <option value="nein">Nein</option>
+                  <option value="offen">Offen</option>
+                </select>
+                <p id="investor-offmarket-error" class={errorBase} data-error-for="investor-offmarket" aria-live="polite"></p>
+              </div>
+            </div>
+
+            <div>
+              <label class={labelBase} for="investor-message">Nachricht</label>
+              <textarea
+                id="investor-message"
+                name="message"
+                rows="4"
+                class={inputBase}
+                aria-describedby="investor-message-error"
+              ></textarea>
+              <p id="investor-message-error" class={errorBase} data-error-for="investor-message" aria-live="polite"></p>
+            </div>
+
+            <div>
+              <label class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300" for="investor-privacy">
+                <input
+                  id="investor-privacy"
+                  name="privacy"
+                  type="checkbox"
+                  required
+                  class={checkboxBase}
+                  data-error-message="Bitte stimmen Sie der Datenschutzerklärung zu."
+                  aria-describedby="investor-privacy-error"
+                />
+                <span>
+                  Ich stimme der Verarbeitung meiner Angaben gemäß der Datenschutzerklärung zu.
+                  <span class="text-rose-600"> *</span>
+                </span>
+              </label>
+              <p id="investor-privacy-error" class={errorBase} data-error-for="investor-privacy" aria-live="polite"></p>
+            </div>
+
+            <div class="hidden" aria-hidden="true">
+              <label for="investor-company">Firma</label>
+              <input id="investor-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+            </div>
+
+            <div class="space-y-3">
+              <button type="submit" class="btn-primary w-full">Suchprofil senden</button>
+              <p class="text-center text-xs text-slate-500 dark:text-slate-400">Wir melden uns innerhalb von 48h.</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <FormValidationScript />
 </Layout>

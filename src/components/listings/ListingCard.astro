@@ -1,0 +1,122 @@
+---
+import {
+  formatAreaHa,
+  formatPrice,
+  computeEuroPerHa,
+  getCategoryChip,
+  getStatusBadge,
+  getCoreChipsByCategory,
+} from '~/utils/listings';
+import type { ListingCardProps } from '~/utils/listings';
+
+const {
+  listing,
+  variant = 'data',
+  secondaryCtaHref,
+  secondaryCtaLabel = 'Exposé anfordern',
+  showSecondaryCta = false,
+} = Astro.props as ListingCardProps;
+
+const status = getStatusBadge(listing);
+const category = getCategoryChip(listing);
+const price = formatPrice(listing);
+const euroPerHa = computeEuroPerHa(listing);
+const coreChips = getCoreChipsByCategory(listing);
+
+const thirdMetric = euroPerHa
+  ? { label: '€/ha', value: euroPerHa }
+  : coreChips[0]
+    ? { label: coreChips[0].label, value: coreChips[0].value }
+    : null;
+
+const chips = euroPerHa ? coreChips : coreChips.slice(1);
+const visibleChips = chips.slice(0, variant === 'highlight' ? 1 : 2);
+
+const metrics = [
+  { label: 'Fläche', value: formatAreaHa(listing.areaHa) },
+  { label: price.label, value: price.value },
+];
+
+if (thirdMetric) metrics.push(thirdMetric);
+
+const metricsCols = metrics.length === 3 ? 'grid-cols-3' : 'grid-cols-2';
+const regionLabel = listing.region ? `${listing.bundesland} · ${listing.region}` : listing.bundesland;
+const href = `/angebote/${listing.slug}`;
+const imageSrc = listing.image ?? '';
+const titleClamp = 'display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;';
+const regionClamp = 'display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;';
+const titleClass = variant === 'highlight' ? 'text-base' : 'text-lg';
+---
+
+<article class="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-slate-900 shadow-sm transition-transform duration-150 hover:-translate-y-1">
+  <a href={href} class="absolute inset-0 z-10" aria-label={`${listing.title} – Details ansehen`} tabindex="-1"></a>
+
+  <div class="relative z-20 flex h-full flex-col">
+    <div class="relative overflow-hidden rounded-xl">
+      <div class="pt-[56.25%]"></div>
+      <img
+        src={imageSrc}
+        alt={listing.imageAlt ?? listing.title}
+        class="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+        loading="lazy"
+        width="1280"
+        height="720"
+      />
+      <span
+        class={`absolute left-3 top-3 inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${
+          status.tone === 'success'
+            ? 'bg-emerald-100 text-emerald-700'
+            : status.tone === 'warning'
+              ? 'bg-amber-100 text-amber-700'
+              : status.tone === 'muted'
+                ? 'bg-slate-200 text-slate-600'
+                : 'bg-slate-100 text-slate-700'
+        }`}
+      >
+        {status.label}
+      </span>
+      <span class="absolute right-3 top-3 inline-flex items-center rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur dark:bg-slate-900/80 dark:text-slate-200">
+        {category.label}
+      </span>
+    </div>
+
+    <div class="flex flex-1 flex-col gap-3 px-1 pb-4 pt-4">
+      <h3 class={`${titleClass} font-semibold leading-tight text-emerald-950 dark:text-white`} style={titleClamp}>
+        {listing.title}
+      </h3>
+      <p class="text-sm text-slate-600 dark:text-slate-400" style={regionClamp}>
+        {regionLabel}
+      </p>
+
+      <div class={`grid ${metricsCols} gap-3 text-xs text-slate-500 dark:text-slate-400`}>
+        {metrics.map((metric) => (
+          <div class="flex flex-col">
+            <span class="uppercase tracking-wide">{metric.label}</span>
+            <span class="text-sm font-semibold text-emerald-950 dark:text-white">{metric.value}</span>
+          </div>
+        ))}
+      </div>
+
+      {visibleChips.length > 0 && (
+        <div class="flex flex-wrap gap-2">
+          {visibleChips.map((chip) => (
+            <span class="inline-flex items-center rounded-full border border-emerald-100 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-800 dark:border-emerald-900/40 dark:bg-emerald-900/20 dark:text-emerald-200">
+              {chip.label}: {chip.value}
+            </span>
+          ))}
+        </div>
+      )}
+
+      <div class="mt-auto flex flex-col gap-2 sm:flex-row">
+        <a href={href} class="btn-primary h-11 w-full text-sm sm:w-auto">
+          Details ansehen
+        </a>
+        {showSecondaryCta && secondaryCtaHref && variant === 'data' && (
+          <a href={secondaryCtaHref} class="btn-secondary h-11 w-full text-sm sm:w-auto">
+            {secondaryCtaLabel}
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+</article>

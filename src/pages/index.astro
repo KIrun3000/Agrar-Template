@@ -7,11 +7,21 @@ import Stats from '~/components/widgets/Stats.astro';
 import Features2 from '~/components/widgets/Features2.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
 import Contact from '~/components/widgets/Contact.astro';
+import ListingCard from '~/components/listings/ListingCard.astro';
 import { ANGEBOTE } from '~/data/angebote';
 import placeholderObj from '~/assets/images/placeholders/placeholder-objekt.jpg';
 import sellerImg from '~/assets/images/stock/stock_fuer-verkaeufer.webp';
 import investorImg from '~/assets/images/stock/stock_fuer-investoren.webp';
 import teamImg from '~/assets/images/stock/stock_ueber-uns.webp';
+import {
+  mapAngebotToListing,
+  formatAreaHa,
+  formatPrice,
+  computeEuroPerHa,
+  getCategoryChip,
+  getStatusBadge,
+  getCoreChipsByCategory,
+} from '~/utils/listings';
 
 const kontaktInfo = {
   firma: 'Muster Agrarimmobilien',
@@ -34,7 +44,7 @@ const metadata = {
       { variant: 'primary', text: 'Kaufen', href: '/angebote' },
       {
         text: 'Verkaufen',
-        href: '/kontakt',
+        href: '/#kontakt',
         class:
           'bg-white text-slate-900 border border-slate-200 hover:bg-slate-50 shadow-sm dark:bg-slate-900 dark:text-white dark:border-slate-700 dark:hover:bg-slate-800',
       },
@@ -77,24 +87,43 @@ const metadata = {
       (() => {
         const placeholderImage = placeholderObj.src;
         const highlightOffers = ANGEBOTE.filter((a) => a.status === 'Neu');
+        const highlightListings = highlightOffers.map((angebot) => mapAngebotToListing(angebot, placeholderImage));
         const highlightPageSize = 4;
-        const highlightPages = Math.ceil(highlightOffers.length / highlightPageSize);
-        const highlightHasPager = highlightOffers.length > highlightPageSize;
+        const highlightPages = Math.ceil(highlightListings.length / highlightPageSize);
+        const highlightHasPager = highlightListings.length > highlightPageSize;
         const highlightPayload = JSON.stringify(
-          highlightOffers.map((angebot) => ({
-            id: angebot.id,
-            status: angebot.status,
-            image: angebot.image || placeholderImage,
-            beschreibungKurz: angebot.beschreibungKurz,
-            bundesland: angebot.bundesland,
-            regionKurz: angebot.regionKurz ?? '',
-            typ: angebot.typ,
-            flaecheGesamtHa: angebot.flaecheGesamtHa,
-            bodenpunkteKern: angebot.bodenpunkteKern ?? null,
-            niederschlagMm: angebot.niederschlagMm ?? null,
-            kaufpreisText: angebot.kaufpreisText,
-            slug: angebot.slug,
-          }))
+          highlightListings.map((listing) => {
+            const price = formatPrice(listing);
+            const category = getCategoryChip(listing);
+            const status = getStatusBadge(listing);
+            const euroPerHa = computeEuroPerHa(listing);
+            const coreChips = getCoreChipsByCategory(listing);
+            const thirdMetric = euroPerHa
+              ? { label: '€/ha', value: euroPerHa }
+              : coreChips[0]
+                ? { label: coreChips[0].label, value: coreChips[0].value }
+                : null;
+            const chips = euroPerHa ? coreChips : coreChips.slice(1);
+            const metrics = [
+              { label: 'Fläche', value: formatAreaHa(listing.areaHa) },
+              { label: price.label, value: price.value },
+            ];
+            if (thirdMetric) metrics.push(thirdMetric);
+
+            return {
+              id: listing.id,
+              title: listing.title,
+              status: status.label,
+              statusTone: status.tone,
+              category: category.label,
+              regionLabel: listing.region ? `${listing.bundesland} · ${listing.region}` : listing.bundesland,
+              image: listing.image ?? placeholderImage,
+              imageAlt: listing.imageAlt ?? listing.title,
+              href: `/angebote/${listing.slug}`,
+              metrics,
+              chips: chips.slice(0, 1),
+            };
+          })
         ).replace(/</g, '\\u003c');
 
         return (
@@ -106,54 +135,9 @@ const metadata = {
               data-total-pages={highlightPages}
               class="grid gap-4 sm:gap-5 grid-cols-1 xs:grid-cols-2 lg:grid-cols-4"
             >
-              {highlightOffers.slice(0, highlightPageSize).map((angebot) => {
-                const statusClass =
-                  angebot.status === 'Neu'
-                    ? 'bg-emerald-100 text-emerald-700'
-                    : angebot.status === 'Reserviert'
-                      ? 'bg-amber-100 text-amber-700'
-                      : 'bg-slate-200 text-slate-600';
-
-                return (
-                  <a
-                    class="group border border-gray-200 dark:border-gray-800 rounded-xl p-3 bg-white dark:bg-slate-900 shadow-sm flex flex-col gap-2 transition-transform duration-150 hover:-translate-y-1"
-                    href={`/angebote/${angebot.slug}`}
-                  >
-                    <div class="relative">
-                      <img
-                        src={angebot.image || placeholderImage}
-                        alt={angebot.beschreibungKurz}
-                        class="w-full h-32 object-cover rounded-lg"
-                        loading="lazy"
-                        width="640"
-                        height="256"
-                      />
-                      <span
-                        class={`absolute top-2 left-2 inline-flex rounded-full px-2 py-0.5 text-xs ${statusClass} backdrop-blur`}
-                      >
-                        {angebot.status}
-                      </span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                      <p class="text-xs font-mono text-slate-500">{angebot.id}</p>
-                      <span class="text-xs text-muted">{angebot.typ}</span>
-                    </div>
-                    <h3 class="text-base font-semibold leading-snug group-hover:underline">
-                      {angebot.beschreibungKurz}
-                    </h3>
-                    <p class="text-xs text-slate-600 dark:text-slate-400">
-                      {angebot.bundesland}
-                      {angebot.regionKurz && ` · ${angebot.regionKurz}`}
-                    </p>
-                    <p class="text-xs text-slate-600 dark:text-slate-400">
-                      {angebot.flaecheGesamtHa} ha · {angebot.typ}
-                      {angebot.bodenpunkteKern && ` · ca. ${angebot.bodenpunkteKern} BP`}
-                      {angebot.niederschlagMm && ` · ca. ${angebot.niederschlagMm} mm`}
-                    </p>
-                    <p class="text-sm font-semibold text-default">{angebot.kaufpreisText}</p>
-                  </a>
-                );
-              })}
+              {highlightListings.slice(0, highlightPageSize).map((listing) => (
+                <ListingCard listing={listing} variant="highlight" />
+              ))}
             </div>
             {highlightHasPager && (
               <div class="mt-6 flex items-center justify-center gap-3">
@@ -193,32 +177,67 @@ const metadata = {
                   const totalPages = Math.ceil(items.length / pageSize);
                   let pageIndex = 0;
 
-                  const statusClass = (status) =>
-                    status === 'Neu'
+                  const statusClass = (tone) =>
+                    tone === 'success'
                       ? 'bg-emerald-100 text-emerald-700'
-                      : status === 'Reserviert'
+                      : tone === 'warning'
                         ? 'bg-amber-100 text-amber-700'
-                        : 'bg-slate-200 text-slate-600';
+                        : tone === 'muted'
+                          ? 'bg-slate-200 text-slate-600'
+                          : 'bg-slate-100 text-slate-700';
 
                   const renderCard = (item) => {
-                    const region = item.regionKurz ? ` · ${item.regionKurz}` : '';
-                    const bp = item.bodenpunkteKern ? ` · ca. ${item.bodenpunkteKern} BP` : '';
-                    const rain = item.niederschlagMm ? ` · ca. ${item.niederschlagMm} mm` : '';
+                    const metricsCols = item.metrics.length === 3 ? 'grid-cols-3' : 'grid-cols-2';
+                    const titleClamp =
+                      'display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;';
+                    const regionClamp =
+                      'display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;';
+                    const metricsHtml = item.metrics
+                      .map(
+                        (metric) => `
+                          <div class=\"flex flex-col\">
+                            <span class=\"uppercase tracking-wide\">${metric.label}</span>
+                            <span class=\"text-sm font-semibold text-emerald-950 dark:text-white\">${metric.value}</span>
+                          </div>`
+                      )
+                      .join('');
+                    const chipsHtml =
+                      item.chips && item.chips.length
+                        ? `
+                          <div class=\"flex flex-wrap gap-2\">
+                            ${item.chips
+                              .map(
+                                (chip) => `
+                                  <span class=\"inline-flex items-center rounded-full border border-emerald-100 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-800 dark:border-emerald-900/40 dark:bg-emerald-900/20 dark:text-emerald-200\">
+                                    ${chip.label}: ${chip.value}
+                                  </span>`
+                              )
+                              .join('')}
+                          </div>`
+                        : '';
                     return `
-                      <a class="group border border-gray-200 dark:border-gray-800 rounded-xl p-3 bg-white dark:bg-slate-900 shadow-sm flex flex-col gap-2 transition-transform duration-150 hover:-translate-y-1" href="/angebote/${item.slug}">
-                        <div class="relative">
-                          <img src="${item.image}" alt="${item.beschreibungKurz}" class="w-full h-32 object-cover rounded-lg" loading="lazy" width="640" height="256" />
-                          <span class="absolute top-2 left-2 inline-flex rounded-full px-2 py-0.5 text-xs ${statusClass(item.status)} backdrop-blur">${item.status}</span>
+                      <article class="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-slate-900 shadow-sm transition-transform duration-150 hover:-translate-y-1">
+                        <a href="${item.href}" class="absolute inset-0 z-10" aria-label="${item.title} – Details ansehen" tabindex="-1"></a>
+                        <div class="relative z-20 flex h-full flex-col">
+                          <div class="relative overflow-hidden rounded-xl">
+                            <div class="pt-[56.25%]"></div>
+                            <img src="${item.image}" alt="${item.imageAlt}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]" loading="lazy" width="1280" height="720" />
+                            <span class="absolute left-3 top-3 inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${statusClass(item.statusTone)}">${item.status}</span>
+                            <span class="absolute right-3 top-3 inline-flex items-center rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur dark:bg-slate-900/80 dark:text-slate-200">${item.category}</span>
+                          </div>
+                          <div class="flex flex-1 flex-col gap-3 px-1 pb-4 pt-4">
+                            <h3 class="text-base font-semibold leading-tight text-emerald-950 dark:text-white" style="${titleClamp}">${item.title}</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-400" style="${regionClamp}">${item.regionLabel}</p>
+                            <div class="grid ${metricsCols} gap-3 text-xs text-slate-500 dark:text-slate-400">
+                              ${metricsHtml}
+                            </div>
+                            ${chipsHtml}
+                            <div class="mt-auto flex flex-col gap-2 sm:flex-row">
+                              <a href="${item.href}" class="btn-primary h-11 w-full text-sm sm:w-auto">Details ansehen</a>
+                            </div>
+                          </div>
                         </div>
-                        <div class="flex items-center justify-between">
-                          <p class="text-xs font-mono text-slate-500">${item.id}</p>
-                          <span class="text-xs text-muted">${item.typ}</span>
-                        </div>
-                        <h3 class="text-base font-semibold leading-snug group-hover:underline">${item.beschreibungKurz}</h3>
-                        <p class="text-xs text-slate-600 dark:text-slate-400">${item.bundesland}${region}</p>
-                        <p class="text-xs text-slate-600 dark:text-slate-400">${item.flaecheGesamtHa} ha · ${item.typ}${bp}${rain}</p>
-                        <p class="text-sm font-semibold text-default">${item.kaufpreisText}</p>
-                      </a>`;
+                      </article>`;
                   };
 
                   const render = () => {
@@ -306,19 +325,16 @@ const metadata = {
         title: 'Brandenburg',
         description: 'Arrondierte Flächen, Gutshöfe, Wald- und Jagdimmobilien, Berlin-nah',
         icon: 'flat-color-icons:approval',
-        callToAction: { text: 'Mehr erfahren', href: '/regionen/brandenburg' },
       },
       {
         title: 'Mecklenburg-Vorpommern',
         description: 'Große Ackerflächen ab 50 ha, strukturstarke Betriebe, BP 40-70',
         icon: 'flat-color-icons:gallery',
-        callToAction: { text: 'Mehr erfahren', href: '/regionen/mecklenburg-vorpommern' },
       },
       {
         title: 'Sachsen-Anhalt',
         description: 'Hochwertige Schwarzerdeböden, BP 60-90, Hochertragsstandorte',
         icon: 'flat-color-icons:document',
-        callToAction: { text: 'Mehr erfahren', href: '/regionen/sachsen-anhalt' },
       },
     ]}
   />
@@ -334,19 +350,19 @@ const metadata = {
         title: 'Verkauf',
         description: 'Diskrete Vermarktung, Käuferqualifizierung und Begleitung bis zum Notartermin.',
         icon: 'flat-color-icons:advertising',
-        callToAction: { text: 'Kontakt aufnehmen', href: '/kontakt?utm_source=leistungen' },
+        callToAction: { text: 'Kontakt aufnehmen', href: '/?utm_source=leistungen#kontakt' },
       },
       {
         title: 'Bewertung',
         description: 'Bodenpunkte, Pacht, Standortfaktoren und Marktpreise im fundierten Vergleich.',
         icon: 'flat-color-icons:currency-exchange',
-        callToAction: { text: 'Kontakt aufnehmen', href: '/kontakt?utm_source=leistungen' },
+        callToAction: { text: 'Kontakt aufnehmen', href: '/?utm_source=leistungen#kontakt' },
       },
       {
         title: 'Beratung',
         description: 'Strukturierung, Nachfolge und Portfolio-Strategie für Eigentümer und Investoren.',
         icon: 'flat-color-icons:business-contact',
-        callToAction: { text: 'Kontakt aufnehmen', href: '/kontakt?utm_source=leistungen' },
+        callToAction: { text: 'Kontakt aufnehmen', href: '/?utm_source=leistungen#kontakt' },
       },
     ]}
   />
@@ -369,8 +385,8 @@ const metadata = {
   <CallToAction
     id="cta"
     actions={[
-      { variant: 'primary', text: 'Mehr erfahren', href: '/ueber-uns' },
-      { text: 'Kontakt aufnehmen', href: '/kontakt' },
+      { variant: 'primary', text: 'Mehr erfahren', href: '/#ueber-uns' },
+      { text: 'Kontakt aufnehmen', href: '/#kontakt' },
     ]}
   >
     <Fragment slot="title">Interesse geweckt?</Fragment>
@@ -393,7 +409,6 @@ const metadata = {
     ]}
     textarea={{ label: 'Nachricht', name: 'message', placeholder: '[NACHRICHT]' }}
     button="Anfrage senden"
-    description="Formular-Endpoint muss konfiguriert werden."
   >
     <Fragment slot="info">
       <div class="space-y-4">

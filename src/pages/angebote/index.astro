@@ -1,37 +1,575 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
+import ListingCard from '~/components/listings/ListingCard.astro';
 import { ANGEBOTE } from '~/data/angebote';
 import placeholderObj from '~/assets/images/placeholders/placeholder-objekt.jpg';
+import { mapAngebotToListing } from '~/utils/listings';
 
 const searchParams = Astro.url.searchParams;
-const filterBundesland = searchParams.get('bundesland');
-const filterTyp = searchParams.get('typ');
-const filterStatus = searchParams.get('status');
-const sort = searchParams.get('sort') ?? 'neu';
 
-let angebote = [...ANGEBOTE];
+const numberParam = (key: string) => {
+  const value = searchParams.get(key);
+  if (!value) return null;
+  const normalized = value.replace(',', '.');
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed) ? parsed : null;
+};
 
-if (filterBundesland) angebote = angebote.filter((a) => a.bundesland === filterBundesland);
-if (filterTyp) angebote = angebote.filter((a) => a.typ === filterTyp);
-if (filterStatus) angebote = angebote.filter((a) => a.status === filterStatus);
-
-if (sort === 'flaeche-desc') {
-  angebote.sort((a, b) => b.flaecheGesamtHa - a.flaecheGesamtHa);
-} else {
-  angebote.sort((a, b) => (a.id < b.id ? 1 : -1));
-}
-
-const uniqueBundeslaender = [...new Set(ANGEBOTE.map((a) => a.bundesland))].sort();
-const uniqueTypen = [...new Set(ANGEBOTE.map((a) => a.typ))].sort();
-const uniqueStatus = [...new Set(ANGEBOTE.map((a) => a.status))].sort();
-const placeholderImage = placeholderObj.src;
-const withImages = angebote.filter((a) => a.image);
-const variantTop = (withImages.length >= 3 ? withImages : angebote).slice(0, 3);
+const parseEuroValue = (text: string) => {
+  if (!text) return null;
+  const match = text.match(/(\d{1,3}(?:[.\s]\d{3})+|\d+)(?:,(\d+))?/);
+  if (!match) return null;
+  const whole = match[1].replace(/[.\s]/g, '');
+  const decimal = match[2] ? `.${match[2]}` : '';
+  const value = Number(`${whole}${decimal}`);
+  return Number.isFinite(value) ? value : null;
+};
 
 const metadata = {
   title: 'Aktuelle Angebote',
   description: 'Übersicht aller aktuell verfügbaren Agrar- und Forstimmobilien.',
 };
+
+const KATEGORIEN = [
+  { value: 'wald', label: 'Wald', typen: ['Wald / Forstfläche'] },
+  { value: 'acker', label: 'Acker', typen: ['Ackerland'] },
+  { value: 'gruenland', label: 'Grünland', typen: ['Grünland / Weide'] },
+  { value: 'hofstelle', label: 'Hofstelle', typen: ['Landwirtschaftlicher Betrieb / Hofstelle'] },
+  { value: 'jagd', label: 'Jagd', typen: ['Jagd / Eigenjagd / Jagdgenossenschaft'] },
+  { value: 'teich', label: 'Teich/Fischerei', typen: ['Teich / Fischerei / Gewässerflächen'] },
+  { value: 'sonder', label: 'Sonderkulturen', typen: ['Sonderkulturen'] },
+  {
+    value: 'naturschutz',
+    label: 'Naturschutz/Ausgleich',
+    typen: ['Naturschutz-/Öko-/Ausgleichs-/Stilllegungsflächen'],
+  },
+  { value: 'gemischt', label: 'Gemischt', typen: ['Gemischtobjekte (Wald + Acker + Gebäude)'] },
+];
+
+const KATEGORIE_LABELS = Object.fromEntries(KATEGORIEN.map((k) => [k.value, k.label]));
+const KATEGORIE_TYPEN = Object.fromEntries(KATEGORIEN.map((k) => [k.value, k.typen]));
+
+const filterKategorie = searchParams.get('kategorie') ?? '';
+const filterBundesland = searchParams.get('bundesland') ?? '';
+const filterRegion = searchParams.get('region') ?? '';
+const filterArt = searchParams.get('art') ?? '';
+const filterFlaecheMin = numberParam('flaecheMin');
+const filterFlaecheMax = numberParam('flaecheMax');
+const filterPreisMin = numberParam('preisMin');
+const filterPreisMax = numberParam('preisMax');
+const filterPreisHaMin = numberParam('preisHaMin');
+const filterPreisHaMax = numberParam('preisHaMax');
+const filterPachtstatus = searchParams.get('pachtstatus') ?? '';
+const filterSchutz = searchParams.getAll('schutz');
+const filterZufahrt = searchParams.get('zufahrt') ?? '';
+const filterTeilflaechen = searchParams.getAll('teil');
+
+const filterWaldBaumart = searchParams.get('waldBaumart') ?? '';
+const filterWaldZert = searchParams.get('waldZert') ?? '';
+const filterWaldVorrat = searchParams.get('waldVorrat') ?? '';
+
+const filterAckerMin = numberParam('ackerMin');
+const filterAckerMax = numberParam('ackerMax');
+const filterAckerEmz = searchParams.get('ackerEmz') ?? '';
+
+const filterGruenMin = numberParam('gruenMin');
+const filterGruenMax = numberParam('gruenMax');
+const filterGruenWasser = searchParams.get('gruenWasser') ?? '';
+
+const filterHofBetrieb = searchParams.get('hofBetrieb') ?? '';
+const filterHofGebaeude = searchParams.getAll('hofGebaeude');
+
+const filterJagdRahmen = searchParams.get('jagdRahmen') ?? '';
+const filterJagdVertrag = searchParams.get('jagdVertrag') ?? '';
+
+const filterTeichTyp = searchParams.get('teichTyp') ?? '';
+const filterTeichWasserrecht = searchParams.get('teichWasserrecht') ?? '';
+
+const filterSonderKultur = searchParams.get('sonderKultur') ?? '';
+const filterSonderBewasserung = searchParams.get('sonderBewasserung') ?? '';
+
+const filterNatBindung = searchParams.get('natBindung') ?? '';
+const filterNatNatura = searchParams.get('natNatura') ?? '';
+
+const sort = searchParams.get('sort') ?? 'neu';
+
+const placeholderImage = placeholderObj.src;
+
+const getRegion = (angebot: (typeof ANGEBOTE)[number]) =>
+  angebot.regionKurz ? angebot.regionKurz.split('·')[0].trim() : '';
+
+const getText = (angebot: (typeof ANGEBOTE)[number]) =>
+  `${angebot.beschreibungKurz} ${angebot.beschreibungLang}`.toLowerCase();
+
+const enrichAngebot = (angebot: (typeof ANGEBOTE)[number]) => {
+  const text = getText(angebot);
+  const isPacht = angebot.kaufpreisText.toLowerCase().includes('pacht');
+  const preisValue = parseEuroValue(angebot.kaufpreisText);
+  const kaufpreis = isPacht ? null : preisValue;
+  const pachtpreis = isPacht ? preisValue : null;
+  const preisProHa = preisValue && angebot.flaecheGesamtHa ? preisValue / angebot.flaecheGesamtHa : null;
+
+  const schutzstatus: string[] = [];
+  if (text.includes('natura')) schutzstatus.push('natura');
+  if (text.includes('wasserschutz') || text.includes('wasserrecht')) schutzstatus.push('wasserschutz');
+  if (text.includes('naturschutz') || text.includes('ausgleich') || text.includes('stilllegung')) schutzstatus.push('nsg');
+
+  let erschliessung = 'unklar';
+  if (text.includes('wirtschaftsweg')) erschliessung = 'wirtschaftsweg';
+  if (text.includes('forstweg')) erschliessung = 'forstweg';
+  if (text.includes('straße') || text.includes('strasse') || text.includes('öffent')) erschliessung = 'strasse';
+
+  const teilflaechen: string[] = [];
+  if ((angebot.flaecheWaldHa ?? 0) > 0 || angebot.typ.includes('Wald')) teilflaechen.push('wald');
+  if ((angebot.flaecheAckerHa ?? 0) > 0 || angebot.typ.includes('Acker')) teilflaechen.push('acker');
+  if (angebot.typ.includes('Hofstelle') || angebot.typ.includes('Gebäude')) teilflaechen.push('gebaeude');
+  if (angebot.typ.includes('Teich') || text.includes('wasser')) teilflaechen.push('wasser');
+
+  let waldBaumart = '';
+  if (angebot.typ.includes('Wald')) {
+    if (text.includes('misch')) waldBaumart = 'misch';
+    else if (text.includes('kiefer') || text.includes('fichte') || text.includes('nadel')) waldBaumart = 'nadel';
+    else if (text.includes('laub') || text.includes('buche') || text.includes('eiche')) waldBaumart = 'laub';
+  }
+
+  let jagdRahmen = '';
+  if (angebot.typ.includes('Jagd')) {
+    if (text.includes('eigenjagd')) jagdRahmen = 'eigenjagd';
+    if (text.includes('jagdgenossenschaft')) jagdRahmen = 'genossenschaft';
+  }
+
+  let teichTyp = '';
+  if (angebot.typ.includes('Teich')) {
+    if (text.includes('fließ') || text.includes('flies')) teichTyp = 'fliess';
+    else if (text.includes('see')) teichTyp = 'see';
+    else if (text.includes('teich')) teichTyp = 'teich';
+  }
+
+  let teichWasserrecht = '';
+  if (angebot.typ.includes('Teich')) {
+    teichWasserrecht = text.includes('wasserrecht') ? 'vorhanden' : 'unklar';
+  }
+
+  let sonderKultur = '';
+  let sonderBewasserung = '';
+  if (angebot.typ.includes('Sonderkulturen')) {
+    if (text.includes('wein')) sonderKultur = 'wein';
+    else if (text.includes('hopfen')) sonderKultur = 'hopfen';
+    else if (text.includes('baumschule')) sonderKultur = 'baumschule';
+    else if (text.includes('energieholz')) sonderKultur = 'energieholz';
+    else if (text.includes('obst') || text.includes('heidelbeere')) sonderKultur = 'obst';
+    else sonderKultur = 'sonstiges';
+
+    if (text.includes('beregnung') || text.includes('bewässerung') || text.includes('tröpf') || text.includes('tröpf')) {
+      sonderBewasserung = 'vorhanden';
+    } else {
+      sonderBewasserung = 'unklar';
+    }
+  }
+
+  let natBindung = '';
+  let natNatura = '';
+  if (angebot.typ.includes('Naturschutz')) {
+    if (text.includes('stilllegung')) natBindung = 'stilllegung';
+    else if (text.includes('vertrag')) natBindung = 'vertrags';
+    else if (text.includes('pflege')) natBindung = 'pflege';
+    else natBindung = 'unklar';
+
+    natNatura = text.includes('natura') ? 'ja' : 'nein';
+  }
+
+  let pachtstatus = 'frei';
+  if (isPacht || angebot.pachtBis) pachtstatus = 'verpachtet';
+
+  return {
+    angebot,
+    region: getRegion(angebot),
+    art: isPacht ? 'Pacht' : 'Verkauf',
+    kaufpreis,
+    pachtpreis,
+    preisProHa,
+    schutzstatus,
+    erschliessung,
+    teilflaechen,
+    waldBaumart,
+    jagdRahmen,
+    teichTyp,
+    teichWasserrecht,
+    sonderKultur,
+    sonderBewasserung,
+    natBindung,
+    natNatura,
+    pachtstatus,
+  };
+};
+
+const enriched = ANGEBOTE.map(enrichAngebot);
+
+const uniqueBundeslaender = [...new Set(ANGEBOTE.map((a) => a.bundesland))].sort();
+const regionByBundesland = new Map<string, string[]>();
+
+enriched.forEach(({ angebot, region }) => {
+  if (!region) return;
+  const list = regionByBundesland.get(angebot.bundesland) ?? [];
+  if (!list.includes(region)) list.push(region);
+  regionByBundesland.set(angebot.bundesland, list);
+});
+
+regionByBundesland.forEach((list, key) => list.sort());
+
+const regionOptions = filterBundesland ? regionByBundesland.get(filterBundesland) ?? [] : [];
+
+const flaechen = enriched.map((item) => item.angebot.flaecheGesamtHa).filter((value) => Number.isFinite(value));
+const flaecheMinValue = flaechen.length ? Math.floor(Math.min(...flaechen)) : 0;
+const flaecheMaxValue = flaechen.length ? Math.ceil(Math.max(...flaechen)) : 0;
+
+const kaufpreise = enriched.map((item) => item.kaufpreis).filter((value): value is number => Number.isFinite(value));
+const pachtpreise = enriched.map((item) => item.pachtpreis).filter((value): value is number => Number.isFinite(value));
+
+const kaufpreisMin = kaufpreise.length ? Math.min(...kaufpreise) : 0;
+const kaufpreisMax = kaufpreise.length ? Math.max(...kaufpreise) : 0;
+const pachtpreisMin = pachtpreise.length ? Math.min(...pachtpreise) : 0;
+const pachtpreisMax = pachtpreise.length ? Math.max(...pachtpreise) : 0;
+
+const preisHaValues = enriched
+  .map((item) => item.preisProHa)
+  .filter((value): value is number => Number.isFinite(value));
+const preisHaMinValue = preisHaValues.length ? Math.min(...preisHaValues) : 0;
+const preisHaMaxValue = preisHaValues.length ? Math.max(...preisHaValues) : 0;
+
+const allPreise = [...kaufpreise, ...pachtpreise];
+const preisLabel = filterArt === 'Pacht' ? 'Pachtpreis/Jahr' : filterArt === 'Verkauf' ? 'Kaufpreis' : 'Preis (Kauf/Pacht)';
+const preisMinValue =
+  filterArt === 'Pacht' ? pachtpreisMin : filterArt === 'Verkauf' ? kaufpreisMin : allPreise.length ? Math.min(...allPreise) : 0;
+const preisMaxValue =
+  filterArt === 'Pacht' ? pachtpreisMax : filterArt === 'Verkauf' ? kaufpreisMax : allPreise.length ? Math.max(...allPreise) : 0;
+
+let angebote = [...enriched];
+
+if (filterKategorie && KATEGORIE_TYPEN[filterKategorie]) {
+  const typen = KATEGORIE_TYPEN[filterKategorie];
+  angebote = angebote.filter((item) => typen.includes(item.angebot.typ));
+}
+
+if (filterBundesland) {
+  angebote = angebote.filter((item) => item.angebot.bundesland === filterBundesland);
+}
+
+if (filterRegion) {
+  angebote = angebote.filter((item) => item.region === filterRegion);
+}
+
+if (filterArt) {
+  angebote = angebote.filter((item) => item.art === filterArt);
+}
+
+if (filterFlaecheMin !== null) {
+  angebote = angebote.filter((item) => item.angebot.flaecheGesamtHa >= filterFlaecheMin);
+}
+
+if (filterFlaecheMax !== null) {
+  angebote = angebote.filter((item) => item.angebot.flaecheGesamtHa <= filterFlaecheMax);
+}
+
+if (filterPreisMin !== null || filterPreisMax !== null) {
+  angebote = angebote.filter((item) => {
+    const priceValue = filterArt === 'Pacht' ? item.pachtpreis : filterArt === 'Verkauf' ? item.kaufpreis : item.kaufpreis ?? item.pachtpreis;
+    if (!Number.isFinite(priceValue)) return false;
+    if (filterPreisMin !== null && priceValue < filterPreisMin) return false;
+    if (filterPreisMax !== null && priceValue > filterPreisMax) return false;
+    return true;
+  });
+}
+
+if (filterPreisHaMin !== null || filterPreisHaMax !== null) {
+  angebote = angebote.filter((item) => {
+    if (!Number.isFinite(item.preisProHa)) return false;
+    if (filterPreisHaMin !== null && item.preisProHa < filterPreisHaMin) return false;
+    if (filterPreisHaMax !== null && item.preisProHa > filterPreisHaMax) return false;
+    return true;
+  });
+}
+
+if (filterPachtstatus) {
+  angebote = angebote.filter((item) => item.pachtstatus === filterPachtstatus);
+}
+
+if (filterSchutz.length) {
+  angebote = angebote.filter((item) => filterSchutz.some((value) => item.schutzstatus.includes(value)));
+}
+
+if (filterZufahrt) {
+  angebote = angebote.filter((item) => item.erschliessung === filterZufahrt);
+}
+
+if (filterTeilflaechen.length) {
+  angebote = angebote.filter((item) => filterTeilflaechen.every((value) => item.teilflaechen.includes(value)));
+}
+
+if (filterKategorie === 'wald') {
+  if (filterWaldBaumart) {
+    angebote = angebote.filter((item) => item.waldBaumart === filterWaldBaumart);
+  }
+}
+
+if (filterKategorie === 'acker') {
+  if (filterAckerMin !== null) {
+    angebote = angebote.filter((item) => Number.isFinite(item.angebot.bodenpunkteKern) && (item.angebot.bodenpunkteKern ?? 0) >= filterAckerMin);
+  }
+  if (filterAckerMax !== null) {
+    angebote = angebote.filter((item) => Number.isFinite(item.angebot.bodenpunkteKern) && (item.angebot.bodenpunkteKern ?? 0) <= filterAckerMax);
+  }
+}
+
+if (filterKategorie === 'jagd') {
+  if (filterJagdRahmen) {
+    angebote = angebote.filter((item) => item.jagdRahmen === filterJagdRahmen);
+  }
+}
+
+if (filterKategorie === 'teich') {
+  if (filterTeichTyp) {
+    angebote = angebote.filter((item) => item.teichTyp === filterTeichTyp);
+  }
+  if (filterTeichWasserrecht) {
+    angebote = angebote.filter((item) => item.teichWasserrecht === filterTeichWasserrecht);
+  }
+}
+
+if (filterKategorie === 'sonder') {
+  if (filterSonderKultur) {
+    angebote = angebote.filter((item) => item.sonderKultur === filterSonderKultur);
+  }
+  if (filterSonderBewasserung) {
+    angebote = angebote.filter((item) => item.sonderBewasserung === filterSonderBewasserung);
+  }
+}
+
+if (filterKategorie === 'naturschutz') {
+  if (filterNatBindung) {
+    angebote = angebote.filter((item) => item.natBindung === filterNatBindung);
+  }
+  if (filterNatNatura) {
+    angebote = angebote.filter((item) => item.natNatura === filterNatNatura);
+  }
+}
+
+if (sort === 'flaeche-asc') {
+  angebote.sort((a, b) => a.angebot.flaecheGesamtHa - b.angebot.flaecheGesamtHa);
+} else if (sort === 'flaeche-desc') {
+  angebote.sort((a, b) => b.angebot.flaecheGesamtHa - a.angebot.flaecheGesamtHa);
+} else if (sort === 'preis-asc') {
+  angebote.sort((a, b) => (a.kaufpreis ?? a.pachtpreis ?? Infinity) - (b.kaufpreis ?? b.pachtpreis ?? Infinity));
+} else if (sort === 'preis-desc') {
+  angebote.sort((a, b) => (b.kaufpreis ?? b.pachtpreis ?? -Infinity) - (a.kaufpreis ?? a.pachtpreis ?? -Infinity));
+} else if (sort === 'eurha-asc') {
+  angebote.sort((a, b) => (a.preisProHa ?? Infinity) - (b.preisProHa ?? Infinity));
+} else if (sort === 'eurha-desc') {
+  angebote.sort((a, b) => (b.preisProHa ?? -Infinity) - (a.preisProHa ?? -Infinity));
+} else {
+  angebote.sort((a, b) => (a.angebot.id < b.angebot.id ? 1 : -1));
+}
+
+const buildQuery = (updates: Record<string, string | number | null | string[]>) => {
+  const params = new URLSearchParams(searchParams);
+  Object.entries(updates).forEach(([key, value]) => {
+    if (value === null || value === '') {
+      params.delete(key);
+      return;
+    }
+    if (Array.isArray(value)) {
+      params.delete(key);
+      value.filter(Boolean).forEach((item) => params.append(key, item));
+      return;
+    }
+    params.set(key, String(value));
+  });
+  const qs = params.toString();
+  return qs ? `/angebote?${qs}` : '/angebote';
+};
+
+const removeMultiValue = (key: string, value: string) => {
+  const params = new URLSearchParams(searchParams);
+  const next = params.getAll(key).filter((item) => item !== value);
+  params.delete(key);
+  next.forEach((item) => params.append(key, item));
+  const qs = params.toString();
+  return qs ? `/angebote?${qs}` : '/angebote';
+};
+
+const activeFilters: { label: string; href: string }[] = [];
+
+if (filterKategorie) {
+  activeFilters.push({
+    label: `Kategorie: ${KATEGORIE_LABELS[filterKategorie] ?? filterKategorie}`,
+    href: buildQuery({
+      kategorie: null,
+      waldBaumart: null,
+      waldZert: null,
+      waldVorrat: null,
+      ackerMin: null,
+      ackerMax: null,
+      ackerEmz: null,
+      gruenMin: null,
+      gruenMax: null,
+      gruenWasser: null,
+      hofBetrieb: null,
+      hofGebaeude: [],
+      jagdRahmen: null,
+      jagdVertrag: null,
+      teichTyp: null,
+      teichWasserrecht: null,
+      sonderKultur: null,
+      sonderBewasserung: null,
+      natBindung: null,
+      natNatura: null,
+    }),
+  });
+}
+
+if (filterBundesland) {
+  activeFilters.push({
+    label: `Bundesland: ${filterBundesland}`,
+    href: buildQuery({ bundesland: null, region: null }),
+  });
+}
+
+if (filterRegion) {
+  activeFilters.push({
+    label: `Region: ${filterRegion}`,
+    href: buildQuery({ region: null }),
+  });
+}
+
+if (filterArt) {
+  activeFilters.push({ label: `Art: ${filterArt}`, href: buildQuery({ art: null }) });
+}
+
+if (filterFlaecheMin !== null || filterFlaecheMax !== null) {
+  const label = `Fläche: ${filterFlaecheMin ?? 'min'}–${filterFlaecheMax ?? 'max'} ha`;
+  activeFilters.push({ label, href: buildQuery({ flaecheMin: null, flaecheMax: null }) });
+}
+
+if (filterPreisMin !== null || filterPreisMax !== null) {
+  const label = `${preisLabel}: ${filterPreisMin ?? 'min'}–${filterPreisMax ?? 'max'}`;
+  activeFilters.push({ label, href: buildQuery({ preisMin: null, preisMax: null }) });
+}
+
+if (filterPreisHaMin !== null || filterPreisHaMax !== null) {
+  const label = `€/ha: ${filterPreisHaMin ?? 'min'}–${filterPreisHaMax ?? 'max'}`;
+  activeFilters.push({ label, href: buildQuery({ preisHaMin: null, preisHaMax: null }) });
+}
+
+if (filterPachtstatus) {
+  activeFilters.push({ label: `Pachtstatus: ${filterPachtstatus}`, href: buildQuery({ pachtstatus: null }) });
+}
+
+filterSchutz.forEach((value) => {
+  const labelMap: Record<string, string> = {
+    natura: 'Natura 2000',
+    wasserschutz: 'Wasserschutzgebiet',
+    nsg: 'NSG/LSG',
+    sonstige: 'Sonstige',
+  };
+  activeFilters.push({ label: `Schutz: ${labelMap[value] ?? value}`, href: removeMultiValue('schutz', value) });
+});
+
+if (filterZufahrt) {
+  const labelMap: Record<string, string> = {
+    strasse: 'Öffentliche Straße',
+    wirtschaftsweg: 'Wirtschaftsweg',
+    forstweg: 'Forstweg',
+    unklar: 'Unklar',
+  };
+  activeFilters.push({ label: `Zufahrt: ${labelMap[filterZufahrt] ?? filterZufahrt}`, href: buildQuery({ zufahrt: null }) });
+}
+
+filterTeilflaechen.forEach((value) => {
+  const labelMap: Record<string, string> = {
+    wald: 'enthält Wald',
+    acker: 'enthält Acker',
+    gebaeude: 'enthält Gebäude/Hofstelle',
+    wasser: 'enthält Wasser',
+  };
+  activeFilters.push({ label: `Teilfläche: ${labelMap[value] ?? value}`, href: removeMultiValue('teil', value) });
+});
+
+if (filterKategorie === 'wald' && filterWaldBaumart) {
+  const labelMap: Record<string, string> = { nadel: 'Nadel', laub: 'Laub', misch: 'Misch' };
+  activeFilters.push({
+    label: `Baumart: ${labelMap[filterWaldBaumart] ?? filterWaldBaumart}`,
+    href: buildQuery({ waldBaumart: null }),
+  });
+}
+
+if (filterKategorie === 'acker' && (filterAckerMin !== null || filterAckerMax !== null)) {
+  activeFilters.push({
+    label: `Ackerzahl: ${filterAckerMin ?? 'min'}–${filterAckerMax ?? 'max'}`,
+    href: buildQuery({ ackerMin: null, ackerMax: null }),
+  });
+}
+
+if (filterKategorie === 'jagd' && filterJagdRahmen) {
+  const labelMap: Record<string, string> = { eigenjagd: 'Eigenjagd', genossenschaft: 'Jagdgenossenschaft' };
+  activeFilters.push({
+    label: `Jagd: ${labelMap[filterJagdRahmen] ?? filterJagdRahmen}`,
+    href: buildQuery({ jagdRahmen: null }),
+  });
+}
+
+if (filterKategorie === 'teich' && filterTeichTyp) {
+  const labelMap: Record<string, string> = { teich: 'Teichanlage', see: 'Seeanteil', fliess: 'Fließgewässerabschnitt' };
+  activeFilters.push({
+    label: `Gewässertyp: ${labelMap[filterTeichTyp] ?? filterTeichTyp}`,
+    href: buildQuery({ teichTyp: null }),
+  });
+}
+
+if (filterKategorie === 'sonder' && filterSonderKultur) {
+  const labelMap: Record<string, string> = {
+    obst: 'Obst',
+    wein: 'Wein',
+    hopfen: 'Hopfen',
+    baumschule: 'Baumschule',
+    energieholz: 'Energieholz',
+    sonstiges: 'Sonstiges',
+  };
+  activeFilters.push({
+    label: `Kulturart: ${labelMap[filterSonderKultur] ?? filterSonderKultur}`,
+    href: buildQuery({ sonderKultur: null }),
+  });
+}
+
+if (filterKategorie === 'naturschutz' && filterNatBindung) {
+  const labelMap: Record<string, string> = {
+    vertrags: 'Vertragsnaturschutz',
+    stilllegung: 'Stilllegung',
+    pflege: 'Pflegevertrag',
+    unklar: 'Unklar',
+  };
+  activeFilters.push({
+    label: `Bindung: ${labelMap[filterNatBindung] ?? filterNatBindung}`,
+    href: buildQuery({ natBindung: null }),
+  });
+}
+
+const hasSecondaryFilters =
+  Boolean(filterPreisHaMin) ||
+  Boolean(filterPreisHaMax) ||
+  Boolean(filterPachtstatus) ||
+  Boolean(filterSchutz.length) ||
+  Boolean(filterZufahrt) ||
+  Boolean(filterTeilflaechen.length) ||
+  Boolean(filterWaldBaumart) ||
+  Boolean(filterAckerMin) ||
+  Boolean(filterAckerMax) ||
+  Boolean(filterJagdRahmen) ||
+  Boolean(filterTeichTyp) ||
+  Boolean(filterTeichWasserrecht) ||
+  Boolean(filterSonderKultur) ||
+  Boolean(filterSonderBewasserung) ||
+  Boolean(filterNatBindung) ||
+  Boolean(filterNatNatura);
 ---
 
 <Layout metadata={metadata}>
@@ -41,189 +579,616 @@ const metadata = {
         <p class="text-sm uppercase tracking-wide text-secondary">Angebote</p>
         <h1 class="text-3xl font-bold">Aktuelle Angebote</h1>
         <p class="text-muted mt-2">
-          Übersicht aller aktuell verfügbaren Agrar- und Forstimmobilien. Filter nach Bundesland, Nutzungstyp und
-          Status.
+          Übersicht aller aktuell verfügbaren Agrar- und Forstimmobilien. Filter nach Kategorie, Region, Art und Preis.
         </p>
       </div>
-      <form class="flex gap-2 items-center text-sm text-muted" method="get">
-        <label for="sort" class="font-semibold">Sortierung</label>
-        <select
-          id="sort"
-          name="sort"
-          class="py-2 px-3 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
-        >
-          <option value="neu" selected={sort === 'neu'}>Neueste zuerst</option>
-          <option value="flaeche-desc" selected={sort === 'flaeche-desc'}>Fläche absteigend</option>
-        </select>
-        <button type="submit" class="btn-tertiary">OK</button>
-      </form>
     </div>
 
-    <form class="grid gap-4 md:grid-cols-4 bg-white/70 dark:bg-slate-900/60 p-6 rounded-xl shadow mb-8" method="get">
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-semibold" for="bundesland">Bundesland</label>
-        <select
-          id="bundesland"
-          name="bundesland"
-          class="py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
-        >
-          <option value="">Alle</option>
-          {
-            uniqueBundeslaender.map((bl) => (
+    <form class="space-y-6" method="get">
+      <div class="grid gap-4 lg:grid-cols-12 bg-white/80 dark:bg-slate-900/70 p-6 rounded-xl shadow">
+        <div class="lg:col-span-3">
+          <label class="text-sm font-semibold" for="kategorie">Kategorie</label>
+          <select
+            id="kategorie"
+            name="kategorie"
+            class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+          >
+            <option value="">Alle</option>
+            {KATEGORIEN.map((kategorie) => (
+              <option value={kategorie.value} selected={kategorie.value === filterKategorie}>
+                {kategorie.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div class="lg:col-span-2">
+          <label class="text-sm font-semibold" for="bundesland">Bundesland</label>
+          <select
+            id="bundesland"
+            name="bundesland"
+            class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+          >
+            <option value="">Alle</option>
+            {uniqueBundeslaender.map((bl) => (
               <option value={bl} selected={bl === filterBundesland}>
                 {bl}
               </option>
-            ))
-          }
-        </select>
-      </div>
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-semibold" for="typ">Nutzung</label>
-        <select
-          id="typ"
-          name="typ"
-          class="py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
-        >
-          <option value="">Alle</option>
-          {
-            uniqueTypen.map((typ) => (
-              <option value={typ} selected={typ === filterTyp}>
-                {typ}
+            ))}
+          </select>
+        </div>
+
+        <div class="lg:col-span-2">
+          <label class="text-sm font-semibold" for="region">Landkreis/Region</label>
+          <select
+            id="region"
+            name="region"
+            disabled={!filterBundesland}
+            class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 disabled:opacity-60"
+          >
+            <option value="">{filterBundesland ? 'Alle' : 'Bitte Bundesland wählen'}</option>
+            {regionOptions.map((region) => (
+              <option value={region} selected={region === filterRegion}>
+                {region}
               </option>
-            ))
-          }
-        </select>
+            ))}
+          </select>
+        </div>
+
+        <div class="lg:col-span-2">
+          <label class="text-sm font-semibold" for="art">Angebotsart</label>
+          <select
+            id="art"
+            name="art"
+            class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+          >
+            <option value="">Alle</option>
+            <option value="Verkauf" selected={filterArt === 'Verkauf'}>Verkauf</option>
+            <option value="Pacht" selected={filterArt === 'Pacht'}>Pacht</option>
+          </select>
+        </div>
+
+        <div class="lg:col-span-3">
+          <label class="text-sm font-semibold" for="flaecheMin">Flächenspanne (ha)</label>
+          <div class="mt-2 grid gap-2">
+            <div class="flex gap-2">
+              <input
+                id="flaecheMin"
+                name="flaecheMin"
+                type="number"
+                step="0.1"
+                min={flaecheMinValue}
+                max={flaecheMaxValue}
+                value={filterFlaecheMin ?? ''}
+                placeholder={`Min. ${flaecheMinValue}`}
+                class="w-full py-2 px-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+              />
+              <input
+                id="flaecheMax"
+                name="flaecheMax"
+                type="number"
+                step="0.1"
+                min={flaecheMinValue}
+                max={flaecheMaxValue}
+                value={filterFlaecheMax ?? ''}
+                placeholder={`Max. ${flaecheMaxValue}`}
+                class="w-full py-2 px-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+              />
+            </div>
+            <div class="flex gap-3">
+              <input type="range" min={flaecheMinValue} max={flaecheMaxValue} step="0.1" value={filterFlaecheMin ?? flaecheMinValue} class="w-full" />
+              <input type="range" min={flaecheMinValue} max={flaecheMaxValue} step="0.1" value={filterFlaecheMax ?? flaecheMaxValue} class="w-full" />
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-3">
+          <label class="text-sm font-semibold" for="preisMin">{preisLabel} (Min/Max)</label>
+          <div class="mt-2 grid gap-2">
+            <div class="flex gap-2">
+              <input
+                id="preisMin"
+                name="preisMin"
+                type="number"
+                step="1000"
+                min={preisMinValue}
+                max={preisMaxValue}
+                value={filterPreisMin ?? ''}
+                placeholder={`Min. ${Math.round(preisMinValue / 1000) * 1000}`}
+                class="w-full py-2 px-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+              />
+              <input
+                id="preisMax"
+                name="preisMax"
+                type="number"
+                step="1000"
+                min={preisMinValue}
+                max={preisMaxValue}
+                value={filterPreisMax ?? ''}
+                placeholder={`Max. ${Math.round(preisMaxValue / 1000) * 1000}`}
+                class="w-full py-2 px-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+              />
+            </div>
+            <div class="flex gap-3">
+              <input type="range" min={preisMinValue} max={preisMaxValue} step="1000" value={filterPreisMin ?? preisMinValue} class="w-full" />
+              <input type="range" min={preisMinValue} max={preisMaxValue} step="1000" value={filterPreisMax ?? preisMaxValue} class="w-full" />
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-3">
+          <label class="text-sm font-semibold" for="sort">Sortierung</label>
+          <select
+            id="sort"
+            name="sort"
+            class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+          >
+            <option value="neu" selected={sort === 'neu'}>Neueste</option>
+            <option value="relevanz" selected={sort === 'relevanz'}>Relevanz</option>
+            <option value="preis-asc" selected={sort === 'preis-asc'}>Preis ↑</option>
+            <option value="preis-desc" selected={sort === 'preis-desc'}>Preis ↓</option>
+            <option value="flaeche-asc" selected={sort === 'flaeche-asc'}>Fläche ↑</option>
+            <option value="flaeche-desc" selected={sort === 'flaeche-desc'}>Fläche ↓</option>
+            <option value="eurha-asc" selected={sort === 'eurha-asc'}>€/ha ↑</option>
+            <option value="eurha-desc" selected={sort === 'eurha-desc'}>€/ha ↓</option>
+          </select>
+        </div>
+
+        <div class="lg:col-span-3 flex items-end gap-2">
+          <button class="btn-secondary w-full" type="submit">Filtern</button>
+          <a class="btn-tertiary w-full text-center" href="/angebote">Alle zurücksetzen</a>
+        </div>
       </div>
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-semibold" for="status">Status</label>
-        <select
-          id="status"
-          name="status"
-          class="py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
-        >
-          <option value="">Alle</option>
-          {
-            uniqueStatus.map((st) => (
-              <option value={st} selected={st === filterStatus}>
-                {st}
-              </option>
-            ))
-          }
-        </select>
-      </div>
-      <div class="flex items-end gap-2">
-        <button class="btn-secondary w-full" type="submit">Filtern</button>
-        <button class="btn-tertiary w-full" type="button" onclick="window.location.href=window.location.pathname"
-          >Reset</button
-        >
-      </div>
+
+      <details class="rounded-xl border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/60 p-6" open={hasSecondaryFilters}>
+        <summary class="cursor-pointer text-sm font-semibold">Mehr Filter</summary>
+
+        <div class="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div>
+            <label class="text-sm font-semibold" for="preisHaMin">Preiskennzahl (€/ha)</label>
+            <div class="mt-2 flex gap-2">
+              <input
+                id="preisHaMin"
+                name="preisHaMin"
+                type="number"
+                step="10"
+                min={preisHaMinValue}
+                max={preisHaMaxValue}
+                value={filterPreisHaMin ?? ''}
+                placeholder={`Min. ${Math.round(preisHaMinValue)}`}
+                class="w-full py-2 px-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+              />
+              <input
+                id="preisHaMax"
+                name="preisHaMax"
+                type="number"
+                step="10"
+                min={preisHaMinValue}
+                max={preisHaMaxValue}
+                value={filterPreisHaMax ?? ''}
+                placeholder={`Max. ${Math.round(preisHaMaxValue)}`}
+                class="w-full py-2 px-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+              />
+            </div>
+            <p class="mt-2 text-xs text-muted">Wird nur angewendet, wenn Preis und Fläche vorliegen.</p>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold" for="pachtstatus">Pachtstatus</label>
+            <select
+              id="pachtstatus"
+              name="pachtstatus"
+              class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+            >
+              <option value="">Alle</option>
+              <option value="verpachtet" selected={filterPachtstatus === 'verpachtet'}>verpachtet</option>
+              <option value="frei" selected={filterPachtstatus === 'frei'}>frei</option>
+              <option value="teilweise" selected={filterPachtstatus === 'teilweise'}>teilweise</option>
+              <option value="unklar" selected={filterPachtstatus === 'unklar'}>unklar</option>
+            </select>
+          </div>
+
+          <div>
+            <p class="text-sm font-semibold">Schutzstatus</p>
+            <div class="mt-2 grid gap-2 text-sm">
+              <label class="flex items-center gap-2">
+                <input type="checkbox" name="schutz" value="natura" checked={filterSchutz.includes('natura')} />
+                Natura 2000
+              </label>
+              <label class="flex items-center gap-2">
+                <input type="checkbox" name="schutz" value="wasserschutz" checked={filterSchutz.includes('wasserschutz')} />
+                Wasserschutzgebiet
+              </label>
+              <label class="flex items-center gap-2">
+                <input type="checkbox" name="schutz" value="nsg" checked={filterSchutz.includes('nsg')} />
+                NSG/LSG
+              </label>
+              <label class="flex items-center gap-2">
+                <input type="checkbox" name="schutz" value="sonstige" checked={filterSchutz.includes('sonstige')} />
+                sonstige
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold" for="zufahrt">Erschließung/Zufahrt</label>
+            <select
+              id="zufahrt"
+              name="zufahrt"
+              class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+            >
+              <option value="">Alle</option>
+              <option value="strasse" selected={filterZufahrt === 'strasse'}>öffentliche Straße</option>
+              <option value="wirtschaftsweg" selected={filterZufahrt === 'wirtschaftsweg'}>Wirtschaftsweg</option>
+              <option value="forstweg" selected={filterZufahrt === 'forstweg'}>Forstweg</option>
+              <option value="unklar" selected={filterZufahrt === 'unklar'}>unklar</option>
+            </select>
+          </div>
+
+          <div>
+            <p class="text-sm font-semibold">Teilflächen (Gemischt)</p>
+            <div class="mt-2 grid gap-2 text-sm">
+              <label class="flex items-center gap-2">
+                <input type="checkbox" name="teil" value="wald" checked={filterTeilflaechen.includes('wald')} />
+                enthält Wald
+              </label>
+              <label class="flex items-center gap-2">
+                <input type="checkbox" name="teil" value="acker" checked={filterTeilflaechen.includes('acker')} />
+                enthält Acker
+              </label>
+              <label class="flex items-center gap-2">
+                <input type="checkbox" name="teil" value="gebaeude" checked={filterTeilflaechen.includes('gebaeude')} />
+                enthält Gebäude/Hofstelle
+              </label>
+              <label class="flex items-center gap-2">
+                <input type="checkbox" name="teil" value="wasser" checked={filterTeilflaechen.includes('wasser')} />
+                enthält Wasser
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold" for="verfuegbar">Verfügbarkeit</label>
+            <select
+              id="verfuegbar"
+              name="verfuegbar"
+              disabled
+              class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 disabled:opacity-60"
+            >
+              <option value="">Derzeit keine Angaben im Bestand</option>
+            </select>
+          </div>
+
+          <div>
+            <p class="text-sm font-semibold">Dokumente vorhanden</p>
+            <div class="mt-2 grid gap-2 text-sm text-muted">
+              <label class="flex items-center gap-2">
+                <input type="checkbox" disabled /> Bodenschätzung
+              </label>
+              <label class="flex items-center gap-2">
+                <input type="checkbox" disabled /> Flurkarte
+              </label>
+              <label class="flex items-center gap-2">
+                <input type="checkbox" disabled /> Forsteinrichtung
+              </label>
+              <label class="flex items-center gap-2">
+                <input type="checkbox" disabled /> Jagdpachtvertrag
+              </label>
+              <label class="flex items-center gap-2">
+                <input type="checkbox" disabled /> wasserrechtliche Erlaubnis
+              </label>
+              <label class="flex items-center gap-2">
+                <input type="checkbox" disabled /> Gutachten
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 border-t border-gray-200 dark:border-gray-700 pt-6">
+          <p class="text-sm font-semibold">Kategorie-spezifische Filter</p>
+          {!filterKategorie && <p class="mt-2 text-sm text-muted">Kategorie wählen, um Details zu filtern.</p>}
+
+          {filterKategorie === 'wald' && (
+            <div class="mt-4 grid gap-4 md:grid-cols-2">
+              <div>
+                <label class="text-sm font-semibold" for="waldBaumart">Baumarten-Schwerpunkt</label>
+                <select
+                  id="waldBaumart"
+                  name="waldBaumart"
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                >
+                  <option value="">Alle</option>
+                  <option value="nadel" selected={filterWaldBaumart === 'nadel'}>Nadel</option>
+                  <option value="laub" selected={filterWaldBaumart === 'laub'}>Laub</option>
+                  <option value="misch" selected={filterWaldBaumart === 'misch'}>Misch</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-sm font-semibold" for="waldZert">Zertifizierung</label>
+                <select
+                  id="waldZert"
+                  name="waldZert"
+                  disabled
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 disabled:opacity-60"
+                >
+                  <option value="">Derzeit keine Angaben</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-sm font-semibold" for="waldVorrat">Vorrat vorhanden</label>
+                <select
+                  id="waldVorrat"
+                  name="waldVorrat"
+                  disabled
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 disabled:opacity-60"
+                >
+                  <option value="">Derzeit keine Angaben</option>
+                </select>
+              </div>
+            </div>
+          )}
+
+          {filterKategorie === 'acker' && (
+            <div class="mt-4 grid gap-4 md:grid-cols-2">
+              <div>
+                <label class="text-sm font-semibold" for="ackerMin">Ackerzahl (BP) Min/Max</label>
+                <div class="mt-2 flex gap-2">
+                  <input
+                    id="ackerMin"
+                    name="ackerMin"
+                    type="number"
+                    step="1"
+                    value={filterAckerMin ?? ''}
+                    placeholder="Min. BP"
+                    class="w-full py-2 px-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                  />
+                  <input
+                    id="ackerMax"
+                    name="ackerMax"
+                    type="number"
+                    step="1"
+                    value={filterAckerMax ?? ''}
+                    placeholder="Max. BP"
+                    class="w-full py-2 px-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                  />
+                </div>
+              </div>
+              <div>
+                <label class="text-sm font-semibold" for="ackerEmz">EMZ vorhanden</label>
+                <select
+                  id="ackerEmz"
+                  name="ackerEmz"
+                  disabled
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 disabled:opacity-60"
+                >
+                  <option value="">Derzeit keine Angaben</option>
+                </select>
+              </div>
+            </div>
+          )}
+
+          {filterKategorie === 'gruenland' && (
+            <div class="mt-4 grid gap-4 md:grid-cols-2">
+              <div>
+                <label class="text-sm font-semibold">Grünlandzahl (Min/Max)</label>
+                <div class="mt-2 flex gap-2">
+                  <input
+                    name="gruenMin"
+                    type="number"
+                    step="1"
+                    value={filterGruenMin ?? ''}
+                    placeholder="Min."
+                    disabled
+                    class="w-full py-2 px-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 disabled:opacity-60"
+                  />
+                  <input
+                    name="gruenMax"
+                    type="number"
+                    step="1"
+                    value={filterGruenMax ?? ''}
+                    placeholder="Max."
+                    disabled
+                    class="w-full py-2 px-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 disabled:opacity-60"
+                  />
+                </div>
+              </div>
+              <div>
+                <label class="text-sm font-semibold" for="gruenWasser">Wasserhaushalt</label>
+                <select
+                  id="gruenWasser"
+                  name="gruenWasser"
+                  disabled
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 disabled:opacity-60"
+                >
+                  <option value="">Derzeit keine Angaben</option>
+                </select>
+              </div>
+            </div>
+          )}
+
+          {filterKategorie === 'hofstelle' && (
+            <div class="mt-4 grid gap-4 md:grid-cols-2">
+              <div>
+                <label class="text-sm font-semibold" for="hofBetrieb">Betriebstyp</label>
+                <select
+                  id="hofBetrieb"
+                  name="hofBetrieb"
+                  disabled
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 disabled:opacity-60"
+                >
+                  <option value="">Derzeit keine Angaben</option>
+                </select>
+              </div>
+              <div>
+                <p class="text-sm font-semibold">Gebäudenutzung</p>
+                <div class="mt-2 grid gap-2 text-sm text-muted">
+                  <label class="flex items-center gap-2"><input type="checkbox" disabled /> Wohnhaus</label>
+                  <label class="flex items-center gap-2"><input type="checkbox" disabled /> Stall</label>
+                  <label class="flex items-center gap-2"><input type="checkbox" disabled /> Halle/Lager</label>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {filterKategorie === 'jagd' && (
+            <div class="mt-4 grid gap-4 md:grid-cols-2">
+              <div>
+                <label class="text-sm font-semibold" for="jagdRahmen">Jagdlicher Rahmen</label>
+                <select
+                  id="jagdRahmen"
+                  name="jagdRahmen"
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                >
+                  <option value="">Alle</option>
+                  <option value="eigenjagd" selected={filterJagdRahmen === 'eigenjagd'}>Eigenjagd</option>
+                  <option value="genossenschaft" selected={filterJagdRahmen === 'genossenschaft'}>Jagdgenossenschaft</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-sm font-semibold" for="jagdVertrag">Jagdpachtvertrag vorhanden</label>
+                <select
+                  id="jagdVertrag"
+                  name="jagdVertrag"
+                  disabled
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 disabled:opacity-60"
+                >
+                  <option value="">Derzeit keine Angaben</option>
+                </select>
+              </div>
+            </div>
+          )}
+
+          {filterKategorie === 'teich' && (
+            <div class="mt-4 grid gap-4 md:grid-cols-2">
+              <div>
+                <label class="text-sm font-semibold" for="teichTyp">Gewässertyp</label>
+                <select
+                  id="teichTyp"
+                  name="teichTyp"
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                >
+                  <option value="">Alle</option>
+                  <option value="teich" selected={filterTeichTyp === 'teich'}>Teichanlage</option>
+                  <option value="see" selected={filterTeichTyp === 'see'}>Seeanteil</option>
+                  <option value="fliess" selected={filterTeichTyp === 'fliess'}>Fließgewässerabschnitt</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-sm font-semibold" for="teichWasserrecht">Wasserrechte-Status</label>
+                <select
+                  id="teichWasserrecht"
+                  name="teichWasserrecht"
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                >
+                  <option value="">Alle</option>
+                  <option value="vorhanden" selected={filterTeichWasserrecht === 'vorhanden'}>vorhanden</option>
+                  <option value="unklar" selected={filterTeichWasserrecht === 'unklar'}>unklar</option>
+                </select>
+              </div>
+            </div>
+          )}
+
+          {filterKategorie === 'sonder' && (
+            <div class="mt-4 grid gap-4 md:grid-cols-2">
+              <div>
+                <label class="text-sm font-semibold" for="sonderKultur">Kulturart</label>
+                <select
+                  id="sonderKultur"
+                  name="sonderKultur"
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                >
+                  <option value="">Alle</option>
+                  <option value="obst" selected={filterSonderKultur === 'obst'}>Obst</option>
+                  <option value="wein" selected={filterSonderKultur === 'wein'}>Wein</option>
+                  <option value="hopfen" selected={filterSonderKultur === 'hopfen'}>Hopfen</option>
+                  <option value="baumschule" selected={filterSonderKultur === 'baumschule'}>Baumschule</option>
+                  <option value="energieholz" selected={filterSonderKultur === 'energieholz'}>Energieholz</option>
+                  <option value="sonstiges" selected={filterSonderKultur === 'sonstiges'}>Sonstiges</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-sm font-semibold" for="sonderBewasserung">Bewässerung</label>
+                <select
+                  id="sonderBewasserung"
+                  name="sonderBewasserung"
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                >
+                  <option value="">Alle</option>
+                  <option value="vorhanden" selected={filterSonderBewasserung === 'vorhanden'}>vorhanden</option>
+                  <option value="unklar" selected={filterSonderBewasserung === 'unklar'}>unklar</option>
+                </select>
+              </div>
+            </div>
+          )}
+
+          {filterKategorie === 'naturschutz' && (
+            <div class="mt-4 grid gap-4 md:grid-cols-2">
+              <div>
+                <label class="text-sm font-semibold" for="natBindung">Bindungstyp</label>
+                <select
+                  id="natBindung"
+                  name="natBindung"
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                >
+                  <option value="">Alle</option>
+                  <option value="vertrags" selected={filterNatBindung === 'vertrags'}>Vertragsnaturschutz</option>
+                  <option value="stilllegung" selected={filterNatBindung === 'stilllegung'}>Stilllegung</option>
+                  <option value="pflege" selected={filterNatBindung === 'pflege'}>Pflegevertrag</option>
+                  <option value="unklar" selected={filterNatBindung === 'unklar'}>unklar</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-sm font-semibold" for="natNatura">Natura 2000</label>
+                <select
+                  id="natNatura"
+                  name="natNatura"
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                >
+                  <option value="">Alle</option>
+                  <option value="ja" selected={filterNatNatura === 'ja'}>ja</option>
+                  <option value="nein" selected={filterNatNatura === 'nein'}>nein</option>
+                </select>
+              </div>
+            </div>
+          )}
+        </div>
+      </details>
     </form>
 
-    <div class="grid gap-6 md:grid-cols-2">
+    {activeFilters.length > 0 && (
+      <div class="mt-6 flex flex-wrap items-center gap-2 text-sm">
+        <span class="text-muted">Aktive Filter:</span>
+        {activeFilters.map((filter) => (
+          <a
+            href={filter.href}
+            class="inline-flex items-center gap-2 rounded-full border border-gray-200 dark:border-gray-700 px-3 py-1 text-xs text-slate-700 dark:text-slate-200 hover:border-emerald-400"
+          >
+            {filter.label}
+            <span aria-hidden="true">×</span>
+          </a>
+        ))}
+      </div>
+    )}
+
+    <div class="grid gap-6 md:grid-cols-2 mt-8">
       {
-        angebote.map((angebot) => {
-          const statusClass =
-            angebot.status === 'Neu'
-              ? 'bg-emerald-100 text-emerald-700'
-              : angebot.status === 'Reserviert'
-                ? 'bg-amber-100 text-amber-700'
-                : 'bg-slate-200 text-slate-600';
+        angebote.map(({ angebot }) => {
+          const listing = mapAngebotToListing(angebot, placeholderImage);
+          const secondaryCtaHref = `/?utm_source=angebote&listing=${encodeURIComponent(angebot.id)}#kontakt`;
 
           return (
-            <article class="border border-gray-200 dark:border-gray-800 rounded-xl p-6 bg-white dark:bg-slate-900 shadow-sm">
-              <div class="mb-4">
-              <img
-                src={angebot.image || placeholderImage}
-                alt={angebot.beschreibungKurz}
-                class="w-full h-40 object-cover rounded-lg"
-                loading="lazy"
-                width="800"
-                height="450"
-              />
-              </div>
-              <div class="flex items-center justify-between mb-2">
-                <p class="text-sm font-mono text-slate-500">{angebot.id}</p>
-                <span class={`inline-flex rounded-full px-2 py-0.5 text-xs ${statusClass}`}>{angebot.status}</span>
-              </div>
-
-              <h2 class="text-lg font-semibold leading-snug">
-                <a class="hover:underline" href={`/angebote/${angebot.slug}`}>
-                  {angebot.beschreibungKurz}
-                </a>
-              </h2>
-
-              <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
-                {angebot.bundesland}
-                {angebot.regionKurz && ` · ${angebot.regionKurz}`}
-              </p>
-
-              <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">
-                {angebot.flaecheGesamtHa} ha · {angebot.typ}
-                {angebot.bodenpunkteKern && ` · ca. ${angebot.bodenpunkteKern} BP`}
-                {angebot.niederschlagMm && ` · ca. ${angebot.niederschlagMm} mm`}
-                {angebot.pachtBis && ` · ${angebot.pachtBis}`}
-              </p>
-
-              <p class="mt-2 text-sm font-semibold text-default">{angebot.kaufpreisText}</p>
-
-              <div class="mt-4 flex justify-between items-center">
-                <a
-                  class="inline-flex items-center text-sm font-semibold text-primary hover:underline"
-                  href={`/angebote/${angebot.slug}`}
-                >
-                  Details ansehen
-                </a>
-                <span class="text-xs text-muted">{angebot.typ}</span>
-              </div>
-            </article>
+            <ListingCard
+              listing={listing}
+              variant="data"
+              showSecondaryCta
+              secondaryCtaHref={secondaryCtaHref}
+              secondaryCtaLabel="Exposé anfordern"
+            />
           );
         })
       }
     </div>
 
     {angebote.length === 0 && <p class="mt-6 text-muted">Keine Angebote für diese Filter gefunden.</p>}
-
-    <div class="mt-12 space-y-6">
-      <div class="flex items-center justify-between">
-        <h2 class="text-2xl font-bold">Variante A: Bild oben (Beispiel)</h2>
-        <span class="text-sm text-muted">3 Beispielkarten</span>
-      </div>
-      <div class="grid gap-6 md:grid-cols-3">
-        {
-          variantTop.map((angebot) => (
-            <article class="border border-gray-200 dark:border-gray-800 rounded-xl p-4 bg-white dark:bg-slate-900 shadow-sm">
-              <img
-                src={angebot.image || placeholderImage}
-                alt={angebot.beschreibungKurz}
-                class="w-full h-40 object-cover rounded-lg mb-4"
-                loading="lazy"
-                width="800"
-                height="450"
-              />
-              <div class="flex items-center justify-between mb-2">
-                <p class="text-sm font-mono text-slate-500">{angebot.id}</p>
-                <span class="inline-flex rounded-full px-2 py-0.5 text-xs bg-emerald-100 text-emerald-700">
-                  {angebot.status}
-                </span>
-              </div>
-              <h3 class="text-lg font-semibold leading-snug">
-                <a class="hover:underline" href={`/angebote/`}>
-                  {angebot.beschreibungKurz}
-                </a>
-              </h3>
-              <p class="mt-2 text-sm text-muted">
-                {angebot.bundesland}
-                {angebot.regionKurz && ` · `}
-              </p>
-              <p class="mt-1 text-sm text-muted">
-                {angebot.flaecheGesamtHa} ha · {angebot.typ} {angebot.bodenpunkteKern && `· ca.  BP`}
-              </p>
-              <p class="mt-2 text-sm font-semibold text-default">{angebot.kaufpreisText}</p>
-            </article>
-          ))
-        }
-      </div>
-    </div>
-
   </section>
 </Layout>

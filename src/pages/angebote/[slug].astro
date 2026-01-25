@@ -21,6 +21,7 @@ const euroProHa =
   preisNumber && angebot.flaecheGesamtHa ? Math.round((preisNumber / angebot.flaecheGesamtHa) * 100) / 100 : null;
 
 const imageSrc = angebot.image || placeholderObj.src;
+const contactHref = `/?utm_source=angebot-detail&listing=${encodeURIComponent(angebot.id)}#kontakt`;
 
 const chips = [
   { label: 'Kategorie', value: angebot.typ },
@@ -91,8 +92,8 @@ const tabs = [
           ))}
         </div>
         <div class="flex gap-3 pt-4">
-          <a class="btn-primary" href="/kontakt">Exposé anfordern</a>
-          <a class="btn-secondary" href="/kontakt">Besichtigung anfragen</a>
+          <a class="btn-primary" href={contactHref}>Exposé anfordern</a>
+          <a class="btn-secondary" href={contactHref}>Besichtigung anfragen</a>
         </div>
       </div>
       <div class="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-slate-900 p-4 text-sm space-y-2 shadow-sm">
