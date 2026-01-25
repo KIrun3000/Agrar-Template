@@ -9,6 +9,9 @@ import CallToAction from '~/components/widgets/CallToAction.astro';
 import Contact from '~/components/widgets/Contact.astro';
 import { ANGEBOTE } from '~/data/angebote';
 import placeholderObj from '~/assets/images/placeholders/placeholder-objekt.jpg';
+import sellerImg from '~/assets/images/stock/stock_fuer-verkaeufer.webp';
+import investorImg from '~/assets/images/stock/stock_fuer-investoren.webp';
+import teamImg from '~/assets/images/stock/stock_ueber-uns.webp';
 
 const metadata = {
   title: 'Muster Agrarimmobilien – Agrar- und Forstimmobilien',
@@ -139,7 +142,7 @@ const metadata = {
           '• Marktgerechte Bewertung auf Basis von Bodenpunkten, Pachtstrukturen und regionaler Nachfrage\n• Diskrete Vermarktung über unser Investoren- und Käufernetzwerk, oft ohne öffentliche Ausschreibung\n• Strukturierte Käuferauswahl und professionelle Begleitung bis zum Abschluss\n• Erfahrung mit Betriebsnachfolgen, Vermögensstrukturierung und Verkauf arrondierter Großflächen\n\nGerne geben wir Ihnen eine erste, unverbindliche Einschätzung Ihrer Fläche.',
       },
     ]}
-    image={{ src: '/images/stock/stock_fuer-verkaeufer.webp', alt: '[BILD_VERKAEUFER]', width: 1200, height: 800 }}
+    image={{ src: sellerImg, alt: '[BILD_VERKAEUFER]', width: sellerImg.width, height: sellerImg.height }}
   >
     <Fragment slot="content">
       Sie planen den Verkauf von Ackerland, Grünland, Wald oder eines gesamten Agrarbetriebs? Wir begleiten Sie diskret
@@ -159,7 +162,7 @@ const metadata = {
           '• Strukturierte Datenräume mit Bodenqualität (BP), Niederschlagsdaten, Pachtverträgen und Ertragsprognosen\n• Objekte mit klaren Renditestrukturen – viele langfristig verpachtet mit Pachtrenditen von 2,5-3,5%\n• Zugang zu Off-Market-Beständen, die nicht öffentlich ausgeschrieben werden\n• Spezialisierung auf Family Offices, institutionelle Investoren und vermögende Privatanleger\n\nHinterlegen Sie Ihr Suchprofil – wir informieren Sie frühzeitig über passende Angebote.',
       },
     ]}
-    image={{ src: '/images/stock/stock_fuer-investoren.webp', alt: '[BILD_INVESTOREN]', width: 1200, height: 800 }}
+    image={{ src: investorImg, alt: '[BILD_INVESTOREN]', width: investorImg.width, height: investorImg.height }}
   >
     <Fragment slot="content">
       Sie suchen nach langfristigen Investments in Agrarflächen, Wald oder Agrarbetriebe? Wir vermitteln Objekte im In-
@@ -245,7 +248,7 @@ const metadata = {
           '2008 gegründet als familiengeführtes Agrar-Beratungsbüro, begleiten wir heute Eigentümer, Family Offices und institutionelle Investoren in Deutschland und der EU. Wir glauben an: \n• Diskretion vor Reichweite – Off-Market, wenn es sinnvoll ist\n• Fundierte Bewertung: Bodenpunkte, Pachtstrukturen, Wasserrechte, Forstinventur\n• Partnerschaft auf Augenhöhe – klare Entscheidungsgrundlagen statt Hochglanzversprechen\n• Nachhaltige Nutzung: Ausgleichsflächen, Waldumbau, Bewässerung & Bodenschutz',
       },
     ]}
-    image={{ src: '/images/stock/stock_ueber-uns.webp', alt: 'Team Muster Agrarimmobilien', width: 1200, height: 800 }}
+    image={{ src: teamImg, alt: 'Team Muster Agrarimmobilien', width: teamImg.width, height: teamImg.height }}
   >
     <Fragment slot="content">
       Unser Kernteam vereint Agraringenieure, Forstsachverständige und Transaktionsspezialisten. Wir arbeiten
