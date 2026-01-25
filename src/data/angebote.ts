@@ -4,17 +4,15 @@ export type Angebot = {
   bundesland: string;
   regionKurz?: string;
   typ:
+    | 'Wald / Forstfläche'
     | 'Ackerland'
-    | 'Wald'
-    | 'Acker/Wald'
-    | 'Grünland'
-    | 'Mischfläche'
-    | 'Betrieb'
-    | 'Wasser/Teich'
-    | 'Jagd'
-    | 'Sonderkultur'
-    | 'Naturschutz'
-    | 'Sonstiges';
+    | 'Grünland / Weide'
+    | 'Landwirtschaftlicher Betrieb / Hofstelle'
+    | 'Jagd / Eigenjagd / Jagdgenossenschaft'
+    | 'Teich / Fischerei / Gewässerflächen'
+    | 'Sonderkulturen'
+    | 'Naturschutz-/Öko-/Ausgleichs-/Stilllegungsflächen'
+    | 'Gemischtobjekte (Wald + Acker + Gebäude)';
   flaecheGesamtHa: number;
   flaecheAckerHa?: number;
   flaecheGruenHa?: number;
@@ -57,7 +55,7 @@ export const ANGEBOTE: Angebot[] = [
     status: 'Neu',
     bundesland: 'Brandenburg',
     regionKurz: 'Spreewald',
-    typ: 'Wald',
+    typ: 'Wald / Forstfläche',
     flaecheGesamtHa: 38.6,
     flaecheWaldHa: 38.6,
     kaufpreisText: 'Kaufpreis auf Anfrage',
@@ -72,7 +70,7 @@ export const ANGEBOTE: Angebot[] = [
     status: 'Neu',
     bundesland: 'Brandenburg',
     regionKurz: 'Uckermark',
-    typ: 'Acker/Wald',
+    typ: 'Gemischtobjekte (Wald + Acker + Gebäude)',
     flaecheGesamtHa: 64.2,
     flaecheAckerHa: 48.0,
     flaecheWaldHa: 16.2,
@@ -89,7 +87,7 @@ export const ANGEBOTE: Angebot[] = [
     status: 'Reserviert',
     bundesland: 'Bayern',
     regionKurz: 'Allgäu',
-    typ: 'Grünland',
+    typ: 'Grünland / Weide',
     flaecheGesamtHa: 32.8,
     flaecheGruenHa: 32.8,
     kaufpreisText: 'Kaufpreis: 890.000 €',
@@ -104,7 +102,7 @@ export const ANGEBOTE: Angebot[] = [
     status: 'Neu',
     bundesland: 'Brandenburg',
     regionKurz: 'Oderbruch',
-    typ: 'Mischfläche',
+    typ: 'Landwirtschaftlicher Betrieb / Hofstelle',
     flaecheGesamtHa: 58.9,
     flaecheAckerHa: 44.0,
     flaecheGruenHa: 8.4,
@@ -122,24 +120,24 @@ export const ANGEBOTE: Angebot[] = [
     status: 'Neu',
     bundesland: 'Niedersachsen',
     regionKurz: 'Heidekreis',
-    typ: 'Betrieb',
+    typ: 'Jagd / Eigenjagd / Jagdgenossenschaft',
     flaecheGesamtHa: 96.0,
-    flaecheAckerHa: 68.0,
+    flaecheAckerHa: 45.0,
     flaecheGruenHa: 18.0,
-    flaecheWaldHa: 10.0,
-    kaufpreisText: 'Kaufpreis auf Anfrage',
-    beschreibungKurz: '96 ha Hofstelle mit Acker-, Grünland- und Waldanteil, Heidekreis.',
+    flaecheWaldHa: 33.0,
+    kaufpreisText: 'Pacht: 14.500 €/Jahr (Eigenjagd)',
+    beschreibungKurz: '96 ha Eigenjagd mit Acker-, Grünland- und Waldanteil im Heidekreis.',
     beschreibungLang:
-      'Hofstelle mit Wohnhaus, Maschinenhalle und Getreidelager. Flächen arrondiert, teilbewässert, gute Anbindung an B3.',
-    slug: 'de-1006-hofstelle-heidekreis',
-    image: IMAGE_WIESE,
+      'Eigenjagdrevier mit Feld-Wald-Mosaik, arrondiert, bestehende Kanzeln und Kirrungen, befahrbar über Wirtschaftswege.',
+    slug: 'de-1006-jagdrevier-heidekreis',
+    image: IMAGE_WALD,
   },
   {
     id: 'DE-1007',
     status: 'Neu',
     bundesland: 'Mecklenburg-Vorpommern',
     regionKurz: 'Seenplatte',
-    typ: 'Wasser/Teich',
+    typ: 'Teich / Fischerei / Gewässerflächen',
     flaecheGesamtHa: 21.5,
     flaecheGruenHa: 4.0,
     flaecheWaldHa: 2.0,
@@ -155,7 +153,7 @@ export const ANGEBOTE: Angebot[] = [
     status: 'Neu',
     bundesland: 'Rheinland-Pfalz',
     regionKurz: 'Pfalz',
-    typ: 'Sonderkultur',
+    typ: 'Sonderkulturen',
     flaecheGesamtHa: 18.2,
     flaecheAckerHa: 18.2,
     kaufpreisText: 'Kaufpreis: 980.000 €',
@@ -170,7 +168,7 @@ export const ANGEBOTE: Angebot[] = [
     status: 'Reserviert',
     bundesland: 'Sachsen-Anhalt',
     regionKurz: 'Elbe-Elster',
-    typ: 'Naturschutz',
+    typ: 'Naturschutz-/Öko-/Ausgleichs-/Stilllegungsflächen',
     flaecheGesamtHa: 52.3,
     flaecheGruenHa: 52.3,
     kaufpreisText: 'Pacht: 3.200 €/Jahr',
