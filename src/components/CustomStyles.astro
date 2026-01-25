@@ -1,5 +1,6 @@
 ---
 import '@fontsource-variable/inter';
+import { getActiveBrand } from '~/config/activeBrand';
 
 // 'DM Sans'
 // Nunito
@@ -17,47 +18,97 @@ import '@fontsource-variable/inter';
 // Oswald
 // 'Space Grotesk'
 // Urbanist
+const { brand } = getActiveBrand();
+const light = brand?.colors?.light ?? {};
+const dark = brand?.colors?.dark ?? {};
+const typography = brand?.typography ?? {};
+const ui = brand?.ui ?? {};
+
+const pick = (value, fallback) => (value === null || value === undefined || value === '' ? fallback : value);
+
+const lightTextMutedAlpha = pick(light.textMutedAlpha, 0.66);
+const darkTextMutedAlpha = pick(dark.textMutedAlpha, 0.66);
 ---
 
 <style is:inline>
   :root {
-    --aw-font-sans: 'Inter Variable';
-    --aw-font-serif: 'Inter Variable';
-    --aw-font-heading: 'Inter Variable';
+    --aw-font-sans: ${pick(typography.sans, 'Inter Variable')};
+    --aw-font-serif: ${pick(typography.serif, 'Inter Variable')};
+    --aw-font-heading: ${pick(typography.heading, 'Inter Variable')};
 
-    --aw-color-primary: rgb(55 116 73);
-    --aw-color-secondary: rgb(92 121 84);
-    --aw-color-accent: rgb(197 139 78);
+    --aw-color-primary: ${pick(light.primary, '55 116 73')};
+    --aw-color-secondary: ${pick(light.secondary, '92 121 84')};
+    --aw-color-accent: ${pick(light.accent, '197 139 78')};
 
-    --aw-color-text-heading: rgb(0 0 0);
-    --aw-color-text-default: rgb(16 16 16);
-    --aw-color-text-muted: rgb(16 16 16 / 66%);
-    --aw-color-bg-page: rgb(255 255 255);
+    --aw-color-text-heading: ${pick(light.textHeading, '0 0 0')};
+    --aw-color-text-default: ${pick(light.textDefault, '16 16 16')};
+    --aw-color-text-muted: ${pick(light.textMuted, '16 16 16')};
+    --aw-color-text-muted-alpha: ${lightTextMutedAlpha};
+    --aw-color-text-page: ${pick(light.textDefault, '16 16 16')};
 
-    --aw-color-bg-page-dark: rgb(3 6 32);
+    --aw-color-bg-page: ${pick(light.bgPage, '255 255 255')};
+    --aw-color-bg-page-dark: ${pick(light.bgPageDark, '3 6 32')};
+    --aw-color-surface: ${pick(light.surface, '255 255 255')};
+    --aw-color-border: ${pick(light.border, '226 232 240')};
+    --aw-color-ring: ${pick(light.ring, '16 185 129')};
+    --aw-color-success: ${pick(light.success, '16 185 129')};
+    --aw-color-warning: ${pick(light.warning, '245 158 11')};
+    --aw-color-muted: ${pick(light.muted, '100 116 139')};
+    --aw-color-card: ${pick(light.card, '255 255 255')};
+    --aw-color-card-border: ${pick(light.cardBorder, '226 232 240')};
+    --aw-color-danger: ${pick(light.danger, '220 38 38')};
+    --aw-color-on-primary: ${pick(light.onPrimary, '255 255 255')};
+    --aw-color-on-secondary: ${pick(light.onSecondary, '255 255 255')};
+    --aw-color-on-accent: ${pick(light.onAccent, '255 255 255')};
+
+    --aw-radius-sm: ${pick(ui.radius?.sm, '0.25rem')};
+    --aw-radius-md: ${pick(ui.radius?.md, '0.5rem')};
+    --aw-radius-lg: ${pick(ui.radius?.lg, '0.75rem')};
+    --aw-radius-xl: ${pick(ui.radius?.xl, '1rem')};
+    --aw-radius-2xl: ${pick(ui.radius?.['2xl'], '1.25rem')};
+
+    --aw-shadow-sm: ${pick(ui.shadow?.sm, '0 1px 2px 0 rgb(15 23 42 / 0.08)')};
+    --aw-shadow-md: ${pick(ui.shadow?.md, '0 10px 30px rgb(15 23 42 / 0.12)')};
+    --aw-shadow-lg: ${pick(ui.shadow?.lg, '0 25px 50px rgb(15 23 42 / 0.15)')};
 
     ::selection {
-      background-color: rgb(220 237 222);
+      background-color: rgb(var(--aw-color-accent) / 0.2);
     }
   }
 
   .dark {
-    --aw-font-sans: 'Inter Variable';
-    --aw-font-serif: 'Inter Variable';
-    --aw-font-heading: 'Inter Variable';
+    --aw-font-sans: ${pick(typography.sans, 'Inter Variable')};
+    --aw-font-serif: ${pick(typography.serif, 'Inter Variable')};
+    --aw-font-heading: ${pick(typography.heading, 'Inter Variable')};
 
-    --aw-color-primary: rgb(93 181 128);
-    --aw-color-secondary: rgb(140 166 128);
-    --aw-color-accent: rgb(214 167 109);
+    --aw-color-primary: ${pick(dark.primary, '93 181 128')};
+    --aw-color-secondary: ${pick(dark.secondary, '140 166 128')};
+    --aw-color-accent: ${pick(dark.accent, '214 167 109')};
 
-    --aw-color-text-heading: rgb(247, 248, 248);
-    --aw-color-text-default: rgb(229 236 246);
-    --aw-color-text-muted: rgb(229 236 246 / 66%);
-    --aw-color-bg-page: rgb(3 6 32);
+    --aw-color-text-heading: ${pick(dark.textHeading, '247 248 248')};
+    --aw-color-text-default: ${pick(dark.textDefault, '229 236 246')};
+    --aw-color-text-muted: ${pick(dark.textMuted, '229 236 246')};
+    --aw-color-text-muted-alpha: ${darkTextMutedAlpha};
+    --aw-color-text-page: ${pick(dark.textDefault, '229 236 246')};
+
+    --aw-color-bg-page: ${pick(dark.bgPage, '3 6 32')};
+    --aw-color-bg-page-dark: ${pick(dark.bgPageDark, '3 6 32')};
+    --aw-color-surface: ${pick(dark.surface, '15 23 42')};
+    --aw-color-border: ${pick(dark.border, '31 41 55')};
+    --aw-color-ring: ${pick(dark.ring, '93 181 128')};
+    --aw-color-success: ${pick(dark.success, '93 181 128')};
+    --aw-color-warning: ${pick(dark.warning, '245 158 11')};
+    --aw-color-muted: ${pick(dark.muted, '148 163 184')};
+    --aw-color-card: ${pick(dark.card, '15 23 42')};
+    --aw-color-card-border: ${pick(dark.cardBorder, '30 41 59')};
+    --aw-color-danger: ${pick(dark.danger, '248 113 113')};
+    --aw-color-on-primary: ${pick(dark.onPrimary, '15 23 42')};
+    --aw-color-on-secondary: ${pick(dark.onSecondary, '15 23 42')};
+    --aw-color-on-accent: ${pick(dark.onAccent, '15 23 42')};
 
     ::selection {
-      background-color: rgb(55 116 73);
-      color: snow;
+      background-color: rgb(var(--aw-color-primary) / 0.4);
+      color: rgb(var(--aw-color-text-heading) / 1);
     }
   }
 </style>

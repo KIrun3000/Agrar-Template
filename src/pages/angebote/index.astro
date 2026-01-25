@@ -585,13 +585,13 @@ const hasSecondaryFilters =
     </div>
 
     <form class="space-y-6" method="get">
-      <div class="grid gap-4 lg:grid-cols-12 bg-white/80 dark:bg-slate-900/70 p-6 rounded-xl shadow">
+      <div class="grid gap-4 lg:grid-cols-12 bg-surface/80 p-6 rounded-xl shadow">
         <div class="lg:col-span-3">
           <label class="text-sm font-semibold" for="kategorie">Kategorie</label>
           <select
             id="kategorie"
             name="kategorie"
-            class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+            class="mt-2 w-full py-3 px-4 rounded-lg border border-border bg-surface"
           >
             <option value="">Alle</option>
             {KATEGORIEN.map((kategorie) => (
@@ -607,7 +607,7 @@ const hasSecondaryFilters =
           <select
             id="bundesland"
             name="bundesland"
-            class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+            class="mt-2 w-full py-3 px-4 rounded-lg border border-border bg-surface"
           >
             <option value="">Alle</option>
             {uniqueBundeslaender.map((bl) => (
@@ -624,7 +624,7 @@ const hasSecondaryFilters =
             id="region"
             name="region"
             disabled={!filterBundesland}
-            class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 disabled:opacity-60"
+            class="mt-2 w-full py-3 px-4 rounded-lg border border-border bg-surface disabled:opacity-60"
           >
             <option value="">{filterBundesland ? 'Alle' : 'Bitte Bundesland wählen'}</option>
             {regionOptions.map((region) => (
@@ -640,7 +640,7 @@ const hasSecondaryFilters =
           <select
             id="art"
             name="art"
-            class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+            class="mt-2 w-full py-3 px-4 rounded-lg border border-border bg-surface"
           >
             <option value="">Alle</option>
             <option value="Verkauf" selected={filterArt === 'Verkauf'}>Verkauf</option>
@@ -661,7 +661,7 @@ const hasSecondaryFilters =
                 max={flaecheMaxValue}
                 value={filterFlaecheMin ?? ''}
                 placeholder={`Min. ${flaecheMinValue}`}
-                class="w-full py-2 px-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                class="w-full py-2 px-3 rounded-lg border border-border bg-surface"
               />
               <input
                 id="flaecheMax"
@@ -672,7 +672,7 @@ const hasSecondaryFilters =
                 max={flaecheMaxValue}
                 value={filterFlaecheMax ?? ''}
                 placeholder={`Max. ${flaecheMaxValue}`}
-                class="w-full py-2 px-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                class="w-full py-2 px-3 rounded-lg border border-border bg-surface"
               />
             </div>
             <div class="flex gap-3">
@@ -695,7 +695,7 @@ const hasSecondaryFilters =
                 max={preisMaxValue}
                 value={filterPreisMin ?? ''}
                 placeholder={`Min. ${Math.round(preisMinValue / 1000) * 1000}`}
-                class="w-full py-2 px-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                class="w-full py-2 px-3 rounded-lg border border-border bg-surface"
               />
               <input
                 id="preisMax"
@@ -706,7 +706,7 @@ const hasSecondaryFilters =
                 max={preisMaxValue}
                 value={filterPreisMax ?? ''}
                 placeholder={`Max. ${Math.round(preisMaxValue / 1000) * 1000}`}
-                class="w-full py-2 px-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                class="w-full py-2 px-3 rounded-lg border border-border bg-surface"
               />
             </div>
             <div class="flex gap-3">
@@ -721,7 +721,7 @@ const hasSecondaryFilters =
           <select
             id="sort"
             name="sort"
-            class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+            class="mt-2 w-full py-3 px-4 rounded-lg border border-border bg-surface"
           >
             <option value="neu" selected={sort === 'neu'}>Neueste</option>
             <option value="relevanz" selected={sort === 'relevanz'}>Relevanz</option>
@@ -740,7 +740,7 @@ const hasSecondaryFilters =
         </div>
       </div>
 
-      <details class="rounded-xl border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/60 p-6" open={hasSecondaryFilters}>
+      <details class="rounded-xl border border-border bg-surface/80 p-6" open={hasSecondaryFilters}>
         <summary class="cursor-pointer text-sm font-semibold">Mehr Filter</summary>
 
         <div class="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -756,7 +756,7 @@ const hasSecondaryFilters =
                 max={preisHaMaxValue}
                 value={filterPreisHaMin ?? ''}
                 placeholder={`Min. ${Math.round(preisHaMinValue)}`}
-                class="w-full py-2 px-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                class="w-full py-2 px-3 rounded-lg border border-border bg-surface"
               />
               <input
                 id="preisHaMax"
@@ -767,7 +767,7 @@ const hasSecondaryFilters =
                 max={preisHaMaxValue}
                 value={filterPreisHaMax ?? ''}
                 placeholder={`Max. ${Math.round(preisHaMaxValue)}`}
-                class="w-full py-2 px-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                class="w-full py-2 px-3 rounded-lg border border-border bg-surface"
               />
             </div>
             <p class="mt-2 text-xs text-muted">Wird nur angewendet, wenn Preis und Fläche vorliegen.</p>
@@ -778,7 +778,7 @@ const hasSecondaryFilters =
             <select
               id="pachtstatus"
               name="pachtstatus"
-              class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+              class="mt-2 w-full py-3 px-4 rounded-lg border border-border bg-surface"
             >
               <option value="">Alle</option>
               <option value="verpachtet" selected={filterPachtstatus === 'verpachtet'}>verpachtet</option>
@@ -815,7 +815,7 @@ const hasSecondaryFilters =
             <select
               id="zufahrt"
               name="zufahrt"
-              class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+              class="mt-2 w-full py-3 px-4 rounded-lg border border-border bg-surface"
             >
               <option value="">Alle</option>
               <option value="strasse" selected={filterZufahrt === 'strasse'}>öffentliche Straße</option>
@@ -853,7 +853,7 @@ const hasSecondaryFilters =
               id="verfuegbar"
               name="verfuegbar"
               disabled
-              class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 disabled:opacity-60"
+              class="mt-2 w-full py-3 px-4 rounded-lg border border-border bg-surface disabled:opacity-60"
             >
               <option value="">Derzeit keine Angaben im Bestand</option>
             </select>
@@ -884,7 +884,7 @@ const hasSecondaryFilters =
           </div>
         </div>
 
-        <div class="mt-6 border-t border-gray-200 dark:border-gray-700 pt-6">
+        <div class="mt-6 border-t border-border pt-6">
           <p class="text-sm font-semibold">Kategorie-spezifische Filter</p>
           {!filterKategorie && <p class="mt-2 text-sm text-muted">Kategorie wählen, um Details zu filtern.</p>}
 
@@ -895,7 +895,7 @@ const hasSecondaryFilters =
                 <select
                   id="waldBaumart"
                   name="waldBaumart"
-                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-border bg-surface"
                 >
                   <option value="">Alle</option>
                   <option value="nadel" selected={filterWaldBaumart === 'nadel'}>Nadel</option>
@@ -909,7 +909,7 @@ const hasSecondaryFilters =
                   id="waldZert"
                   name="waldZert"
                   disabled
-                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 disabled:opacity-60"
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-border bg-surface disabled:opacity-60"
                 >
                   <option value="">Derzeit keine Angaben</option>
                 </select>
@@ -920,7 +920,7 @@ const hasSecondaryFilters =
                   id="waldVorrat"
                   name="waldVorrat"
                   disabled
-                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 disabled:opacity-60"
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-border bg-surface disabled:opacity-60"
                 >
                   <option value="">Derzeit keine Angaben</option>
                 </select>
@@ -940,7 +940,7 @@ const hasSecondaryFilters =
                     step="1"
                     value={filterAckerMin ?? ''}
                     placeholder="Min. BP"
-                    class="w-full py-2 px-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                    class="w-full py-2 px-3 rounded-lg border border-border bg-surface"
                   />
                   <input
                     id="ackerMax"
@@ -949,7 +949,7 @@ const hasSecondaryFilters =
                     step="1"
                     value={filterAckerMax ?? ''}
                     placeholder="Max. BP"
-                    class="w-full py-2 px-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                    class="w-full py-2 px-3 rounded-lg border border-border bg-surface"
                   />
                 </div>
               </div>
@@ -959,7 +959,7 @@ const hasSecondaryFilters =
                   id="ackerEmz"
                   name="ackerEmz"
                   disabled
-                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 disabled:opacity-60"
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-border bg-surface disabled:opacity-60"
                 >
                   <option value="">Derzeit keine Angaben</option>
                 </select>
@@ -979,7 +979,7 @@ const hasSecondaryFilters =
                     value={filterGruenMin ?? ''}
                     placeholder="Min."
                     disabled
-                    class="w-full py-2 px-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 disabled:opacity-60"
+                    class="w-full py-2 px-3 rounded-lg border border-border bg-surface disabled:opacity-60"
                   />
                   <input
                     name="gruenMax"
@@ -988,7 +988,7 @@ const hasSecondaryFilters =
                     value={filterGruenMax ?? ''}
                     placeholder="Max."
                     disabled
-                    class="w-full py-2 px-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 disabled:opacity-60"
+                    class="w-full py-2 px-3 rounded-lg border border-border bg-surface disabled:opacity-60"
                   />
                 </div>
               </div>
@@ -998,7 +998,7 @@ const hasSecondaryFilters =
                   id="gruenWasser"
                   name="gruenWasser"
                   disabled
-                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 disabled:opacity-60"
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-border bg-surface disabled:opacity-60"
                 >
                   <option value="">Derzeit keine Angaben</option>
                 </select>
@@ -1014,7 +1014,7 @@ const hasSecondaryFilters =
                   id="hofBetrieb"
                   name="hofBetrieb"
                   disabled
-                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 disabled:opacity-60"
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-border bg-surface disabled:opacity-60"
                 >
                   <option value="">Derzeit keine Angaben</option>
                 </select>
@@ -1037,7 +1037,7 @@ const hasSecondaryFilters =
                 <select
                   id="jagdRahmen"
                   name="jagdRahmen"
-                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-border bg-surface"
                 >
                   <option value="">Alle</option>
                   <option value="eigenjagd" selected={filterJagdRahmen === 'eigenjagd'}>Eigenjagd</option>
@@ -1050,7 +1050,7 @@ const hasSecondaryFilters =
                   id="jagdVertrag"
                   name="jagdVertrag"
                   disabled
-                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 disabled:opacity-60"
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-border bg-surface disabled:opacity-60"
                 >
                   <option value="">Derzeit keine Angaben</option>
                 </select>
@@ -1065,7 +1065,7 @@ const hasSecondaryFilters =
                 <select
                   id="teichTyp"
                   name="teichTyp"
-                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-border bg-surface"
                 >
                   <option value="">Alle</option>
                   <option value="teich" selected={filterTeichTyp === 'teich'}>Teichanlage</option>
@@ -1078,7 +1078,7 @@ const hasSecondaryFilters =
                 <select
                   id="teichWasserrecht"
                   name="teichWasserrecht"
-                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-border bg-surface"
                 >
                   <option value="">Alle</option>
                   <option value="vorhanden" selected={filterTeichWasserrecht === 'vorhanden'}>vorhanden</option>
@@ -1095,7 +1095,7 @@ const hasSecondaryFilters =
                 <select
                   id="sonderKultur"
                   name="sonderKultur"
-                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-border bg-surface"
                 >
                   <option value="">Alle</option>
                   <option value="obst" selected={filterSonderKultur === 'obst'}>Obst</option>
@@ -1111,7 +1111,7 @@ const hasSecondaryFilters =
                 <select
                   id="sonderBewasserung"
                   name="sonderBewasserung"
-                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-border bg-surface"
                 >
                   <option value="">Alle</option>
                   <option value="vorhanden" selected={filterSonderBewasserung === 'vorhanden'}>vorhanden</option>
@@ -1128,7 +1128,7 @@ const hasSecondaryFilters =
                 <select
                   id="natBindung"
                   name="natBindung"
-                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-border bg-surface"
                 >
                   <option value="">Alle</option>
                   <option value="vertrags" selected={filterNatBindung === 'vertrags'}>Vertragsnaturschutz</option>
@@ -1142,7 +1142,7 @@ const hasSecondaryFilters =
                 <select
                   id="natNatura"
                   name="natNatura"
-                  class="mt-2 w-full py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
+                  class="mt-2 w-full py-3 px-4 rounded-lg border border-border bg-surface"
                 >
                   <option value="">Alle</option>
                   <option value="ja" selected={filterNatNatura === 'ja'}>ja</option>
@@ -1161,7 +1161,7 @@ const hasSecondaryFilters =
         {activeFilters.map((filter) => (
           <a
             href={filter.href}
-            class="inline-flex items-center gap-2 rounded-full border border-gray-200 dark:border-gray-700 px-3 py-1 text-xs text-slate-700 dark:text-slate-200 hover:border-emerald-400"
+            class="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 text-xs text-default hover:border-primary"
           >
             {filter.label}
             <span aria-hidden="true">×</span>

@@ -5,10 +5,10 @@ const alignClass = align === 'left' ? 'justify-start' : 'justify-center';
 
 {
   items.length > 0 && (
-    <ul class={`mt-6 flex flex-wrap ${alignClass} gap-x-6 gap-y-2 text-sm text-slate-600 dark:text-slate-300 ${className}`.trim()}>
+    <ul class={`mt-6 flex flex-wrap ${alignClass} gap-x-6 gap-y-2 text-sm text-muted ${className}`.trim()}>
       {items.map((item) => (
         <li class="inline-flex items-center gap-2">
-          <span class="h-1.5 w-1.5 rounded-full bg-emerald-600" aria-hidden="true"></span>
+          <span class="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden="true"></span>
           <span>{item}</span>
         </li>
       ))}

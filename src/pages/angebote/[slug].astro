@@ -86,8 +86,8 @@ const tabs = [
         </p>
         <div class="flex flex-wrap gap-2 pt-2">
           {chips.map((chip) => (
-            <span class="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-xs font-medium">
-              <span class="text-slate-500 mr-2">{chip.label}:</span> {chip.value}
+            <span class="inline-flex items-center px-3 py-1 rounded-full bg-surface/80 text-xs font-medium">
+              <span class="text-muted mr-2">{chip.label}:</span> {chip.value}
             </span>
           ))}
         </div>
@@ -96,7 +96,7 @@ const tabs = [
           <a class="btn-secondary" href={contactHref}>Besichtigung anfragen</a>
         </div>
       </div>
-      <div class="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-slate-900 p-4 text-sm space-y-2 shadow-sm">
+      <div class="rounded-lg border border-card-border bg-card p-4 text-sm space-y-2 shadow-sm">
         <div class="flex justify-between"><span>Objekt</span><span class="font-medium">{angebot.id}</span></div>
         <div class="flex justify-between"><span>Kaufpreis</span><span class="font-medium">{angebot.kaufpreisText}</span></div>
         <div class="flex justify-between"><span>Fläche</span><span class="font-medium">{angebot.flaecheGesamtHa} ha</span></div>
@@ -124,7 +124,7 @@ const tabs = [
         {tabs.map((tab, idx) => (
           <button
             type="button"
-            class="tab-btn rounded-full px-4 py-2 text-sm border border-gray-200 dark:border-gray-800 data-[active=true]:bg-primary data-[active=true]:text-white"
+            class="tab-btn rounded-full px-4 py-2 text-sm border border-border data-[active=true]:bg-primary data-[active=true]:text-on-primary"
             data-tab={`tab-${idx}`}
             aria-controls={`tab-${idx}`}
             aria-selected={idx === 0}
@@ -240,14 +240,14 @@ const tabs = [
         <article id="tab-5" class="tab-panel hidden" role="tabpanel">
           <h2 class="text-xl font-semibold mb-3">Dokumente</h2>
           <div class="space-y-2">
-            <div class="flex items-center justify-between border border-gray-200 dark:border-gray-800 rounded-lg p-3">
+            <div class="flex items-center justify-between border border-border rounded-lg p-3">
               <div>
                 <p class="font-semibold">Lageplan (PDF)</p>
                 <p class="text-xs text-muted">Stand: 2025-12-01 · Sichtbarkeit: öffentlich</p>
               </div>
               <span class="text-sm text-primary">Download</span>
             </div>
-            <div class="flex items-center justify-between border border-gray-200 dark:border-gray-800 rounded-lg p-3">
+            <div class="flex items-center justify-between border border-border rounded-lg p-3">
               <div>
                 <p class="font-semibold">Detailunterlagen</p>
                 <p class="text-xs text-muted">Stand: 2025-12-01 · Sichtbarkeit: nach Anfrage</p>
@@ -292,7 +292,7 @@ const tabs = [
       </div>
     </div>
 
-    <div class="mt-10 text-xs text-muted border-t border-gray-200 dark:border-gray-800 pt-4">
+    <div class="mt-10 text-xs text-muted border-t border-border pt-4">
       Alle Angaben sind DEMO-Beispiele, unverbindlich und ohne Gewähr; keine Rechts- oder Beschaffenheitsgarantie. Verbindlich sind ausschließlich geprüfte Unterlagen nach Anfrage.
     </div>
   </section>
@@ -302,7 +302,7 @@ const tabs = [
   .tab-panel.hidden { display: none; }
   .tab-btn[data-active="true"] { border-color: transparent; }
   .input {
-    @apply w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 px-3 py-2;
+    @apply w-full rounded-lg border border-border bg-surface px-3 py-2;
   }
 </style>
 

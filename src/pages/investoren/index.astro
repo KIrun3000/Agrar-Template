@@ -53,14 +53,14 @@ const bundeslaender = [
 const submitted = Astro.url.searchParams.get('submitted') === '1';
 
 const inputBase =
-  'mt-1 w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 px-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 focus:outline-none transition';
-const labelBase = 'text-sm font-semibold text-slate-700 dark:text-slate-200';
-const errorBase = 'mt-1 text-xs text-rose-600 hidden';
-const checkboxBase = 'h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500';
+  'mt-1 w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-default focus:border-primary focus:ring-2 focus:ring-ring/30 focus:outline-none transition';
+const labelBase = 'text-sm font-semibold text-default';
+const errorBase = 'mt-1 text-xs text-danger hidden';
+const checkboxBase = 'h-4 w-4 rounded border-border text-primary focus:ring-ring/30';
 ---
 
 <Layout metadata={metadata}>
-  <section id="gesuche" class="relative overflow-hidden bg-white dark:bg-slate-950">
+  <section id="gesuche" class="relative overflow-hidden bg-page">
     <div class="mx-auto max-w-6xl px-6 pt-16 pb-12 sm:pt-20 sm:pb-16 lg:pt-24">
       <SectionHeader
         eyebrow="Gesuche"
@@ -91,7 +91,7 @@ const checkboxBase = 'h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ri
     </div>
   </section>
 
-  <section id="kontakt" class="bg-slate-50/70 dark:bg-slate-900/30 py-12 sm:py-16">
+  <section id="kontakt" class="bg-surface/70 py-12 sm:py-16">
     <div class="mx-auto max-w-6xl px-6">
       <SectionHeader
         eyebrow="Kontakt"
@@ -110,9 +110,9 @@ const checkboxBase = 'h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ri
           ]}
           note="Ihre Angaben behandeln wir vertraulich und verwenden sie ausschließlich für die Suche."
         />
-        <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-slate-900 p-6 lg:p-8 shadow-sm">
+        <div class="rounded-xl border border-card-border bg-card p-6 lg:p-8 shadow-sm">
           {submitted && (
-            <div class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800">
+            <div class="mb-4 rounded-lg border border-primary/30 bg-primary/10 p-4 text-sm text-primary">
               Danke! Ihr Suchprofil ist bei uns eingegangen.
             </div>
           )}
@@ -120,7 +120,7 @@ const checkboxBase = 'h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ri
             <div class="grid gap-4 sm:grid-cols-2">
               <div>
                 <label class={labelBase} for="investor-name">
-                  Name <span class="text-rose-600">*</span>
+                  Name <span class="text-danger">*</span>
                 </label>
                 <input
                   id="investor-name"
@@ -135,7 +135,7 @@ const checkboxBase = 'h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ri
               </div>
               <div>
                 <label class={labelBase} for="investor-email">
-                  E-Mail <span class="text-rose-600">*</span>
+                  E-Mail <span class="text-danger">*</span>
                 </label>
                 <input
                   id="investor-email"
@@ -153,7 +153,7 @@ const checkboxBase = 'h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ri
             <div class="grid gap-4 sm:grid-cols-2">
               <div>
                 <label class={labelBase} for="investor-type">
-                  Investor-Typ <span class="text-rose-600">*</span>
+                  Investor-Typ <span class="text-danger">*</span>
                 </label>
                 <select id="investor-type" name="investorTyp" required class={inputBase} aria-describedby="investor-type-error">
                   <option value="">Bitte auswählen</option>
@@ -180,11 +180,11 @@ const checkboxBase = 'h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ri
 
             <fieldset class="space-y-3" data-required-group="suchtyp" aria-describedby="investor-type-error-group">
               <legend class={labelBase}>
-                Suchtyp <span class="text-rose-600">*</span>
+                Suchtyp <span class="text-danger">*</span>
               </legend>
               <div class="grid gap-2 sm:grid-cols-2">
                 {suchtypen.map((typ) => (
-                  <label class="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-300">
+                  <label class="flex items-center gap-3 text-sm text-muted">
                     <input class={checkboxBase} type="checkbox" name="suchtyp" value={typ} />
                     <span>{typ}</span>
                   </label>
@@ -192,7 +192,7 @@ const checkboxBase = 'h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ri
               </div>
               <p
                 id="investor-type-error-group"
-                class="text-xs text-rose-600 hidden"
+                class="text-xs text-danger hidden"
                 data-group-error="suchtyp"
                 aria-live="polite"
               ></p>
@@ -201,7 +201,7 @@ const checkboxBase = 'h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ri
             <div class="grid gap-4 sm:grid-cols-2">
               <div>
                 <label class={labelBase} for="investor-regions">
-                  Regionen (Bundesländer) <span class="text-rose-600">*</span>
+                  Regionen (Bundesländer) <span class="text-danger">*</span>
                 </label>
                 <select
                   id="investor-regions"
@@ -238,7 +238,7 @@ const checkboxBase = 'h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ri
 
             <div class="space-y-2" data-range-group="flaeche">
               <p class={labelBase}>
-                Flächenspanne (ha) <span class="text-rose-600">*</span>
+                Flächenspanne (ha) <span class="text-danger">*</span>
               </p>
               <div class="grid gap-4 sm:grid-cols-2">
                 <div>
@@ -276,7 +276,7 @@ const checkboxBase = 'h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ri
                   <p id="investor-area-max-error" class={errorBase} data-error-for="investor-area-max" aria-live="polite"></p>
                 </div>
               </div>
-              <p class="text-xs text-rose-600 hidden" data-range-error aria-live="polite"></p>
+              <p class="text-xs text-danger hidden" data-range-error aria-live="polite"></p>
             </div>
 
             <div class="space-y-2" data-range-group="budget">
@@ -315,7 +315,7 @@ const checkboxBase = 'h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ri
                   <p id="investor-budget-max-error" class={errorBase} data-error-for="investor-budget-max" aria-live="polite"></p>
                 </div>
               </div>
-              <p class="text-xs text-rose-600 hidden" data-range-error aria-live="polite"></p>
+              <p class="text-xs text-danger hidden" data-range-error aria-live="polite"></p>
             </div>
 
             <div class="grid gap-4 sm:grid-cols-2">
@@ -361,7 +361,7 @@ const checkboxBase = 'h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ri
             </div>
 
             <div>
-              <label class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300" for="investor-privacy">
+              <label class="flex items-start gap-3 text-sm text-muted" for="investor-privacy">
                 <input
                   id="investor-privacy"
                   name="privacy"
@@ -373,7 +373,7 @@ const checkboxBase = 'h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ri
                 />
                 <span>
                   Ich stimme der Verarbeitung meiner Angaben gemäß der Datenschutzerklärung zu.
-                  <span class="text-rose-600"> *</span>
+                  <span class="text-danger"> *</span>
                 </span>
               </label>
               <p id="investor-privacy-error" class={errorBase} data-error-for="investor-privacy" aria-live="polite"></p>
@@ -386,7 +386,7 @@ const checkboxBase = 'h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ri
 
             <div class="space-y-3">
               <button type="submit" class="btn-primary w-full">Suchprofil senden</button>
-              <p class="text-center text-xs text-slate-500 dark:text-slate-400">Wir melden uns innerhalb von 48h.</p>
+              <p class="text-center text-xs text-muted">Wir melden uns innerhalb von 48h.</p>
             </div>
           </form>
         </div>

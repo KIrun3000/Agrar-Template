@@ -35,7 +35,7 @@ const { id, eyebrow, title, description, items = [] } = Astro.props as {
   <div class="space-y-4 mt-6">
     {
       items.map((item) => (
-        <article class="flex flex-col sm:flex-row gap-4 border border-gray-200 dark:border-gray-800 rounded-xl p-4 bg-white dark:bg-slate-900 shadow-sm">
+        <article class="flex flex-col sm:flex-row gap-4 border border-card-border rounded-xl p-4 bg-card shadow-sm">
           <img
             src={item.imageSrc}
             alt={item.imageAlt}
@@ -46,9 +46,9 @@ const { id, eyebrow, title, description, items = [] } = Astro.props as {
           />
           <div class="flex-1">
             <div class="flex items-center justify-between mb-1">
-              {item.code && <p class="text-sm font-mono text-slate-500">{item.code}</p>}
+              {item.code && <p class="text-sm font-mono text-muted">{item.code}</p>}
               {item.badge && (
-                <span class="inline-flex rounded-full px-2 py-0.5 text-xs bg-amber-100 text-amber-700">
+                <span class="inline-flex rounded-full px-2 py-0.5 text-xs bg-warning/15 text-warning">
                   {item.badge}
                 </span>
               )}

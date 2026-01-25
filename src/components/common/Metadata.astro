@@ -9,6 +9,7 @@ import type { MetaData } from '~/types';
 import { getCanonical } from '~/utils/permalinks';
 
 import { adaptOpenGraphImages } from '~/utils/images';
+import { getActiveBrand } from '~/config/activeBrand';
 
 export interface Props extends MetaData {
   dontUseTitleTemplate?: boolean;
@@ -23,6 +24,13 @@ const {
   openGraph = {},
   twitter = {},
 } = Astro.props;
+
+const { brand } = getActiveBrand();
+const brandOg = brand?.assets?.ogImage;
+const brandOgImage =
+  brandOg?.url && typeof brandOg.url === 'string'
+    ? [{ url: brandOg.url, width: brandOg.width ?? 1200, height: brandOg.height ?? 628 }]
+    : undefined;
 
 const seoProps: AstroSeoProps = merge(
   {
@@ -63,6 +71,11 @@ const seoProps: AstroSeoProps = merge(
     twitter: twitter,
   }
 );
+
+const finalSeoProps: AstroSeoProps = {
+  ...seoProps,
+  openGraph: brandOgImage ? { ...seoProps.openGraph, images: brandOgImage } : seoProps.openGraph,
+};
 ---
 
-<AstroSeo {...{ ...seoProps, openGraph: await adaptOpenGraphImages(seoProps?.openGraph, Astro.site) }} />
+<AstroSeo {...{ ...finalSeoProps, openGraph: await adaptOpenGraphImages(finalSeoProps?.openGraph, Astro.site) }} />

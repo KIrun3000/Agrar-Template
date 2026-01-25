@@ -2,9 +2,17 @@
 import favIcon from '~/assets/favicons/favicon.ico';
 import favIconSvg from '~/assets/favicons/favicon.svg';
 import appleTouchIcon from '~/assets/favicons/apple-touch-icon.png';
+import { getActiveBrand } from '~/config/activeBrand';
+
+const { brand } = getActiveBrand();
+const favicon = brand?.assets?.favicon ?? {};
+const faviconIco = favicon.ico ?? favIcon;
+const faviconSvgUrl = favicon.svg ?? favIconSvg.src;
+const appleTouch = favicon.appleTouch ?? appleTouchIcon.src;
+const maskColor = favicon.maskColor ?? '#8D46E7';
 ---
 
-<link rel="shortcut icon" href={favIcon} />
-<link rel="icon" type="image/svg+xml" href={favIconSvg.src} />
-<link rel="mask-icon" href={favIconSvg.src} color="#8D46E7" />
-<link rel="apple-touch-icon" sizes="180x180" href={appleTouchIcon.src} />
+<link rel="shortcut icon" href={faviconIco} />
+<link rel="icon" type="image/svg+xml" href={faviconSvgUrl} />
+<link rel="mask-icon" href={faviconSvgUrl} color={maskColor} />
+<link rel="apple-touch-icon" sizes="180x180" href={appleTouch} />
