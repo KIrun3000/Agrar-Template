@@ -29,13 +29,15 @@ const metadata = {
       `<div class="absolute inset-0">
         <video
           class="w-full h-full object-cover"
-          src="https://cdn.coverr.co/videos/coverr-wheat-field-5175/1080p.mp4"
           autoplay
           muted
           loop
           playsinline
-          poster="https://cdn.coverr.co/videos/coverr-wheat-field-5175/1080p.mp4?poster"
-        ></video>
+          poster="/media/167754-838892766_medium.mp4"
+        >
+          <source src="/media/167754-838892766_medium.webm" type="video/webm" />
+          <source src="/media/167754-838892766_medium.mp4" type="video/mp4" />
+        </video>
         <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/55 to-black/70"></div>
       </div>`
     }
