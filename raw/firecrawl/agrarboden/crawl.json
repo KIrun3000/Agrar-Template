@@ -1,0 +1,36 @@
+{
+  "id": "manual-scrape-1769653151894",
+  "status": "completed",
+  "completed": 0,
+  "total": 0,
+  "data": [],
+  "config": {
+    "excludePaths": [
+      "/angebote",
+      "/angebot",
+      "/immobilien",
+      "/objekte",
+      "/expose",
+      "/exposé",
+      "/listing",
+      "/property",
+      "/inserat",
+      "/kaufen",
+      "/mieten"
+    ],
+    "includePaths": [
+      "/",
+      "/ueber-uns",
+      "/leistungen",
+      "/kontakt",
+      "/impressum",
+      "/datenschutz",
+      "/presse"
+    ],
+    "limit": 15,
+    "maxDepth": 2,
+    "delayMs": 800,
+    "maxConcurrency": 2,
+    "timeout": 180
+  }
+}

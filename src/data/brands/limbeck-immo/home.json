@@ -1,0 +1,256 @@
+{
+  "metadata": {
+    "title": "Limbeck Immobilien KG",
+    "description": "Limbeck Immobilien KG – Ihr Partner für den Kauf, Verkauf, Pacht und Bewertung von land- und forstwirtschaftlichen Immobilien und Flächen",
+    "ignoreTitleTemplate": true
+  },
+  "hero": {
+    "title": "Ihr starker Agrar-Partner",
+    "subtitle": "Für Kauf- und Pachtangelegenheiten rund um Agrarimmobilien wie land- und forstwirtschaftliche Betriebe, Flächen, Hofstellen und Stallanlagen.",
+    "actions": [
+      {
+        "variant": "primary",
+        "text": "Kaufen",
+        "href": "/angebote"
+      },
+      {
+        "variant": "secondary",
+        "text": "Verkaufen",
+        "href": "/#kontakt"
+      }
+    ],
+    "video": {
+      "poster": "/media/167754-838892766_medium.mp4",
+      "sources": [
+        {
+          "src": "/media/167754-838892766_medium.webm",
+          "type": "video/webm"
+        },
+        {
+          "src": "/media/167754-838892766_medium.mp4",
+          "type": "video/mp4"
+        }
+      ]
+    },
+    "overlay": {
+      "light": "from-page/40 via-page/20 to-page/5",
+      "dark": "from-page/70 via-page/50 to-page/90"
+    }
+  },
+  "highlights": {
+    "eyebrow": "Unsere Stärken",
+    "title": "Diskret. Partnerschaftlich. Erfolgsorientiert.",
+    "subtitle": "Für Kauf- und Pachtangelegenheiten rund um Agrarimmobilien wie land- und forstwirtschaftliche Betriebe, Flächen, Hofstellen und Stallanlagen. Limbeck Immobilien KG steht seit vielen Jahren für Diskretion, Zuverlässigkeit und partnerschaftliches Vertrauen",
+    "source": "custom",
+    "variant": "discreet",
+    "items": [
+      {
+        "title": "Diskrete Vermarktung",
+        "description": "Referenzen auf Anfrage. Keine öffentlichen Exposés."
+      },
+      {
+        "title": "Überregionale Expertise",
+        "description": "Netzwerk in Nord- und Ostdeutschland."
+      },
+      {
+        "title": "Individuelle Beratung",
+        "description": "Bewertung, Strategie und Transaktionsbegleitung."
+      }
+    ]
+  },
+  "sections": {
+    "seller": {
+      "id": "verkaeufer",
+      "tagline": "Service",
+      "title": "Für Verkäufer",
+      "subtitle": "Ob Kauf oder Verkauf von Agrarimmobilien – bei Limbeck stehen Ihre Ziele im Mittelpunkt. Wir begleiten Sie durch den gesamten Prozess, von der fundierten Wertermittlung bis zur erfolgreichen Übergabe. Profitieren Sie von unserer Erfahrung und unserem Netzwerk für bestmögliche Ergebnisse.",
+      "items": [
+        {
+          "title": "Unsere Leistungen",
+          "description": "Ob Kauf oder Verkauf von Agrarimmobilien – bei Limbeck stehen Ihre Ziele im Mittelpunkt. Wir begleiten Sie durch den gesamten Prozess, von der fundierten Wertermittlung bis zur erfolgreichen Übergabe. Profitieren Sie von unserer Erfahrung und unserem Netzwerk für bestmögliche Ergebnisse."
+        }
+      ],
+      "image": {
+        "src": "/images/stock/stock_fuer-verkaeufer.webp",
+        "alt": "Kaufen und Verkaufen",
+        "width": 2649,
+        "height": 1535
+      }
+    },
+    "investor": {
+      "id": "investoren",
+      "tagline": "Investment",
+      "title": "Sale-and-Lease-back",
+      "subtitle": "Mit dem Sale-and-Lease-Back-Verfahren schaffen Sie finanzielle Spielräume, ohne Ihre Produktionsgrundlage zu verlieren. Sie verkaufen Ihre Agrarimmobilie und nutzen sie weiterhin durch einen langfristigen Mietvertrag. Limbeck Immobilien KG bietet Ihnen eine diskrete, professionelle Abwicklung und faire Konditionen für maximale Flexibilität.",
+      "items": [
+        {
+          "title": "Finanzielle Flexibilität",
+          "description": "Mit dem Sale-and-Lease-Back-Verfahren schaffen Sie finanzielle Spielräume, ohne Ihre Produktionsgrundlage zu verlieren. Sie verkaufen Ihre Agrarimmobilie und nutzen sie weiterhin durch einen langfristigen Mietvertrag. Limbeck Immobilien KG bietet Ihnen eine diskrete, professionelle Abwicklung und faire Konditionen für maximale Flexibilität."
+        }
+      ],
+      "image": {
+        "src": "/images/stock/stock_fuer-investoren.webp",
+        "alt": "Sale-and-Lease-Back",
+        "width": 2645,
+        "height": 1534
+      },
+      "isReversed": true
+    },
+    "stats": {
+      "id": "trust",
+      "title": "Unsere Bilanz",
+      "items": [
+        {
+          "title": "Erfolgreiche Vermittlungen",
+          "amount": "2024/25"
+        },
+        {
+          "title": "Produkte",
+          "amount": "7+"
+        },
+        {
+          "title": "Regionen",
+          "amount": "4"
+        },
+        {
+          "title": "Antwortzeit",
+          "amount": "< 48h"
+        }
+      ]
+    },
+    "regions": {
+      "id": "regionen",
+      "tagline": "Regionen & Länder",
+      "title": "Unsere Regionen",
+      "subtitle": "Überregionale Vermittlung von Agrarimmobilien in Nord- und Ostdeutschland.",
+      "columns": 3,
+      "items": [
+        {
+          "title": "Sachsen-Anhalt",
+          "description": "Überregionale Vermittlung in Sachsen-Anhalt – z.B. Ca. 200 ha Acker & Grünland in S-A zu verkaufen",
+          "icon": "flat-color-icons:approval"
+        },
+        {
+          "title": "Mecklenburg-Vorpommern",
+          "description": "Überregionale Vermittlung in Mecklenburg-Vorpommern – z.B. 5,4720 ha Grünland in Klein Nemerow zu verkaufen",
+          "icon": "flat-color-icons:approval"
+        },
+        {
+          "title": "Niedersachsen",
+          "description": "Überregionale Vermittlung in Niedersachsen – z.B. ca. 5 ha Acker in Aschendorf zu verkaufen",
+          "icon": "flat-color-icons:approval"
+        },
+        {
+          "title": "Emsland / Nordrhein-Westfalen",
+          "description": "Überregionale Vermittlung in Emsland / Nordrhein-Westfalen – z.B. ca. 76 ha Eigenjagd im Altkreis Lingen zu verkaufen",
+          "icon": "flat-color-icons:approval"
+        }
+      ]
+    },
+    "services": {
+      "id": "leistungen",
+      "tagline": "Leistungen",
+      "title": "Unsere Leistungen",
+      "subtitle": "Wir begleiten seit vielen Jahren den Verkauf kleiner bis sehr umfangreicher landwirtschaftlicher Flächen, bis hin zu gesamten Betrieben und Resthöfen. Für jeden potentiellen Kunden bieten wir ein breites Dienstleistungsportfolio an.",
+      "columns": 3,
+      "items": [
+        {
+          "title": "Pachten & Verpachten",
+          "description": "Die Verpachtung von Agrarflächen oder der Pacht neuer Grundstücke erfordert Fachwissen und Marktkenntnis. Bei Limbeck vermitteln wir passende Lösungen für Landwirte und Eigentümer – transparent, zuverlässig und individuell auf Ihre Bedürfnisse zugeschnitten. Gemeinsam finden wir die optimale Nutzung für Ihre Flächen.",
+          "icon": "flat-color-icons:advertising",
+          "callToAction": {
+            "text": "Kontakt aufnehmen",
+            "href": "/?utm_source=leistungen#kontakt"
+          }
+        },
+        {
+          "title": "Produktsortiment",
+          "description": "Wir begleiten Transaktionen für: [Ackerland](https, [Grünland](https, Kompensationsflächen, [Forst/Wald](https, [Eigenjagden](https, Hofstellen/Stallanlagen, [Pachtangelegenheiten](https",
+          "icon": "flat-color-icons:currency-exchange",
+          "callToAction": {
+            "text": "Kontakt aufnehmen",
+            "href": "/?utm_source=leistungen#kontakt"
+          }
+        },
+        {
+          "title": "Umfassender Service",
+          "description": "Wir begleiten seit vielen Jahren den Verkauf kleiner bis sehr umfangreicher landwirtschaftlicher Flächen, bis hin zu gesamten Betrieben und Resthöfen. Für jeden potentiellen Kunden bieten wir ein breites Dienstleistungsportfolio an.",
+          "icon": "flat-color-icons:business-contact",
+          "callToAction": {
+            "text": "Kontakt aufnehmen",
+            "href": "/?utm_source=leistungen#kontakt"
+          }
+        }
+      ]
+    },
+    "about": {
+      "id": "ueber-uns",
+      "tagline": "Unternehmen",
+      "title": "Kompetente & ganzheitliche Betreuung",
+      "subtitle": "Überregional betreut unser erfahrenes Team aus den Bereichen Agrarwirtschaft, Bankwesen und Notariat Ihre Immobilienanliegen mit höchster Sorgfalt. Wir unterstützen Sie bei der Wertanalyse, beraten fundiert zur Preisermittlung und begleiten Sie zuverlässig durch den gesamten Vermittlungsprozess – von der ersten Kontaktaufnahme bis weit über den Vertragsabschluss hinaus.",
+      "items": [
+        {
+          "title": "Wertermittlung & Prozess",
+          "description": "Überregional betreut unser erfahrenes Team aus den Bereichen Agrarwirtschaft, Bankwesen und Notariat Ihre Immobilienanliegen mit höchster Sorgfalt. Wir unterstützen Sie bei der Wertanalyse, beraten fundiert zur Preisermittlung und begleiten Sie zuverlässig durch den gesamten Vermittlungsprozess – von der ersten Kontaktaufnahme bis weit über den Vertragsabschluss hinaus.\n\nSchnell und bequem: Übermitteln Sie uns einfach die wichtigsten Eckdaten Ihrer Immobilie. Wir melden uns zeitnah bei Ihnen, um"
+        }
+      ],
+      "image": {
+        "src": "/images/stock/stock_ueber-uns.webp",
+        "alt": "Kompetente Betreuung",
+        "width": 2816,
+        "height": 1536
+      }
+    },
+    "cta": {
+      "id": "cta",
+      "title": "Interesse? Lassen Sie uns sprechen.",
+      "subtitle": "Kontaktieren Sie uns für ein unverbindliches Erstgespräch oder fordern Sie weitere Informationen an.",
+      "actions": [
+        {
+          "variant": "primary",
+          "text": "Kontakt aufnehmen",
+          "href": "/#kontakt"
+        },
+        {
+          "variant": "secondary",
+          "text": "Mehr erfahren",
+          "href": "/#ueber-uns"
+        }
+      ]
+    },
+    "contact": {
+      "id": "kontakt",
+      "tagline": "Kontakt aufnehmen",
+      "title": "Kontakt aufnehmen",
+      "subtitle": "Sie haben Fragen zu einem Objekt oder möchten eine Ersteinschätzung? Wir melden uns innerhalb von 48 Stunden.",
+      "inputs": [
+        {
+          "label": "Name",
+          "name": "name",
+          "type": "text"
+        },
+        {
+          "label": "E-Mail",
+          "name": "email",
+          "type": "email"
+        },
+        {
+          "label": "Telefon",
+          "name": "phone",
+          "type": "tel"
+        }
+      ],
+      "textarea": {
+        "label": "Nachricht",
+        "name": "message"
+      },
+      "button": "Anfrage senden",
+      "info": {
+        "label": "Kontaktinfos",
+        "antwortzeit": "< 48h",
+        "email": "info@limbeck-immo.de",
+        "phone": "6      1           -                                                                                             -                                                    6      1           -     \n\n                                                                                                                                                                                \n\n                                                       \n\n                                                                                                                                           \n\n                                                \n\n               \n\n                                                                                                                                                                                                                                      \n\n                                                                                                                                                                                                                                                                                                                                            \n\n                                                                                               -                                                                                                                        \n\n                                       \n\n                                                                            \n\n                     \n\n                           \n\n           14\n\n49716       \n\n         05931 49661-0\n\n -                  -       \n\n                                                                                                                                                                                                -    -                            \n\n                                                     \n\n                                                                                                                                                                                                       -                         -                                                                                                            \n\n                               21     1   -     \n\n                                                                                                                                                                         6      1          -                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  \n\n                               21     2   -     \n\n                                                                                                                                                                                                                                                                                                                                                                                                                                                              \n\n                                                        \n\n                                                                                                                                                                                                                                                                                                                                                                                               //                /  /        /                  /                  -                 //                /  /        /                 /                 -           \n\n                                  \n\n                                                20      1   -                                                                                                                                                                                                                                                                                                                                                                                                                               6      1           -                                     6      1          -                            6      1          -                   \n\n     -         -                 \n\n                                                                                                                                                                             -         -                                                                                                                //             //                             -                             \n\n            -         -                                                                                                                 \n\n                                       \n\n                                                                                                                                                                                                                                                                                                                                                                                                                                                  \n\n                                            \n\n                                                                                                                                                                                                                                                                        \n\n-                                                                                                                                                                                                                                                                               \n-                                                                         /                                                                                           \n-                                                                                                                                                                                                                                                                                 \n-                                      21      1   -                                                                                                                                                                                                                                                                 \n\n                                                                                                                                                                                                                                                                                                                                                                                                                                                   \n\n                                     \n\n           \n\n                                                                                                                                                                                                               -                                                                                    -                                                                                                                                                                                                                                                                                                           \n\n                                                                                                                                                                                                                                                                                                                                                                                             \n\n                                                                                                                             6      1          -                                                                                                                                             6      1           -                                                                                                                                                                                                                                                                                              6      1                                                              \n\n                                                                                                                                                                                                      \n\n                   \n\n                                                                                                                                                                                                                                                                                                                \n\n                                                             6      1           -                                                                                                                                                                                                                                                                                                  6      1           -                                       6      1           -                                  \n\n                                                                                                                                                                                                                                                                                                                                                              \n\n               -                            \n\n                  -                                                                                                                                                                                                                                                                                   \n\n                                                             6      1           -                                                                                                                                                                                                                                                                                                  6      1           -                                       6      1           -                                  \n\n                          -                                                                                                                                                                                                                                                                                                                                                                       \n\n         -                   \n\n                                  -          \n\n                                                             -                                                                                         4         \n\n                                                              -                                                                                                     -                                                                                     -                                                                          30                                                                                                                                                                                                                                                                                                        \n\n                -                                                                                          -                                                       -                                                         -                          -                                            -                                                                                                                                                  -        -                                                                                                                                                                                                                                                                               -                             -                                                                                                -                                 \n\n                               -                                        -                                      6      1           -                                                                                                                                                                                                                                                                                                                                           6      1           -                                                \n\n                                                      -                                                                      //                   /                     //               /   /20240609140343/      /                   /               \n\n                                                                                                                                                                                                                                                                                                                                                                                             \n\n                     \n\n            \n\n                                                                                                                                                                \n\n                 -     -                                                                     4                            2                         \n\n                                                                                      \n\n       //                /    /       /540977946302970        //                /    /       /540977946302970 \n\n                                                                                                                                                                                                                                                          \n\n       //                /     /     /                                  //                /     /     /                         \n\n                                                                                                                            6      1           -                                                                                                                                               \n\n                                                                   6      1           -                                                                                             7      3   -                                                                                         \n\n                                                                                                                                                                                                    -                          \n\n                                                                                                                                                                                         -                                                                                                                                                                                                                                                                                                                                                                                                            \n\n                                                                                                                                                                                                                                                                                                                                                                                                                  \n\n                                                                                          \n\n                                                                                                                                                                                                                                                                                                                                               -                                                                                                                                                -                                                                                                                                                                                      \n\n                                                                                                                                                                  \n\n       //                /       /                   //                /       /            \n\n                                                                                                                                1601                                     94025                    \n\n             \n\n                                                       \n                                                                            \n                            \n\n                 -     -                                    \n                                4                            2         \n               \n\n                                                      \n                                \n\n       //                /    /       /540977946302970        //                /    /       /540977946302970 \n\n                                                    \n                                                                        \n                                                                            \n                                               \n\n       //                /     /     /                                  //                /     /     /                         \n\n                                                          \n                                                                 6      1     \n                                                                               \n                                                                   \n\n                                                       \n           6      1                                                        \n                                              7      3                      \n                                                                     \n\n                                                        \n                                                                               \n                                                            -             \n            \n\n                                               \n                                                                               \n                                                          -                 \n                                                                              \n                                                                      \n                                                                         \n                                                                                    \n                                                                       \n\n                                                         \n                                                                          \n                                                                             \n                                                                               \n                                                                            \n                                   \n\n                                                          \n                               \n\n                                               \n                                                                            \n                                                                        \n                                                                    \n                                                                    -       \n                                                                     \n                                                                  -        \n                                                                            \n                                                                   \n                            \n\n                                                           \n                                                                         \n                              \n\n       //                  /519522125107875        //                  /519522125107875 \n\n                                                            \n                                                          1601             \n                       94025                    \n\n                    \n\n                                                                                                                                                                                                                                      \n\n                                                                  //                     /     /           //               /   /20240609140343/      /                     /     /                                                        //                   /                     //               /   /20240609140343/      /                   /               \n\n               \n\n                                                                                                                                                      4         \n\n                                                                                                                                                                                                                                                                                   \n\n                                                                                               -                                                                                                                                                     6      1           -                                                                                                                                6      1           -                                                \n\n                                                                                                        //                   /                     //               /   /20240609140343/      /                   /               \n\n                    \n\n                                                                                                                                                                     4         \n\n                                                                                                                                                                                                                                                                                                                                                                                                                                         -                                                                                                                                                                          \n\n             -                                                                                                                           \n\n                                                                     6      1           -                                                                                                                                                                                                                                                                                                                                         6      1           -                                                \n\n                                                                  -                                                                                         //                   /                     //               /   /20240609140343/      /                   /                          //                   /                   //               /   /20240609140343/      /                   /             \n\n                                                                                                                                                      \n\n                   05931 / 49661-0"
+      }
+    }
+  }
+}

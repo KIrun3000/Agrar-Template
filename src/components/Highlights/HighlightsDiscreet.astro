@@ -1,0 +1,40 @@
+---
+/**
+ * HighlightsDiscreet.astro - Discreet Highlights Variant
+ *
+ * For brands with discreet marketing or zero listings.
+ * Shows subtle mention with direct contact CTA.
+ */
+import type { HighlightsProps } from '~/lib/autofit/widget-props';
+
+interface Props extends HighlightsProps {}
+
+const { title, subtitle, cta } = Astro.props;
+---
+
+<section id="highlights" class="px-6 sm:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-4xl">
+  <div class="text-center">
+    {title && <h2 class="text-2xl sm:text-3xl font-bold text-heading">{title}</h2>}
+    {subtitle && <p class="text-muted mt-3 max-w-2xl mx-auto">{subtitle}</p>}
+
+    <div class="mt-8 p-8 bg-surface border border-card-border rounded-xl">
+      <p class="text-lg text-muted mb-6">
+        Weitere Objekte vermarkten wir diskret außerhalb dieser Website.
+      </p>
+      <p class="text-base text-muted mb-8">
+        Sprechen Sie uns auf Ihre Wünsche an – wir prüfen für Sie passende Möglichkeiten in unserem Portfolio.
+      </p>
+
+      {
+        cta?.href && cta?.label && (
+          <a
+            href={cta.href}
+            class="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-page bg-primary hover:bg-primary-600 rounded-md transition-colors"
+          >
+            {cta.label}
+          </a>
+        )
+      }
+    </div>
+  </div>
+</section>

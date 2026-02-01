@@ -2,11 +2,6 @@
 import Layout from '~/layouts/PageLayout.astro';
 
 import Hero from '~/components/widgets/Hero.astro';
-import Content from '~/components/widgets/Content.astro';
-import Stats from '~/components/widgets/Stats.astro';
-import Features2 from '~/components/widgets/Features2.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
-import Contact from '~/components/widgets/Contact.astro';
 import ListingCard from '~/components/listings/ListingCard.astro';
 import { ANGEBOTE } from '~/data/angebote';
 import placeholderObj from '~/assets/images/placeholders/placeholder-objekt.jpg';
@@ -20,12 +15,45 @@ import {
   getCoreChipsByCategory,
 } from '~/utils/listings';
 import { getActiveBrand } from '~/config/activeBrand';
+import SectionRenderer from '~/components/SectionRenderer.astro';
+import HighlightsRenderer from '~/components/HighlightsRenderer.astro';
+import { normalizeSections } from '~/lib/autofit/normalize';
+import { selectVariants } from '~/lib/autofit/rules';
+import { getEffectiveSectionsOrder, filterExistingSections } from '~/lib/autofit/legacy';
 
 const { home } = getActiveBrand();
 const homeContent = (home ?? {}) as Record<string, any>;
 const hero = homeContent.hero ?? {};
 const highlights = homeContent.highlights ?? {};
 const sections = homeContent.sections ?? {};
+const sectionsOrder = homeContent.sectionsOrder as string[] | undefined;
+
+// Autofit pipeline: normalize → select variants → determine order → filter existing
+const normalizedSections = normalizeSections(sections);
+const sectionVariants = selectVariants(normalizedSections);
+const effectiveOrder = getEffectiveSectionsOrder(sectionsOrder);
+const renderOrder = filterExistingSections(effectiveOrder, sections);
+
+// Variant audit table (when DEBUG_AUTOFIT enabled)
+if (import.meta.env.DEBUG_AUTOFIT && String(import.meta.env.DEBUG_AUTOFIT) === 'true') {
+  console.log('\n[Autofit] Variant Selection Audit:');
+  console.log('┌─────────────┬──────────┬─────────────────────────────────────┬─────────┬───────┬───────┐');
+  console.log('│ Section     │ Variant  │ Reason                              │ Missing │ Items │ Media │');
+  console.log('├─────────────┼──────────┼─────────────────────────────────────┼─────────┼───────┼───────┤');
+
+  for (const [key, rule] of sectionVariants.entries()) {
+    const section = normalizedSections.get(key);
+    const missing = section?.meta.missingRequired.join(', ') || '—';
+    const items = String(section?.meta.itemsCount ?? 0);
+    const media = section?.meta.hasMedia ? 'Yes' : 'No';
+
+    console.log(
+      `│ ${key.padEnd(11)} │ ${rule.variant.padEnd(8)} │ ${rule.reason.padEnd(35).slice(0, 35)} │ ${missing.padEnd(7).slice(0, 7)} │ ${items.padEnd(5)} │ ${media.padEnd(5)} │`
+    );
+  }
+
+  console.log('└─────────────┴──────────┴─────────────────────────────────────┴─────────┴───────┴───────┘\n');
+}
 
 const metadata = (homeContent.metadata ?? {
   title: 'Muster Agrarimmobilien – Agrar- und Forstimmobilien',
@@ -33,18 +61,6 @@ const metadata = (homeContent.metadata ?? {
     'Diskrete Vermarktung von Ackerland, Grünland, Wald und Agrarbetrieben in Deutschland und der EU. Seit über 15 Jahren Ihr Partner für professionelle Vermittlung.',
   ignoreTitleTemplate: true,
 }) as Record<string, unknown>;
-
-const buildImageHtml = (image?: Record<string, unknown> | null, className = 'mx-auto w-full rounded-lg shadow-lg') => {
-  if (!image || typeof image !== 'object') return null;
-  const src = image.src;
-  if (!src || typeof src !== 'string') return null;
-  const alt = typeof image.alt === 'string' ? image.alt : '';
-  const width = typeof image.width === 'number' ? image.width : 1200;
-  const height = typeof image.height === 'number' ? image.height : 800;
-  return `<img src=\"${src}\" alt=\"${alt}\" width=\"${width}\" height=\"${height}\" loading=\"lazy\" class=\"${className}\" />`;
-};
-
-const contactInfo = sections?.contact?.info ?? {};
 
 const normalizeHighlightListing = (item: Record<string, any>, index: number, placeholderImage: string) => {
   const fallbackId = `highlight-${index + 1}`;
@@ -96,15 +112,15 @@ const heroOverlayDark = hero?.overlay?.dark ?? 'from-page/70 via-page/50 to-page
 const heroVideo = hero?.video;
 const heroBg =
   heroVideo && Array.isArray(heroVideo.sources) && heroVideo.sources.length
-    ? `<div class=\"absolute inset-0\">
-        <video class=\"w-full h-full object-cover\" autoplay muted loop playsinline ${
-          heroVideo.poster ? `poster=\\\"${heroVideo.poster}\\\"` : ''
+    ? `<div class="absolute inset-0">
+        <video class="w-full h-full object-cover" autoplay muted loop playsinline ${
+          heroVideo.poster ? `poster="${heroVideo.poster}"` : ''
         }>
           ${heroVideo.sources
-            .map((source) => `<source src=\\\"${source.src}\\\" type=\\\"${source.type}\\\" />`)
+            .map((source) => `<source src="${source.src}" type="${source.type}" />`)
             .join('')}
         </video>
-        <div class=\"absolute inset-0 bg-gradient-to-b ${heroOverlayLight} dark:${heroOverlayDark}\"></div>
+        <div class="absolute inset-0 bg-gradient-to-b ${heroOverlayLight} dark:${heroOverlayDark}"></div>
       </div>`
     : '';
 
@@ -117,19 +133,6 @@ const highlightCta = highlights.cta ?? { label: 'Alle Angebote anzeigen', href: 
 const highlightPageSizeDefault = Number(highlights.pageSize) || 4;
 const highlightSource = highlights.source ?? 'angebote';
 const highlightCustomItems = Array.isArray(highlights.items) ? highlights.items : [];
-
-const sellerSection = sections.seller ?? {};
-const investorSection = sections.investor ?? {};
-const statsSection = sections.stats ?? {};
-const regionsSection = sections.regions ?? {};
-const servicesSection = sections.services ?? {};
-const aboutSection = sections.about ?? {};
-const ctaSection = sections.cta ?? {};
-const contactSection = sections.contact ?? {};
-
-const sellerImage = buildImageHtml(sellerSection.image);
-const investorImage = buildImageHtml(investorSection.image);
-const aboutImage = buildImageHtml(aboutSection.image);
 ---
 
 <Layout metadata={metadata}>
@@ -138,283 +141,35 @@ const aboutImage = buildImageHtml(aboutSection.image);
     <Fragment slot="subtitle">{heroSubtitle}</Fragment>
   </Hero>
 
-  <section id="highlights" class="px-6 sm:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-6xl">
-    <div class="mb-8 text-center">
-      <p class="text-sm uppercase tracking-wide text-secondary">{highlightEyebrow}</p>
-      <h2 class="text-3xl font-bold">{highlightTitle}</h2>
-      <p class="text-muted mt-2 max-w-2xl mx-auto">{highlightSubtitle}</p>
-    </div>
+  {
+    /* Highlights section - now using HighlightsRenderer with variant autofit */
+    (() => {
+      const placeholderImage = placeholderObj.src;
+      const highlightListings =
+        highlightSource === 'custom' && highlightCustomItems.length > 0
+          ? highlightCustomItems.map((item, index) => normalizeHighlightListing(item, index, placeholderImage))
+          : ANGEBOTE.filter((a) => a.status === 'Neu').map((angebot) => mapAngebotToListing(angebot, placeholderImage));
 
-    {
-      (() => {
-        const placeholderImage = placeholderObj.src;
-        const highlightListings =
-          highlightSource === 'custom' && highlightCustomItems.length > 0
-            ? highlightCustomItems.map((item, index) => normalizeHighlightListing(item, index, placeholderImage))
-            : ANGEBOTE.filter((a) => a.status === 'Neu').map((angebot) => mapAngebotToListing(angebot, placeholderImage));
-        const highlightPageSize = highlightPageSizeDefault;
-        const highlightPages = Math.ceil(highlightListings.length / highlightPageSize);
-        const highlightHasPager = highlightListings.length > highlightPageSize;
-        const highlightPayload = JSON.stringify(
-          highlightListings.map((listing) => {
-            const price = formatPrice(listing);
-            const category = getCategoryChip(listing);
-            const status = getStatusBadge(listing);
-            const euroPerHa = computeEuroPerHa(listing);
-            const coreChips = getCoreChipsByCategory(listing);
-            const thirdMetric = euroPerHa
-              ? { label: '€/ha', value: euroPerHa }
-              : coreChips[0]
-                ? { label: coreChips[0].label, value: coreChips[0].value }
-                : null;
-            const chips = euroPerHa ? coreChips : coreChips.slice(1);
-            const metrics = [
-              { label: 'Fläche', value: formatAreaHa(listing.areaHa) },
-              { label: price.label, value: price.value },
-            ];
-            if (thirdMetric) metrics.push(thirdMetric);
+      return <HighlightsRenderer config={highlights} listings={highlightListings} debug={false} />;
+    })()
+  }
 
-            return {
-              id: listing.id,
-              title: listing.title,
-              status: status.label,
-              statusTone: status.tone,
-              category: category.label,
-              regionLabel: listing.region ? `${listing.bundesland} · ${listing.region}` : listing.bundesland,
-              image: listing.image ?? placeholderImage,
-              imageAlt: listing.imageAlt ?? listing.title,
-              href: listing.href ?? `/angebote/${listing.slug}`,
-              metrics,
-              chips: chips.slice(0, 1),
-            };
-          })
-        ).replace(/</g, '\\u003c');
+  {/* Dynamic section rendering via autofit layer */}
+  {renderOrder.map((sectionKey) => {
+    const section = normalizedSections.get(sectionKey);
+    const variantRule = sectionVariants.get(sectionKey);
 
-        return (
-          <>
-            <div
-              id="highlights-grid"
-              data-items={highlightPayload}
-              data-page-size={highlightPageSize}
-              data-total-pages={highlightPages}
-              class="grid gap-4 sm:gap-5 grid-cols-1 xs:grid-cols-2 lg:grid-cols-4"
-            >
-              {highlightListings.slice(0, highlightPageSize).map((listing) => (
-                <ListingCard listing={listing} variant="highlight" />
-              ))}
-            </div>
-            {highlightHasPager && (
-              <div class="mt-6 flex items-center justify-center gap-3">
-                <button
-                  type="button"
-                  class="btn-secondary py-2 px-4 text-sm disabled:opacity-40 disabled:cursor-not-allowed"
-                  data-highlights-prev
-                  disabled
-                >
-                  Zurück
-                </button>
-                <span class="text-sm text-muted" data-highlights-page>
-                  1 / {highlightPages}
-                </span>
-                <button
-                  type="button"
-                  class="btn-secondary py-2 px-4 text-sm disabled:opacity-40 disabled:cursor-not-allowed"
-                  data-highlights-next
-                >
-                  Weiter
-                </button>
-              </div>
-            )}
-            <div class="mt-8 flex justify-center">
-              <a class="btn-secondary" href={highlightCta.href}>{highlightCta.label}</a>
-            </div>
-            {highlightHasPager && (
-              <script is:inline>
-                const grid = document.getElementById('highlights-grid');
-                const prevBtn = document.querySelector('[data-highlights-prev]');
-                const nextBtn = document.querySelector('[data-highlights-next]');
-                const pageLabel = document.querySelector('[data-highlights-page]');
-
-                if (grid) {
-                  const items = JSON.parse(grid.dataset.items || '[]');
-                  const pageSize = parseInt(grid.dataset.pageSize || '4', 10);
-                  const totalPages = Math.ceil(items.length / pageSize);
-                  let pageIndex = 0;
-
-                  const statusClass = (tone) =>
-                    tone === 'success'
-                      ? 'bg-success/15 text-success'
-                      : tone === 'warning'
-                        ? 'bg-warning/15 text-warning'
-                        : tone === 'muted'
-                          ? 'bg-muted/20 text-muted'
-                          : 'bg-surface/70 text-default';
-
-                  const renderCard = (item) => {
-                    const metricsCols = item.metrics.length === 3 ? 'grid-cols-3' : 'grid-cols-2';
-                    const titleClamp =
-                      'display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;';
-                    const regionClamp =
-                      'display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;';
-                    const metricsHtml = item.metrics
-                      .map(
-                        (metric) => `
-                          <div class=\"flex flex-col\">
-                            <span class=\"uppercase tracking-wide\">${metric.label}</span>
-                            <span class=\"text-sm font-semibold text-heading\">${metric.value}</span>
-                          </div>`
-                      )
-                      .join('');
-                    const chipsHtml =
-                      item.chips && item.chips.length
-                        ? `
-                          <div class=\"flex flex-wrap gap-2\">
-                            ${item.chips
-                              .map(
-                                (chip) => `
-                                  <span class=\"inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary\">
-                                    ${chip.label}: ${chip.value}
-                                  </span>`
-                              )
-                              .join('')}
-                          </div>`
-                        : '';
-                    return `
-                      <article class="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-card-border bg-card shadow-sm transition-transform duration-150 hover:-translate-y-1">
-                        <a href="${item.href}" class="absolute inset-0 z-10" aria-label="${item.title} – Details ansehen" tabindex="-1"></a>
-                        <div class="relative z-20 flex h-full flex-col">
-                          <div class="relative overflow-hidden rounded-xl">
-                            <div class="pt-[56.25%]"></div>
-                            <img src="${item.image}" alt="${item.imageAlt}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]" loading="lazy" width="1280" height="720" />
-                            <span class="absolute left-3 top-3 inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${statusClass(item.statusTone)}">${item.status}</span>
-                            <span class="absolute right-3 top-3 inline-flex items-center rounded-full bg-card/85 px-2.5 py-1 text-xs font-semibold text-default shadow-sm backdrop-blur border border-card-border/60">${item.category}</span>
-                          </div>
-                          <div class="flex flex-1 flex-col gap-3 px-1 pb-4 pt-4">
-                            <h3 class="text-base font-semibold leading-tight text-heading" style="${titleClamp}">${item.title}</h3>
-                            <p class="text-sm text-muted" style="${regionClamp}">${item.regionLabel}</p>
-                            <div class="grid ${metricsCols} gap-3 text-xs text-muted">
-                              ${metricsHtml}
-                            </div>
-                            ${chipsHtml}
-                            <div class="mt-auto flex flex-col gap-2 sm:flex-row">
-                              <a href="${item.href}" class="btn-primary h-11 w-full text-sm sm:w-auto">Details ansehen</a>
-                            </div>
-                          </div>
-                        </div>
-                      </article>`;
-                  };
-
-                  const render = () => {
-                    const start = pageIndex * pageSize;
-                    const pageItems = items.slice(start, start + pageSize);
-                    grid.innerHTML = pageItems.map(renderCard).join('');
-                    if (pageLabel) pageLabel.textContent = `${pageIndex + 1} / ${totalPages}`;
-                    if (prevBtn) prevBtn.disabled = pageIndex === 0;
-                    if (nextBtn) nextBtn.disabled = pageIndex >= totalPages - 1;
-                  };
-
-                  if (prevBtn) prevBtn.addEventListener('click', () => {
-                    if (pageIndex > 0) {
-                      pageIndex -= 1;
-                      render();
-                    }
-                  });
-
-                  if (nextBtn) nextBtn.addEventListener('click', () => {
-                    if (pageIndex < totalPages - 1) {
-                      pageIndex += 1;
-                      render();
-                    }
-                  });
-
-                  render();
-                }
-              </script>
-            )}
-          </>
-        );
-      })()
+    // Skip hidden sections or missing mappings
+    if (!section || !variantRule || variantRule.variant === 'hidden') {
+      return null;
     }
-  </section>
 
-  <Content
-    id={sellerSection.id ?? 'verkaeufer'}
-    tagline={sellerSection.tagline}
-    title={sellerSection.title}
-    subtitle={sellerSection.subtitle}
-    items={sellerSection.items ?? []}
-    image={sellerImage || undefined}
-  />
-
-  <Content
-    id={investorSection.id ?? 'investoren'}
-    isReversed={investorSection.isReversed ?? true}
-    tagline={investorSection.tagline}
-    title={investorSection.title}
-    subtitle={investorSection.subtitle}
-    items={investorSection.items ?? []}
-    image={investorImage || undefined}
-  />
-
-  <Stats id={statsSection.id ?? 'trust'} stats={statsSection.items ?? statsSection.stats ?? []} />
-
-  <Features2
-    id={regionsSection.id ?? 'regionen'}
-    tagline={regionsSection.tagline}
-    title={regionsSection.title}
-    subtitle={regionsSection.subtitle}
-    columns={regionsSection.columns ?? 3}
-    items={regionsSection.items ?? []}
-  />
-
-  <Features2
-    id={servicesSection.id ?? 'leistungen'}
-    tagline={servicesSection.tagline}
-    title={servicesSection.title}
-    subtitle={servicesSection.subtitle}
-    columns={servicesSection.columns ?? 3}
-    items={servicesSection.items ?? []}
-  />
-
-  <Content
-    id={aboutSection.id ?? 'ueber-uns'}
-    tagline={aboutSection.tagline}
-    title={aboutSection.title}
-    subtitle={aboutSection.subtitle}
-    items={aboutSection.items ?? []}
-    image={aboutImage || undefined}
-  />
-
-  <CallToAction id={ctaSection.id ?? 'cta'} actions={ctaSection.actions ?? []}>
-    <Fragment slot="title">{ctaSection.title}</Fragment>
-    <Fragment slot="subtitle">{ctaSection.subtitle}</Fragment>
-  </CallToAction>
-
-  <Contact
-    id={contactSection.id ?? 'kontakt'}
-    tagline={contactSection.tagline}
-    title={contactSection.title}
-    subtitle={contactSection.subtitle}
-    inputs={contactSection.inputs ?? []}
-    textarea={contactSection.textarea}
-    button={contactSection.button}
-  >
-    <Fragment slot="info">
-      <div class="space-y-4">
-        <p class="text-sm uppercase tracking-wide text-secondary">{contactInfo.label ?? 'Kontaktinfos'}</p>
-        <h3 class="text-xl font-semibold">{contactInfo.firma}</h3>
-        <dl class="space-y-2 text-sm">
-          <div class="flex items-center justify-between">
-            <dt class="text-muted">Ansprechpartner</dt>
-            <dd class="font-medium">{contactInfo.ansprechpartner}</dd>
-          </div>
-          <div class="flex items-center justify-between">
-            <dt class="text-muted">Antwortzeit</dt>
-            <dd class="font-medium">{contactInfo.antwortzeit}</dd>
-          </div>
-        </dl>
-        <p class="text-xs text-muted">{contactInfo.hinweis}</p>
-      </div>
-    </Fragment>
-  </Contact>
+    return (
+      <SectionRenderer
+        section={section}
+        variant={variantRule.variant}
+        debug={false}
+      />
+    );
+  })}
 </Layout>

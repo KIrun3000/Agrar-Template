@@ -1,0 +1,67 @@
+{
+  "url": "https://agrarboden.de",
+  "slug": "agrarboden",
+  "runMode": "scrape-only",
+  "startedAt": "2026-01-29T03:27:45.016Z",
+  "finishedAt": "2026-01-29T03:33:56.882Z",
+  "durationMs": 371866,
+  "configPath": "/Users/lucaingenbleek/conductor/workspaces/astrowind/kiev/config/firecrawl.makler.json",
+  "configHash": "8918f024b831d423268dd254cc90d8cccd987c929ef251b3c156a733fb279db8",
+  "timeoutSeconds": 180,
+  "pollInterval": 5,
+  "jobIds": [
+    "019c07ca-ed11-75bd-a5f9-97b7f367e108",
+    "019c07cd-c3fa-73e9-af11-1ef57949aa8b"
+  ],
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-01-29T03:27:45.017Z",
+      "finishedAt": "2026-01-29T03:30:50.030Z",
+      "durationMs": 185013,
+      "exitCode": 1,
+      "signal": "SIGTERM",
+      "timedOut": true,
+      "jobId": "019c07ca-ed11-75bd-a5f9-97b7f367e108",
+      "overrides": null,
+      "status": "scraping",
+      "completed": 0,
+      "total": 15,
+      "errorsCount": 0,
+      "cancelled": true
+    },
+    {
+      "index": 2,
+      "startedAt": "2026-01-29T03:30:51.034Z",
+      "finishedAt": "2026-01-29T03:33:56.043Z",
+      "durationMs": 185009,
+      "exitCode": 1,
+      "signal": "SIGTERM",
+      "timedOut": true,
+      "jobId": "019c07cd-c3fa-73e9-af11-1ef57949aa8b",
+      "overrides": {
+        "limit": 8,
+        "maxDepth": 2,
+        "maxConcurrency": 1,
+        "delayMs": 1000,
+        "sitemap": "skip"
+      },
+      "status": "scraping",
+      "completed": 0,
+      "total": 1,
+      "errorsCount": 0,
+      "cancelled": true
+    }
+  ],
+  "result": "fallback",
+  "fallback": "scrape",
+  "fallbackReason": "stalled",
+  "artifacts": {
+    "map": "raw/firecrawl/agrarboden/map.json",
+    "crawl": "raw/firecrawl/agrarboden/crawl.json",
+    "status": "raw/firecrawl/agrarboden/status.json",
+    "errors": "raw/firecrawl/agrarboden/errors.json",
+    "violations": null
+  },
+  "updatedAt": "2026-01-29T03:34:40.121Z"
+}

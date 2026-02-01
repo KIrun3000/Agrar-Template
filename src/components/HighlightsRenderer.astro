@@ -1,0 +1,72 @@
+---
+/**
+ * HighlightsRenderer.astro - Highlights Variant Renderer
+ *
+ * Selects and renders appropriate highlights variant based on content.
+ * Part of Phase 3: Highlights variants implementation.
+ */
+import type { ListingItem } from '~/lib/autofit/widget-props';
+import { normalizeHighlights, selectHighlightsVariant } from '~/lib/autofit/highlights';
+
+// Import all highlights variant components
+import Highlights from '~/components/Highlights/Highlights.astro';
+import HighlightsFew from '~/components/Highlights/HighlightsFew.astro';
+import HighlightsMany from '~/components/Highlights/HighlightsMany.astro';
+import HighlightsDiscreet from '~/components/Highlights/HighlightsDiscreet.astro';
+import HighlightsNoImage from '~/components/Highlights/HighlightsNoImage.astro';
+
+interface Props {
+  config: Record<string, unknown>;
+  listings: ListingItem[];
+  debug?: boolean;
+}
+
+const { config, listings, debug = false } = Astro.props;
+
+// Normalize and select variant
+const normalized = normalizeHighlights(config, listings);
+const variantRule = selectHighlightsVariant(normalized);
+
+// Manual override check
+const manualVariant = config.variant as string | undefined;
+const finalVariant = manualVariant && ['default', 'few', 'many', 'discreet', 'no-image'].includes(manualVariant)
+  ? manualVariant
+  : variantRule.variant;
+
+// Component mapping
+const componentMap: Record<string, any> = {
+  default: Highlights,
+  few: HighlightsFew,
+  many: HighlightsMany,
+  discreet: HighlightsDiscreet,
+  'no-image': HighlightsNoImage,
+};
+
+const Component = componentMap[finalVariant] || Highlights;
+
+// Debug mode
+const DEBUG_CONSOLE = (import.meta.env.DEBUG_AUTOFIT && String(import.meta.env.DEBUG_AUTOFIT) === 'true') || debug;
+const DEBUG_VISUAL = import.meta.env.MODE === 'development' && DEBUG_CONSOLE;
+
+if (DEBUG_CONSOLE) {
+  console.log(
+    `[Autofit] highlights → ${finalVariant} | Listings: ${normalized.meta.listingCount}, Images: ${normalized.meta.hasImages}, Discreet: ${normalized.meta.isDiscreet}`
+  );
+  if (manualVariant) {
+    console.log(`[Autofit] highlights manual override: ${manualVariant}`);
+  }
+}
+---
+
+{DEBUG_VISUAL && (
+  <div class="bg-warning/10 border border-warning p-4 mb-4 text-xs font-mono mx-auto max-w-6xl px-6">
+    <strong>Highlights Debug:</strong> variant={finalVariant}
+    {manualVariant && <span> (manual override)</span>}
+    <br />Listings: {normalized.meta.listingCount} | Images: {normalized.meta.hasImages ? 'Yes' : 'No'} | Discreet: {
+      normalized.meta.isDiscreet ? 'Yes' : 'No'
+    }
+    <br />Reason: {variantRule.reason}
+  </div>
+)}
+
+<Component {...normalized.data} />

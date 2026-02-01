@@ -1,0 +1,35 @@
+{
+  "success": true,
+  "data": {
+    "links": [
+      {
+        "url": "https://limbeck-immo.de/post-sitemap.xml"
+      },
+      {
+        "url": "https://limbeck-immo.de",
+        "title": "Limbeck Immobilien KG",
+        "description": "Limbeck Immobilien KG – Ihr Partner für den Kauf, Verkauf, Pacht und Bewertung von land- und forstwirtschaftlichen Immobilien und Flächen"
+      },
+      {
+        "url": "https://limbeck-immo.de/page-sitemap.xml"
+      },
+      {
+        "url": "https://limbeck-immo.de/impressum",
+        "title": "Impressum - limbeck-immo.de",
+        "description": "Impressum Limbeck Immobilien KGAm Emspfad 14, 49716 MeppenTelefon: +495931 49661-0E-Mail: info@limbeck-immo.deVertretungsberechtigter Gesellschafter: Clemens..."
+      },
+      {
+        "url": "https://limbeck-immo.de/category-sitemap.xml"
+      },
+      {
+        "url": "https://limbeck-immo.de/sitemap_index.xml"
+      },
+      {
+        "url": "https://limbeck-immo.de/kaufen-und-verkaufen"
+      },
+      {
+        "url": "https://limbeck-immo.de/pachten-und-verpachten"
+      }
+    ]
+  }
+}

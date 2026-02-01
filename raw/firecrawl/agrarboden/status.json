@@ -1,0 +1,18 @@
+{
+  "fetchedAt": "2026-01-29T03:33:56.761Z",
+  "jobId": "019c07cd-c3fa-73e9-af11-1ef57949aa8b",
+  "response": {
+    "ok": true,
+    "status": 200,
+    "data": {
+      "success": true,
+      "status": "scraping",
+      "completed": 0,
+      "total": 1,
+      "creditsUsed": 0,
+      "expiresAt": "2026-01-30T03:33:56.000Z",
+      "next": "https://api.firecrawl.dev/v2/crawl/019c07cd-c3fa-73e9-af11-1ef57949aa8b?skip=0",
+      "data": []
+    }
+  }
+}

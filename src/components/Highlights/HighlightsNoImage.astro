@@ -1,0 +1,82 @@
+---
+/**
+ * HighlightsNoImage.astro - No-Image Listings Variant
+ *
+ * For listings without images. Uses list-style layout
+ * focusing on text content (title, location, metrics).
+ */
+import type { HighlightsProps } from '~/lib/autofit/widget-props';
+
+interface Props extends HighlightsProps {}
+
+const { eyebrow, title, subtitle, listings, cta } = Astro.props;
+---
+
+<section id="highlights" class="px-6 sm:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-4xl">
+  {
+    (eyebrow || title || subtitle) && (
+      <div class="mb-8 text-center">
+        {eyebrow && <p class="text-sm uppercase tracking-wide text-secondary">{eyebrow}</p>}
+        {title && <h2 class="text-3xl font-bold text-heading mt-2">{title}</h2>}
+        {subtitle && <p class="text-muted mt-3 max-w-2xl mx-auto">{subtitle}</p>}
+      </div>
+    )
+  }
+
+  <!-- List-style layout for no-image listings -->
+  <div class="space-y-3">
+    {
+      listings.map((listing) => (
+        <a
+          href={listing.href}
+          class="block p-5 bg-card border border-card-border rounded-lg hover:border-primary hover:shadow-md transition-all"
+        >
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            {/* Left: Title and location */}
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                {listing.status && (
+                  <span class="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-success/10 text-success rounded">
+                    {listing.status}
+                  </span>
+                )}
+                {listing.category && (
+                  <span class="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-secondary/10 text-secondary rounded">
+                    {listing.category}
+                  </span>
+                )}
+              </div>
+              <h3 class="text-lg font-semibold text-heading">{listing.title}</h3>
+              {listing.regionLabel && <p class="text-sm text-muted mt-1">{listing.regionLabel}</p>}
+            </div>
+
+            {/* Right: Metrics */}
+            {listing.metrics && listing.metrics.length > 0 && (
+              <div class="flex gap-4 sm:gap-6 text-sm">
+                {listing.metrics.map((metric) => (
+                  <div class="text-center">
+                    <p class="text-xs text-muted">{metric.label}</p>
+                    <p class="font-semibold text-heading mt-0.5">{metric.value}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </a>
+      ))
+    }
+  </div>
+
+  {
+    cta?.href && cta?.label && (
+      <div class="mt-8 text-center">
+        <a
+          href={cta.href}
+          class="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-primary border-2 border-primary hover:bg-primary hover:text-page rounded-md transition-colors"
+        >
+          {cta.label}
+        </a>
+      </div>
+    )
+  }
+</section>

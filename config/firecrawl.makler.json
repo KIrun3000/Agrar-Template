@@ -1,0 +1,33 @@
+{
+  "excludePaths": [
+    "/angebote",
+    "/angebot",
+    "/aktuelle-angebote",
+    "/immobilien",
+    "/objekte",
+    "/expose",
+    "/exposé",
+    "/listing",
+    "/property",
+    "/inserat",
+    "/kaufen",
+    "/mieten"
+  ],
+  "includePaths": [
+    "/",
+    "/ueber-uns",
+    "/leistungen",
+    "/kontakt",
+    "/impressum",
+    "/datenschutz",
+    "/presse"
+  ],
+  "limit": 8,
+  "maxDepth": 2,
+  "delayMs": 1000,
+  "maxConcurrency": 2,
+  "sitemap": "include",
+  "pollInterval": 5,
+  "retrySitemap": "skip",
+  "timeout": 180
+}
