@@ -1,0 +1,15 @@
+{
+  "url": "https://limbeck-immo.de/",
+  "slug": "limbeck-immo",
+  "configPath": "/Users/lucaingenbleek/conductor/workspaces/astrowind/kiev/config/firecrawl.makler.json",
+  "targets": [
+    "https://limbeck-immo.de/",
+    "https://limbeck-immo.de/ueber-uns",
+    "https://limbeck-immo.de/leistungen",
+    "https://limbeck-immo.de/kontakt",
+    "https://limbeck-immo.de/impressum",
+    "https://limbeck-immo.de/datenschutz",
+    "https://limbeck-immo.de/presse"
+  ],
+  "generatedAt": "2026-01-29T05:01:02.312Z"
+}

@@ -31,6 +31,7 @@ Neutrales Basis-Template auf Grundlage von **AstroWind** für Agrar- und Immobil
 <summary>Table of Contents</summary>
 
 - [Demo](#demo)
+- [Branding & Conductor](#branding--conductor)
 - [Verwendung als Template](#verwendung-als-template)
 - [Upcoming: AstroWind 2.0 – We Need Your Vision!](#-upcoming-astrowind-20--we-need-your-vision)
 - [TL;DR](#tldr)
@@ -52,6 +53,34 @@ Neutrales Basis-Template auf Grundlage von **AstroWind** für Agrar- und Immobil
 ## Demo
 
 📌 Lokale Vorschau: `npm run dev` (Standard: http://localhost:4321)
+
+<br>
+
+## Branding & Conductor
+
+Dieses Template ist Conductor-ready: **Branding global**, **Content nur auf der Startseite**.
+
+- Brand/CI + Home-Content liegen in `src/data/brands/<slug>/`.
+- Aktiven Brand über ENV wählen: `BRAND_SLUG=demo_makler npm run dev`.
+- Beispiel-Brand inkl. Assets: `src/data/brands/demo_makler/` + `public/brands/demo_makler/`.
+- Validierung: `npm run validate:brands` (prüft Schema + Asset-Pfade).
+- Manifeste generieren: `npm run generate:manifests` (resolved Brand/Home in `out/brands/<slug>`).
+- Vertrag/Schema: siehe `CONDUCTOR_CONTRACT.md`.
+
+Typische Fehler:
+- Fehlende Assets (z.B. `brand.assets.logo.svg` zeigt auf nicht vorhandene Datei).
+- Ungültige Form-Feldnamen (`name` muss mit Buchstabe starten, nur A-Z/0-9/_).
+- Hero-Actions ohne `variant` (`primary|secondary|tertiary`) oder ohne `href`.
+- Dark-Rescue ist nur **Übergang**: neue Komponenten müssen Tokens nutzen (`bg-card`, `bg-surface`, `text-heading`, `border-card-border`). Rescue greift ausschließlich in `html.dark main`, nutzt `!important`, und überschreibt nur Legacy-Utilities. Escape-Hatch (Element **oder** Vorfahre): `.allow-white` / `[data-allow-white]` → setzt nur die betroffenen Legacy-Utilities (bg-white*, border-*, text-slate*/gray*) zurück.
+- Claude-Extraktionen können zusätzliche Felder wie `brand.tagline` oder `brand.themeHint` liefern; diese sind im Extraction-Schema optional unterstützt.
+
+### 7-Tage-Prototyp-Workflow (Option A)
+1) Neues Conductor-Workspace auf Basis des Templates starten, Branch z. B. `prospect/<slug>` verwenden.
+2) Extraction JSON ablegen unter `out/extractions/<slug>/extraction.json`.
+3) Generator ausführen: `npm run generate:prospect -- --slug=<slug>` (optional `--input=/pfad/zur/extraction.json`).
+4) Validierung läuft mit (`npm run validate:brands`); bei Fehlern Pfade/Felder prüfen.
+5) Preview: `BRAND_SLUG=<slug> npm run dev` (Conductor nutzt `conductor.json`, Port wird automatisch gesetzt).
+6) Commits: Echte/abgenommene Brands committen; Prospect-Brands bevorzugt in eigenen `prospect/<slug>`-Branches oder lokal lassen, um main clean zu halten.
 
 <br>
 
@@ -163,6 +192,16 @@ All commands are run from the root of the project, from a terminal:
 | `npm run check`     | Check your project for errors                      |
 | `npm run fix`       | Run Eslint and format codes with Prettier          |
 | `npm run astro ...` | Run CLI commands like `astro add`, `astro preview` |
+
+## Firecrawl tooling
+
+- Install/auth: `npm install -g firecrawl-cli`; set `FIRECRAWL_API_KEY` (see `.env.example`) or run `firecrawl login`. Ensure your npm global bin is on `PATH` (e.g. `PATH=$(npm config get prefix)/bin:$PATH firecrawl --status`).
+- Outputs live in `raw/firecrawl/<slug>/` (`map.json`, `crawl.json` when crawl succeeds, `meta.json`, optional `status.json`, `errors.json`, `violations.json`, `scrape/`, `pages/`, `images.json`, `branding.json`). Map supports `--json --pretty` (no `--wait`); crawl is job-based and supports `--wait`/`--poll-interval`/`--timeout`. Scrape-only fallback writes `raw/firecrawl/<slug>/scrape/*.json`.
+- Example runs: `npm run firecrawl:map -- --url https://example.com --slug example` (JSON output) and `npm run firecrawl:crawl -- --url https://example.com --slug example` (wait + progress + pretty JSON).
+- Secrets: keep `.env.local` uncommitted (gitignored). If a key ever gets committed, rotate it immediately.
+- Makler flow (summary — see `docs/firecrawl-makler-workflow.md`): status → map → crawl (uses `config/firecrawl.makler.json`, with includePaths defaulted to a safe set) → `npm run brand:from-firecrawl -- --slug <slug>` → `BRAND_SLUG=<slug> npm run build`. No-listings policy enforced; violations saved to `raw/firecrawl/<slug>/violations.json`.
+- One-command shortcut: `npm run relaunch:from-url -- --url https://example.com --slug example --mode generate|build|dev|scrape` (default mode is `generate`; runs status → map → crawl → generate → validate; `--mode dev` prints the `BRAND_SLUG=<slug> npm run dev` hint; `--mode scrape` skips crawl and uses scrape-only fallback).
+- Skill install note: Firecrawl Skill is added for agents; if a harness does not detect it immediately, restart the agent/Conductor session so skills are reloaded.
 
 <br>
 

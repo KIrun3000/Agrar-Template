@@ -1,0 +1,88 @@
+{
+  "name": "Muster Agrarimmobilien",
+  "colors": {
+    "light": {
+      "primary": "55 116 73",
+      "secondary": "92 121 84",
+      "accent": "197 139 78",
+      "textHeading": "0 0 0",
+      "textDefault": "16 16 16",
+      "textMuted": "16 16 16",
+      "textMutedAlpha": 0.66,
+      "bgPage": "255 255 255",
+      "bgPageDark": "3 6 32",
+      "surface": "255 255 255",
+      "border": "226 232 240",
+      "ring": "16 185 129",
+      "success": "16 185 129",
+      "warning": "245 158 11",
+      "muted": "100 116 139",
+      "card": "255 255 255",
+      "cardBorder": "226 232 240",
+      "danger": "220 38 38",
+      "onPrimary": "255 255 255",
+      "onSecondary": "255 255 255",
+      "onAccent": "255 255 255"
+    },
+    "dark": {
+      "primary": "93 181 128",
+      "secondary": "140 166 128",
+      "accent": "214 167 109",
+      "textHeading": "247 248 248",
+      "textDefault": "229 236 246",
+      "textMuted": "229 236 246",
+      "textMutedAlpha": 0.66,
+      "bgPage": "3 6 32",
+      "bgPageDark": "3 6 32",
+      "surface": "15 23 42",
+      "border": "31 41 55",
+      "ring": "93 181 128",
+      "success": "93 181 128",
+      "warning": "245 158 11",
+      "muted": "148 163 184",
+      "card": "15 23 42",
+      "cardBorder": "30 41 59",
+      "danger": "248 113 113",
+      "onPrimary": "15 23 42",
+      "onSecondary": "15 23 42",
+      "onAccent": "15 23 42"
+    }
+  },
+  "typography": {
+    "sans": "Inter Variable",
+    "serif": "Inter Variable",
+    "heading": "Inter Variable"
+  },
+  "assets": {
+    "logo": {
+      "svg": null,
+      "png": null
+    },
+    "favicon": {
+      "ico": null,
+      "svg": null,
+      "appleTouch": null,
+      "maskColor": "#8D46E7"
+    },
+    "ogImage": {
+      "url": null,
+      "width": 1200,
+      "height": 628
+    }
+  },
+  "ui": {
+    "radius": {
+      "sm": "0.25rem",
+      "md": "0.5rem",
+      "lg": "0.75rem",
+      "xl": "1rem",
+      "2xl": "1.25rem"
+    },
+    "shadow": {
+      "sm": "0 1px 2px 0 rgb(15 23 42 / 0.08)",
+      "md": "0 10px 30px rgb(15 23 42 / 0.12)",
+      "lg": "0 25px 50px rgb(15 23 42 / 0.15)"
+    }
+  },
+  "evidence": {}
+}

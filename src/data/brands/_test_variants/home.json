@@ -1,0 +1,140 @@
+{
+  "metadata": {
+    "title": "Test Variants – Phase 2 Autofit Demonstration",
+    "description": "Test brand demonstrating Phase 2 variant system with manual overrides and autofit logic.",
+    "ignoreTitleTemplate": true
+  },
+  "hero": {
+    "title": "Phase 2 Variant System Test",
+    "subtitle": "This test brand demonstrates manual variant overrides (longform, compact, grid, minimal) and autofit logic.",
+    "actions": [
+      { "variant": "primary", "text": "Explore Variants", "href": "#stats" },
+      { "variant": "secondary", "text": "View Documentation", "href": "/docs" }
+    ]
+  },
+  "highlights": {
+    "eyebrow": "Test Highlights",
+    "title": "Variant Testing",
+    "subtitle": "This section demonstrates the highlights feature.",
+    "pageSize": 3,
+    "source": "angebote"
+  },
+  "sectionsOrder": ["seller", "investor", "stats", "regions", "services", "about", "cta", "contact"],
+  "sections": {
+    "seller": {
+      "id": "seller-longform",
+      "variant": "longform",
+      "tagline": "Variant Override",
+      "title": "Seller Section (Longform Variant)",
+      "subtitle": "This section has variant: 'longform' explicitly set. It should use ContentLongform.astro with generous vertical spacing.",
+      "items": [
+        {
+          "title": "Extended Content Test",
+          "description": "This is a long description to test the longform variant.\n\n• Multiple paragraphs with bullets\n• Generous spacing between items\n• Leading-relaxed text treatment\n\nThe longform variant is designed for extended text content with multiple items and structured formatting."
+        },
+        { "title": "Item 2", "description": "Additional content for testing" },
+        { "title": "Item 3", "description": "More content" },
+        { "title": "Item 4", "description": "Even more content" }
+      ],
+      "image": {
+        "src": "/images/stock/stock_fuer-verkaeufer.webp",
+        "alt": "Test Image",
+        "width": 2649,
+        "height": 1535
+      }
+    },
+    "investor": {
+      "id": "investor-compact",
+      "variant": "compact",
+      "tagline": "Variant Override",
+      "title": "Investor Section (Compact Variant)",
+      "subtitle": "This section has variant: 'compact' explicitly set. It should use ContentCompact.astro with minimal spacing.",
+      "items": [
+        {
+          "title": "Compact Layout",
+          "description": "Tight spacing, smaller text, minimal vertical padding."
+        }
+      ],
+      "image": {
+        "src": "/images/stock/stock_fuer-investoren.webp",
+        "alt": "Test Image",
+        "width": 2645,
+        "height": 1534
+      },
+      "isReversed": true
+    },
+    "stats": {
+      "id": "stats-grid",
+      "variant": "grid",
+      "items": [
+        { "title": "Grid Variant", "amount": "Test 1" },
+        { "title": "4+ Items", "amount": "Test 2" },
+        { "title": "Grid Layout", "amount": "Test 3" },
+        { "title": "Manual Override", "amount": "Test 4" }
+      ]
+    },
+    "regions": {
+      "id": "regions-grid2",
+      "variant": "grid-2",
+      "tagline": "Variant Override",
+      "title": "Regions (Grid-2 Variant)",
+      "subtitle": "This section has variant: 'grid-2' set. It should display in a 2-column grid.",
+      "items": [
+        { "title": "Region 1", "description": "2-column grid layout", "icon": "flat-color-icons:approval" },
+        { "title": "Region 2", "description": "Explicit override", "icon": "flat-color-icons:gallery" }
+      ]
+    },
+    "services": {
+      "id": "services-compact",
+      "variant": "compact",
+      "tagline": "Variant Override",
+      "title": "Services (Compact Variant)",
+      "subtitle": "This section has variant: 'compact' set. It should use Features2Compact.astro with reduced spacing.",
+      "items": [
+        { "title": "Service 1", "description": "Compact feature cards", "icon": "flat-color-icons:advertising" },
+        { "title": "Service 2", "description": "Smaller padding", "icon": "flat-color-icons:currency-exchange" },
+        { "title": "Service 3", "description": "Reduced shadow", "icon": "flat-color-icons:business-contact" }
+      ]
+    },
+    "about": {
+      "id": "about-autofit",
+      "tagline": "Autofit Logic",
+      "title": "About Section (No Override - Autofit)",
+      "subtitle": "This section has NO variant override. Autofit logic will select default variant based on content characteristics.",
+      "items": [
+        {
+          "title": "Autofit Selection",
+          "description": "The autofit system analyzes:\n• Text density (short/normal/long)\n• Content signals (bullets, paragraphs)\n• Item count\n• Media presence\n\nBased on these signals, it selects the appropriate variant automatically."
+        }
+      ],
+      "image": {
+        "src": "/images/stock/stock_ueber-uns.webp",
+        "alt": "Test Image",
+        "width": 2816,
+        "height": 1536
+      }
+    },
+    "cta": {
+      "id": "cta-minimal",
+      "variant": "minimal",
+      "title": "CTA (Minimal Variant)",
+      "subtitle": "This section has variant: 'minimal' set. No border, no shadow, simple design.",
+      "actions": [
+        { "variant": "primary", "text": "Minimal CTA", "href": "#contact" }
+      ]
+    },
+    "contact": {
+      "id": "contact-minimal",
+      "variant": "minimal",
+      "tagline": "Variant Override",
+      "title": "Contact (Minimal Variant)",
+      "subtitle": "This section has variant: 'minimal' set. It should use ContactMinimal.astro (form only, no info panel).",
+      "inputs": [
+        { "label": "Name", "name": "name", "type": "text", "placeholder": "Your Name" },
+        { "label": "Email", "name": "email", "type": "email", "placeholder": "your@email.com", "autocomplete": "email" }
+      ],
+      "textarea": { "label": "Message", "name": "message", "placeholder": "Your message..." },
+      "button": "Send Test Message"
+    }
+  }
+}

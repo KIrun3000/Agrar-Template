@@ -1,0 +1,12 @@
+{
+  "fetchedAt": "2026-01-29T03:33:56.762Z",
+  "jobId": "019c07cd-c3fa-73e9-af11-1ef57949aa8b",
+  "response": {
+    "ok": true,
+    "status": 200,
+    "data": {
+      "errors": [],
+      "robotsBlocked": []
+    }
+  }
+}

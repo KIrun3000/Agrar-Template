@@ -1,0 +1,15 @@
+{
+  "url": "https://agrarboden.de",
+  "slug": "agrarboden",
+  "configPath": "/Users/lucaingenbleek/conductor/workspaces/astrowind/kiev/config/firecrawl.makler.json",
+  "targets": [
+    "https://agrarboden.de/",
+    "https://agrarboden.de/ueber-uns",
+    "https://agrarboden.de/leistungen",
+    "https://agrarboden.de/kontakt",
+    "https://agrarboden.de/impressum",
+    "https://agrarboden.de/datenschutz",
+    "https://agrarboden.de/presse"
+  ],
+  "generatedAt": "2026-01-29T03:33:56.923Z"
+}

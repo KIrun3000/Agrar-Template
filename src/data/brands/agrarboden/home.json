@@ -1,0 +1,179 @@
+{
+  "metadata": {
+    "title": "Ihr Partner für Agrar- und Forstimmobilien - Agrarboden",
+    "description": "Agrarboden unterstützt Sie deutschlandweit beim Verkauf und Kauf von landwirtschaftlichen Betrieben, Eigenjagden, Ackerland und Forst. Agrarmakler seit 1960.",
+    "ignoreTitleTemplate": true
+  },
+  "hero": {
+    "title": "Ihr Partner für Agrarimmobilien und Forst seit 1960",
+    "subtitle": "[Zum Inhalt springen](https://www.agrarboden.de/content \"Zum Inhalt springen\")",
+    "actions": [
+      {
+        "variant": "primary",
+        "text": "Kaufen",
+        "href": "/angebote"
+      },
+      {
+        "variant": "secondary",
+        "text": "Verkaufen",
+        "href": "/#kontakt"
+      }
+    ],
+    "video": {
+      "poster": "/media/167754-838892766_medium.mp4",
+      "sources": [
+        {
+          "src": "/media/167754-838892766_medium.webm",
+          "type": "video/webm"
+        },
+        {
+          "src": "/media/167754-838892766_medium.mp4",
+          "type": "video/mp4"
+        }
+      ]
+    },
+    "overlay": {
+      "light": "from-page/40 via-page/20 to-page/5",
+      "dark": "from-page/70 via-page/50 to-page/90"
+    }
+  },
+  "highlights": {
+    "eyebrow": "Highlights (Demo)",
+    "title": "Keine echten Inserate",
+    "subtitle": "Platzhalter ohne reale Objektdaten. Bitte eigene Highlights pflegen.",
+    "source": "custom",
+    "variant": "discreet",
+    "items": [
+      {
+        "title": "Diskrete Vermarktung",
+        "description": "Referenzen auf Anfrage. Keine Live-Angebote."
+      },
+      {
+        "title": "Markt-Know-how",
+        "description": "Regionale Expertise und Investoren-Netzwerk."
+      },
+      {
+        "title": "Individuelle Beratung",
+        "description": "Strategie, Bewertung und Transaktionsbegleitung."
+      }
+    ]
+  },
+  "sections": {
+    "seller": {
+      "title": "Für Verkäufer",
+      "subtitle": "Diskrete Vermittlung, Marktpreiseinschätzung und strukturierte Prozesse."
+    },
+    "investor": {
+      "title": "Für Investoren",
+      "subtitle": "Kuratiertes Dealflow ohne öffentliche Exposés."
+    },
+    "stats": {
+      "id": "trust",
+      "items": [
+        {
+          "title": "Hektar vermittelt (letzte 3 Jahre)",
+          "amount": "2.500+"
+        },
+        {
+          "title": "Jahre Markterfahrung",
+          "amount": "15"
+        },
+        {
+          "title": "Länder & Regionen",
+          "amount": "8"
+        },
+        {
+          "title": "Durchschnittliche Antwortzeit",
+          "amount": "< 48h"
+        }
+      ]
+    },
+    "regions": {
+      "title": "Regionen",
+      "subtitle": "Fokus auf die Kernregionen des Kunden. Bitte bei Bedarf anpassen.",
+      "items": [
+        {
+          "title": "Region 1",
+          "description": "Bitte mit realen Regionen ersetzen."
+        },
+        {
+          "title": "Region 2",
+          "description": "Platzhalter – anpassen oder entfernen."
+        },
+        {
+          "title": "Region 3",
+          "description": "Platzhalter – anpassen oder entfernen."
+        }
+      ]
+    },
+    "services": {
+      "title": "Leistungen",
+      "columns": 3,
+      "items": [
+        {
+          "title": "Beratung",
+          "description": "Strategie, Bewertung und Transaktionsplanung."
+        },
+        {
+          "title": "Vermarktung",
+          "description": "Diskrete Ansprache passender Käufer und Investoren."
+        },
+        {
+          "title": "Begleitung",
+          "description": "Koordination bis zum Notartermin und darüber hinaus."
+        }
+      ]
+    },
+    "about": {
+      "title": "Über uns",
+      "subtitle": "Agrarboden – seit 1960 Ihr Partner für Agrarimmobilien und Forst"
+    },
+    "cta": {
+      "title": "Interesse? Lassen Sie uns sprechen.",
+      "actions": [
+        {
+          "variant": "primary",
+          "text": "Kontakt aufnehmen",
+          "href": "/#kontakt"
+        },
+        {
+          "variant": "secondary",
+          "text": "Mehr erfahren",
+          "href": "/#ueber-uns"
+        }
+      ]
+    },
+    "contact": {
+      "id": "kontakt",
+      "title": "Kontakt aufnehmen",
+      "subtitle": "Wir melden uns zeitnah zurück.",
+      "inputs": [
+        {
+          "label": "Name",
+          "name": "name",
+          "type": "text"
+        },
+        {
+          "label": "E-Mail",
+          "name": "email",
+          "type": "email"
+        },
+        {
+          "label": "Telefon",
+          "name": "phone",
+          "type": "tel"
+        }
+      ],
+      "textarea": {
+        "label": "Nachricht",
+        "name": "message"
+      },
+      "button": "Absenden",
+      "info": {
+        "email": "info@agrarboden.de",
+        "phone": "2024/08/                    \n\n                   \n\n                                                                                                               \n\n                              //                 /  -       /       /2024/08/                     \n\n           \n\n                                               60 000                                                               \n\n                              //                 /  -       /       /2024/08/                        \n\n                                                                                                                                          \n\n              -         \n\n                                                                                 \n\n               16                                                                                                                                       \n\n                                                                                                                                                                               \n\n                                                          -                                                                                                     \n\n                                                                                                         //                 /           /  \n\n                                                                                                           \n\n                                                              //                 /     -                 /                            \n\n                                                                                                                              \n\n                                                                                                                                                                                          49  1                                                                                             -                                                            -                                                                                                                                              \n\n                               -                                                                         -                                                      \n\n-           \n\n-          \n\n-          \n\n-               \n\n\n                   \n\n                      \n\n                        -           \n\n                                         //                 /           /                    //                 /         /",
+        "addressLine": "Ostenfelder Straße 14"
+      }
+    }
+  }
+}

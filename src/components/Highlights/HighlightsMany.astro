@@ -1,0 +1,137 @@
+---
+/**
+ * HighlightsMany.astro - Many Listings Variant
+ *
+ * For brands with 8+ listings. Uses compact 4-column grid
+ * with pagination controls and smaller cards.
+ */
+import type { HighlightsProps } from '~/lib/autofit/widget-props';
+import ListingCard from '~/components/listings/ListingCard.astro';
+
+interface Props extends HighlightsProps {}
+
+const { eyebrow, title, subtitle, listings, pageSize = 8, totalPages = 1, hasPager, cta } = Astro.props;
+
+// Serialize listings for client-side pagination
+const listingsPayload = JSON.stringify(listings).replace(/</g, '\\u003c');
+---
+
+<section id="highlights" class="px-6 sm:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-7xl">
+  {
+    (eyebrow || title || subtitle) && (
+      <div class="mb-8 text-center">
+        {eyebrow && <p class="text-sm uppercase tracking-wide text-secondary">{eyebrow}</p>}
+        {title && <h2 class="text-3xl font-bold text-heading mt-2">{title}</h2>}
+        {subtitle && <p class="text-muted mt-3 max-w-2xl mx-auto">{subtitle}</p>}
+      </div>
+    )
+  }
+
+  <!-- Compact 4-column grid for many listings -->
+  <div
+    id="highlights-grid"
+    data-items={listingsPayload}
+    data-page-size={pageSize}
+    data-total-pages={totalPages}
+    class="grid gap-4 grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+  >
+    {listings.slice(0, pageSize).map((listing) => (
+      <ListingCard listing={listing} variant="highlight" />
+    ))}
+  </div>
+
+  {
+    hasPager && (
+      <div class="mt-6 flex items-center justify-center gap-3">
+        <button
+          type="button"
+          class="btn-secondary py-2 px-4 text-sm disabled:opacity-40 disabled:cursor-not-allowed"
+          data-highlights-prev
+          disabled
+        >
+          Zurück
+        </button>
+        <span class="text-sm text-muted" data-highlights-page>
+          1 / {totalPages}
+        </span>
+        <button
+          type="button"
+          class="btn-secondary py-2 px-4 text-sm disabled:opacity-40 disabled:cursor-not-allowed"
+          data-highlights-next
+        >
+          Weiter
+        </button>
+      </div>
+    )
+  }
+
+  {
+    cta?.href && cta?.label && (
+      <div class="mt-8 text-center">
+        <a
+          href={cta.href}
+          class="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-primary border-2 border-primary hover:bg-primary hover:text-page rounded-md transition-colors"
+        >
+          {cta.label}
+        </a>
+      </div>
+    )
+  }
+</section>
+
+<script>
+  // Client-side pagination for highlights (many variant)
+  document.addEventListener('astro:page-load', () => {
+    const grid = document.getElementById('highlights-grid');
+    if (!grid) return;
+
+    const itemsData = grid.getAttribute('data-items');
+    const pageSize = parseInt(grid.getAttribute('data-page-size') || '8', 10);
+    const totalPages = parseInt(grid.getAttribute('data-total-pages') || '1', 10);
+
+    if (!itemsData || totalPages <= 1) return;
+
+    const items = JSON.parse(itemsData);
+    let currentPage = 1;
+
+    const prevBtn = document.querySelector('[data-highlights-prev]');
+    const nextBtn = document.querySelector('[data-highlights-next]');
+    const pageSpan = document.querySelector('[data-highlights-page]');
+
+    function renderPage(page: number) {
+      const start = (page - 1) * pageSize;
+      const end = start + pageSize;
+      const pageItems = items.slice(start, end);
+
+      // Update grid (simplified - assumes ListingCard structure)
+      grid.innerHTML = pageItems
+        .map(
+          (item: any) => `
+        <a href="${item.href}" class="block bg-card border border-card-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+          <img src="${item.image}" alt="${item.imageAlt}" class="w-full h-48 object-cover" loading="lazy" />
+          <div class="p-4">
+            <h3 class="font-semibold text-lg">${item.title}</h3>
+            <p class="text-sm text-muted">${item.regionLabel}</p>
+          </div>
+        </a>
+      `
+        )
+        .join('');
+
+      // Update controls
+      if (prevBtn) (prevBtn as HTMLButtonElement).disabled = page === 1;
+      if (nextBtn) (nextBtn as HTMLButtonElement).disabled = page === totalPages;
+      if (pageSpan) pageSpan.textContent = `${page} / ${totalPages}`;
+
+      currentPage = page;
+    }
+
+    prevBtn?.addEventListener('click', () => {
+      if (currentPage > 1) renderPage(currentPage - 1);
+    });
+
+    nextBtn?.addEventListener('click', () => {
+      if (currentPage < totalPages) renderPage(currentPage + 1);
+    });
+  });
+</script>

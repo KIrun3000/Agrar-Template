@@ -1,0 +1,67 @@
+{
+  "url": "https://limbeck-immo.de/",
+  "slug": "limbeck-immo",
+  "runMode": "scrape-only",
+  "startedAt": "2026-01-29T04:54:50.361Z",
+  "finishedAt": "2026-01-29T05:01:02.277Z",
+  "durationMs": 371916,
+  "configPath": "/Users/lucaingenbleek/conductor/workspaces/astrowind/kiev/config/firecrawl.makler.json",
+  "configHash": "2d0a33d5ef3e959d4dac01a2766f0b4526cbb081192f6faea907928f5a779646",
+  "timeoutSeconds": 180,
+  "pollInterval": 5,
+  "jobIds": [
+    "019c081a-a8d0-70ce-9cc4-e084899904d2",
+    "019c081d-7f04-76cb-ab3c-811db5ce4e7e"
+  ],
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-01-29T04:54:50.361Z",
+      "finishedAt": "2026-01-29T04:57:55.372Z",
+      "durationMs": 185011,
+      "exitCode": 1,
+      "signal": "SIGTERM",
+      "timedOut": true,
+      "jobId": "019c081a-a8d0-70ce-9cc4-e084899904d2",
+      "overrides": null,
+      "status": "scraping",
+      "completed": 0,
+      "total": 8,
+      "errorsCount": 0,
+      "cancelled": true
+    },
+    {
+      "index": 2,
+      "startedAt": "2026-01-29T04:57:56.234Z",
+      "finishedAt": "2026-01-29T05:01:01.241Z",
+      "durationMs": 185007,
+      "exitCode": 1,
+      "signal": "SIGTERM",
+      "timedOut": true,
+      "jobId": "019c081d-7f04-76cb-ab3c-811db5ce4e7e",
+      "overrides": {
+        "limit": 8,
+        "maxDepth": 2,
+        "maxConcurrency": 1,
+        "delayMs": 1000,
+        "sitemap": "skip"
+      },
+      "status": "scraping",
+      "completed": 0,
+      "total": 1,
+      "errorsCount": 0,
+      "cancelled": true
+    }
+  ],
+  "result": "fallback",
+  "fallback": "scrape",
+  "fallbackReason": "stalled",
+  "artifacts": {
+    "map": "raw/firecrawl/limbeck-immo/map.json",
+    "crawl": null,
+    "status": "raw/firecrawl/limbeck-immo/status.json",
+    "errors": "raw/firecrawl/limbeck-immo/errors.json",
+    "violations": null
+  },
+  "updatedAt": "2026-01-29T05:01:36.845Z"
+}

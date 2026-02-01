@@ -1,0 +1,201 @@
+---
+import type { NormalizedSection } from '~/lib/autofit/normalize';
+import type { VariantKey } from '~/lib/autofit/rules';
+import { getWidgetMapping, getWidgetProps } from '~/lib/autofit/registry';
+
+// Static imports of all widgets (default variants)
+import Content from '~/components/widgets/Content.astro';
+import Stats from '~/components/widgets/Stats.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import Contact from '~/components/widgets/Contact.astro';
+
+// Phase 2: Import variant components
+import ContentLongform from '~/components/widgets/Content/ContentLongform.astro';
+import ContentCompact from '~/components/widgets/Content/ContentCompact.astro';
+import Features2Compact from '~/components/widgets/Features2/Features2Compact.astro';
+import CallToActionMinimal from '~/components/widgets/CallToAction/CallToActionMinimal.astro';
+import ContactMinimal from '~/components/widgets/Contact/ContactMinimal.astro';
+
+interface Props {
+  section: NormalizedSection;
+  variant: VariantKey;
+  debug?: boolean;
+}
+
+const { section, variant, debug = false } = Astro.props;
+
+// Phase 2: Debug mode flags
+const DEBUG_CONSOLE = (import.meta.env.DEBUG_AUTOFIT && String(import.meta.env.DEBUG_AUTOFIT) === 'true') || debug;
+const DEBUG_VISUAL = import.meta.env.MODE === 'development' && DEBUG_CONSOLE;
+
+// Log variant selection in server-side console (works in dev and build)
+if (DEBUG_CONSOLE) {
+  console.log(`[Autofit] ${section.key} → ${variant} | Items: ${section.meta.itemsCount}, Media: ${section.meta.hasMedia}, Text: ${section.meta.textDensity}`);
+}
+
+// Get widget mapping from registry
+const mapping = getWidgetMapping(section.key, variant);
+
+if (!mapping) {
+  // Graceful degradation: log warning, skip rendering
+  if (debug) {
+    console.warn(`[SectionRenderer] No mapping for ${section.key}.${variant} - skipping`);
+  }
+  // Render nothing
+  Astro.response.status = 200; // Not an error, intentional skip
+}
+
+// Get transformed props
+const widgetProps = mapping ? getWidgetProps(section, mapping) : {};
+
+// Static component mapping (replaces dynamic imports)
+const componentMap: Record<string, any> = {
+  // Default variants
+  '~/components/widgets/Content.astro': Content,
+  '~/components/widgets/Stats.astro': Stats,
+  '~/components/widgets/Features2.astro': Features2,
+  '~/components/widgets/CallToAction.astro': CallToAction,
+  '~/components/widgets/Contact.astro': Contact,
+
+  // Phase 2: Variant components
+  '~/components/widgets/Content/ContentLongform.astro': ContentLongform,
+  '~/components/widgets/Content/ContentCompact.astro': ContentCompact,
+  '~/components/widgets/Features2/Features2Compact.astro': Features2Compact,
+  '~/components/widgets/CallToAction/CallToActionMinimal.astro': CallToActionMinimal,
+  '~/components/widgets/Contact/ContactMinimal.astro': ContactMinimal,
+};
+
+const Widget = mapping ? componentMap[mapping.component] : null;
+
+// Special handling for Contact section (requires info slot)
+const isContact = section.key === 'contact';
+const contactInfo = isContact ? (section.data.info as any ?? {}) : {};
+const contactAgent = isContact ? (contactInfo.agent as any ?? {}) : {};
+const contactMap = isContact ? (contactInfo.map as any ?? {}) : {};
+const contactAddress = isContact ? String(contactInfo.addressLine ?? '') : '';
+
+// Check if contact info slot should be rendered (defensive slot checking)
+const shouldRenderContactInfo = isContact && (section.meta.hasAgent || section.meta.hasMap);
+
+// Helper: Build image HTML (same as index.astro)
+const buildImageHtml = (image?: any | null, className = 'mx-auto w-full rounded-lg shadow-lg') => {
+  if (!image || typeof image !== 'object') return null;
+  const src = image.src;
+  if (!src || typeof src !== 'string') return null;
+  const alt = typeof image.alt === 'string' ? image.alt : '';
+  const width = typeof image.width === 'number' ? image.width : 1200;
+  const height = typeof image.height === 'number' ? image.height : 800;
+  return `<img src="${src}" alt="${alt}" width="${width}" height="${height}" loading="lazy" class="${className}" />`;
+};
+
+// Build image HTML for sections that need it
+const imageHtml = ['seller', 'investor', 'about'].includes(section.key)
+  ? buildImageHtml(section.data.image as any)
+  : undefined;
+---
+
+{DEBUG_VISUAL && (
+  <div class="bg-warning/10 border border-warning p-4 mb-4 text-xs font-mono">
+    <strong>Section Debug:</strong> {section.key} | Variant: {variant}
+    <br />Items: {section.meta.itemsCount} | Media: {section.meta.hasMedia ? 'Yes' : 'No'} | Text: {section.meta.textDensity}
+    <br />Signals: H1={section.meta.contentSignals.hasH1}, Bullets={section.meta.contentSignals.hasBullets}, Paragraphs={section.meta.contentSignals.paragraphCount}
+    {section.meta.missingRequired.length > 0 && (
+      <><br /><span class="text-danger">Missing: {section.meta.missingRequired.join(', ')}</span></>
+    )}
+  </div>
+)}
+
+{Widget && (
+  // Case 1: Contact section WITH info (has agent or map)
+  isContact && shouldRenderContactInfo ? (
+    <Widget {...widgetProps}>
+      <Fragment slot="info">
+        <div class="space-y-5">
+          <div class="space-y-1">
+            <p class="text-sm uppercase tracking-wide text-secondary">{contactInfo.label ?? 'Kontaktinfos'}</p>
+            {contactInfo.firma && <h3 class="text-xl font-semibold text-heading">{contactInfo.firma}</h3>}
+            {contactAddress && <p class="text-sm text-muted">{contactAddress}</p>}
+          </div>
+
+          {(contactAgent?.name || contactAgent?.image?.src) && (
+            <div class="flex items-center gap-3">
+              {contactAgent?.image?.src ? (
+                <img
+                  src={contactAgent.image.src}
+                  alt={contactAgent.image.alt ?? contactAgent.name ?? 'Ansprechpartner'}
+                  width={contactAgent.image.width ?? 96}
+                  height={contactAgent.image.height ?? 96}
+                  loading="lazy"
+                  class="h-14 w-14 rounded-full object-cover border border-card-border"
+                />
+              ) : contactAgent?.name ? (
+                <div class="flex h-14 w-14 items-center justify-center rounded-full border border-card-border bg-surface text-lg font-semibold text-heading">
+                  {contactAgent.name.slice(0, 1)}
+                </div>
+              ) : null}
+              <div class="space-y-0.5">
+                <p class="text-xs uppercase tracking-wide text-muted">Ansprechpartner</p>
+                <p class="text-heading font-semibold leading-tight">{contactAgent.name}</p>
+                {contactAgent.role && <p class="text-sm text-muted">{contactAgent.role}</p>}
+              </div>
+            </div>
+          )}
+
+          <dl class="space-y-2 text-sm">
+            {contactInfo.email && (
+              <div class="flex items-center justify-between gap-3">
+                <dt class="text-muted">E-Mail</dt>
+                <dd class="font-medium">
+                  <a class="text-primary hover:underline" href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a>
+                </dd>
+              </div>
+            )}
+            {contactInfo.phone && (
+              <div class="flex items-center justify-between gap-3">
+                <dt class="text-muted">Telefon</dt>
+                <dd class="font-medium">
+                  <a class="text-primary hover:underline" href={`tel:${String(contactInfo.phone).replace(/\s+/g, '')}`}>
+                    {contactInfo.phone}
+                  </a>
+                </dd>
+              </div>
+            )}
+            {contactInfo.ansprechpartner && (
+              <div class="flex items-center justify-between gap-3">
+                <dt class="text-muted">Ansprechpartner</dt>
+                <dd class="font-medium">{contactInfo.ansprechpartner}</dd>
+              </div>
+            )}
+            {contactInfo.antwortzeit && (
+              <div class="flex items-center justify-between gap-3">
+                <dt class="text-muted">Antwortzeit</dt>
+                <dd class="font-medium">{contactInfo.antwortzeit}</dd>
+              </div>
+            )}
+          </dl>
+          {contactInfo.hinweis && <p class="text-xs text-muted">{contactInfo.hinweis}</p>}
+
+          {contactMap?.embedUrl && (
+            <div class="space-y-2">
+              {contactMap.label && <p class="text-sm font-semibold text-heading">{contactMap.label}</p>}
+              <div class="overflow-hidden rounded-lg border border-card-border bg-card shadow-sm aspect-video">
+                <iframe
+                  src={contactMap.embedUrl}
+                  class="h-full w-full"
+                  loading="lazy"
+                  allowfullscreen
+                  referrerpolicy={contactMap.referrerPolicy ?? 'no-referrer-when-downgrade'}
+                  aria-label={contactMap.label ?? 'Standortkarte'}
+                ></iframe>
+              </div>
+            </div>
+          )}
+        </div>
+      </Fragment>
+    </Widget>
+  // Case 2: Contact section WITHOUT info (no agent/map) OR non-contact sections
+  ) : (
+    <Widget {...widgetProps} image={imageHtml} />
+  )
+)}

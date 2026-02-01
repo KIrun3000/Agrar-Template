@@ -1,0 +1,48 @@
+---
+/**
+ * HighlightsFew.astro - Few Listings Variant
+ *
+ * For brands with 1-2 listings. Uses larger hero-style cards
+ * with prominent display and centered layout.
+ */
+import type { HighlightsProps } from '~/lib/autofit/widget-props';
+import ListingCard from '~/components/listings/ListingCard.astro';
+
+interface Props extends HighlightsProps {}
+
+const { eyebrow, title, subtitle, listings, cta } = Astro.props;
+---
+
+<section id="highlights" class="px-6 sm:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-5xl">
+  {
+    (eyebrow || title || subtitle) && (
+      <div class="mb-10 text-center">
+        {eyebrow && <p class="text-sm uppercase tracking-wide text-secondary">{eyebrow}</p>}
+        {title && <h2 class="text-3xl font-bold text-heading mt-2">{title}</h2>}
+        {subtitle && <p class="text-muted mt-3 max-w-2xl mx-auto">{subtitle}</p>}
+      </div>
+    )
+  }
+
+  <!-- Hero-style large cards for few listings -->
+  <div class="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 max-w-4xl mx-auto">
+    {listings.slice(0, 2).map((listing) => (
+      <div class="transform transition-transform hover:scale-[1.02]">
+        <ListingCard listing={listing} variant="data" />
+      </div>
+    ))}
+  </div>
+
+  {
+    cta?.href && cta?.label && (
+      <div class="mt-10 text-center">
+        <a
+          href={cta.href}
+          class="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-primary border-2 border-primary hover:bg-primary hover:text-page rounded-md transition-colors"
+        >
+          {cta.label}
+        </a>
+      </div>
+    )
+  }
+</section>
