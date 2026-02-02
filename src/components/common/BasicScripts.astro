@@ -40,6 +40,31 @@ import { UI } from 'astrowind:config';
     }
   }
 
+  const toggleColorScheme = function () {
+    if (defaultTheme && defaultTheme.endsWith(':only')) {
+      return;
+    }
+
+    if (typeof Observer !== 'undefined') {
+      Observer.removeAnimationDelay();
+    }
+
+    document.documentElement.classList.toggle('dark');
+    localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+  };
+
+  // Delegate: keeps working even if load handlers are overridden or DOM is swapped.
+  document.addEventListener(
+    'click',
+    (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      if (!target.closest('[data-aw-toggle-color-scheme]')) return;
+      toggleColorScheme();
+    },
+    { passive: true }
+  );
+
   const onLoad = function () {
     let lastKnownScrollPosition = window.scrollY;
     let ticking = true;
@@ -62,17 +87,6 @@ import { UI } from 'astrowind:config';
       document.getElementById('header')?.classList.toggle('bg-page');
       document.querySelector('#header nav')?.classList.toggle('hidden');
       document.querySelector('#header > div > div:last-child')?.classList.toggle('hidden');
-    });
-
-    attachEvent('[data-aw-toggle-color-scheme]', 'click', function () {
-      if (defaultTheme.endsWith(':only')) {
-        return;
-      }
-
-      Observer.removeAnimationDelay();
-
-      document.documentElement.classList.toggle('dark');
-      localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
     });
 
     attachEvent('[data-aw-social-share]', 'click', function (_, elem) {
