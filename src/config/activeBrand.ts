@@ -32,9 +32,11 @@ const brandModules = import.meta.glob('../data/brands/*/brand.json', { eager: tr
 const homeModules = import.meta.glob('../data/brands/*/home.json', { eager: true, import: 'default' });
 
 const resolveSlug = () => {
-  const raw = (import.meta as unknown as { env?: Record<string, string | undefined> })?.env?.BRAND_SLUG;
-  const envSlug = raw || (typeof process !== 'undefined' ? process.env.BRAND_SLUG : undefined);
-  return envSlug && envSlug.trim().length > 0 ? envSlug.trim() : '_default';
+  // Access env statically to satisfy Vite/Astro (no dynamic import.meta.env access)
+  const envSlug = typeof import.meta !== 'undefined' ? import.meta.env.BRAND_SLUG : undefined;
+  const processSlug = typeof process !== 'undefined' ? process.env.BRAND_SLUG : undefined;
+  const slug = envSlug ?? processSlug;
+  return slug && slug.trim().length > 0 ? slug.trim() : '_default';
 };
 
 const getBySlug = <T extends unknown>(modules: Record<string, unknown>, slug: string, fileName: string) => {

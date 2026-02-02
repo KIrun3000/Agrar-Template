@@ -26,3 +26,29 @@ const {
     </button>
   )
 }
+
+<script
+  is:inline
+  define:vars={{
+    themeMode: UI.theme || 'system',
+  }}
+>
+  // Fallback toggle handler in case BasicScripts is not loaded for this page view
+  document.addEventListener(
+    'click',
+    (event) => {
+      if (typeof window !== 'undefined' && window.basic_script) return; // BasicScripts already handles toggling
+      const target = event.target;
+      if (!target) return;
+      const btn = target.closest?.('[data-aw-toggle-color-scheme]');
+      if (!btn) return;
+      if (themeMode.endsWith(':only')) return;
+
+      event.preventDefault();
+      const root = document.documentElement;
+      const isDark = root.classList.toggle('dark');
+      localStorage.theme = isDark ? 'dark' : 'light';
+    },
+    { passive: true }
+  );
+</script>
