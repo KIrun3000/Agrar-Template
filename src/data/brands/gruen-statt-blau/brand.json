@@ -1,0 +1,21 @@
+{
+  "colors": {
+    "light": {
+      "primary": "216 197 90",
+      "accent": "216 197 90",
+      "ring": "216 197 90"
+    },
+    "dark": {
+      "bgPage": "6 23 14",
+      "surface": "6 23 14",
+      "card": "6 23 14",
+      "primary": "216 197 90",
+      "accent": "216 197 90",
+      "ring": "216 197 90",
+      "textHeading": "255 255 255",
+      "textDefault": "255 255 255",
+      "textMuted": "229 231 235",
+      "cardBorder": "216 197 90"
+    }
+  }
+}
